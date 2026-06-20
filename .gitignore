@@ -1,0 +1,24 @@
+# Environment & Secrets
+.env
+
+# Dependencies
+/vendor
+/node_modules
+
+# Storage & Cache (The "Don't Upload" list)
+/storage/*.key
+/storage/*.log
+/storage/app/Laravel/*
+/storage/app/RazaMall/*
+/storage/app/backup-temp/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/debugbar/*
+
+# Public Symlinks
+/public/storage
+
+# IDE Settings
+.vscode
+.idea
