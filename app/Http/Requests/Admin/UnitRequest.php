@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCategoryRequest extends FormRequest
+class UnitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,11 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:categories,name,' . $this->category->id,
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',           
-            'status' => 'required|boolean',
-            'description' => 'nullable|string',
-           
+            'name' => [
+            'required',
+            Rule::unique('units', 'name')
+                ->ignore($this->route('unit'))
+        ],
         ];
     }
 }

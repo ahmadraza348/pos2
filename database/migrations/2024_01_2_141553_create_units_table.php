@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-           $table->string('product_variation_type')->default('simple')->after('slug');
+        Schema::create('units', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique()->comment('Name of the unit, e.g., "kg", "liters", "pieces"');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-           $table->dropColumn('product_variation_type');
-        });
+        Schema::dropIfExists('units');
     }
 };

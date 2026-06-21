@@ -9,23 +9,20 @@ use App\Http\Requests\Admin\{StoreCategoryRequest, ImportCategoryRequest, Update
 
 class CategoryController extends Controller
 {
-protected CategoryService $service;
+    protected CategoryService $service;
 
-public function __construct(CategoryService $service)
+    public function __construct(CategoryService $service)
+    {
+        $this->service = $service;
+    }
+
+public function index()
 {
-    $this->service = $service;
-}
-    public function index()
-    {
-        $data['categories_data'] = Category::with('parent')->ordered()->get();
-        return view('backend.category.index', $data);
-    }
+    $data['categories_data'] = Category::ordered()->get();
+    $data['editable_category'] = null;
 
-    public function create()
-    {
-        $data['categories'] = Category::with('subcategories')->whereNull('parent_id')->ordered()->get();
-        return view('backend.category.create', $data);
-    }
+    return view('backend.inventory.categories', $data);
+}
 
     public function store(StoreCategoryRequest $request)
     {
@@ -34,22 +31,16 @@ public function __construct(CategoryService $service)
         return redirect()->route('category.index');
     }
 
-    public function edit(Category $category)
-    {
-        $categories = Category::with('subcategories.subcategories')
-            ->whereNull('parent_id')
-            ->where('id', '!=', $category->id)
-            ->ordered()
-            ->get();
-    
-        return view('backend.category.edit', compact('category', 'categories'));
-    }
-    
+public function edit(Category $category)
+{
+    $data['categories_data'] = Category::ordered()->get();
+    $data['editable_category'] = $category;
 
-    public function update(
-        UpdateCategoryRequest $request,
-        Category $category,
-    ) {
+    return view('backend.inventory.categories', $data);
+}
+
+    public function update(UpdateCategoryRequest $request, Category $category) 
+    {
         $this->service->update($category, $request->validated());
         toastr()->success('Category updated successfully');
         return redirect()->route('category.index');
@@ -62,20 +53,17 @@ public function __construct(CategoryService $service)
         return back();
     }
 
-    public function bulkDelete(
-        BulkDeleteCategoryRequest $request,
-    ) {
+    public function bulkDelete(BulkDeleteCategoryRequest $request) 
+    {
         $this->service->bulkDelete($request->getCategoryIds());
         toastr()->success('Categories deleted successfully');
         return back();
     }
 
-    public function import(
-        ImportCategoryRequest $request,       
-    ) {
+    public function import(ImportCategoryRequest $request) 
+    {
         try {
             $this->service->importCategories($request->file('categories_file'));
-
             toastr()->success('Categories imported successfully');
             return back();
         } catch (\Throwable $e) {

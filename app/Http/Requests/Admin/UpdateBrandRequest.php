@@ -19,20 +19,14 @@ class UpdateBrandRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-  public function rules(): array
+    public function rules(): array
     {
-$brandId = $this->route('brand') ? $this->route('brand')->id : null;
         return [
-            'name'           => 'required|string|max:255',
-            'slug'           => 'required|string|max:255|unique:brands,slug,' . $brandId,
-            'website'        => 'nullable|url',
-            'description'    => 'nullable|string',
-            'status'         => 'required|in:0,1',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category'       => 'nullable|array',
-            'subcategory'    => 'nullable|array',
-            'childcategory'  => 'nullable|array',
-            'superchild'     => 'nullable|array',
+            'name' => 'required|unique:brands,name,' . $this->brand->id,
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',           
+            'status' => 'required|boolean',
+            'description' => 'nullable|string',
+           
         ];
     }
 }

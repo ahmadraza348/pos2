@@ -23,15 +23,9 @@ class StoreBrandRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:brands,slug',
-            'website' => 'nullable|url',
+            'status' => 'required|boolean',
             'description' => 'nullable|string',
-            'status' => 'integer',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category'       => 'nullable|array',
-            'subcategory'    => 'nullable|array',
-            'childcategory'  => 'nullable|array',
-            'superchild'     => 'nullable|array',
-        ];
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+           ];
     }
 }
