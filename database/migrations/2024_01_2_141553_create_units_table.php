@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->comment('Name of the unit, e.g., "kg", "liters", "pieces"');
+            $table->string('name')->unique(); //name of the unit, e.g., "Piece", "Kilogram", "Liter"
             $table->timestamps();
         });
     }

@@ -18,37 +18,33 @@ class ProductController extends Controller
 
     public function index()
     {
-        return view('backend.product.index', [
+        return view('backend.inventory.product.index', [
             'products' => $this->service->getAll()
         ]);
     }
 
     public function create()
     {
-        return view('backend.product.create', 
-            $this->service->getCreateData()
-        );
+        return view('backend.inventory.product.create', $this->service->getCreateData());
     }
 
     public function store(ProductRequest $request)
     {
         $this->service->store($request);
         toastr()->success('Product saved successfully!');
-        return redirect()->back();
+        return redirect()->route('product.index');
     }
 
     public function edit(string $id)
     {
-        return view('backend.product.edit',
-            $this->service->getEditData($id)
-        );
+        return view('backend.inventory.product.edit', $this->service->getEditData($id));
     }
 
     public function update(ProductRequest $request, string $id)
     {
         $this->service->update($request, $id);
         toastr()->success('Product updated successfully!');
-        return redirect()->back();
+        return redirect()->route('product.index');
     }
 
     public function destroy(string $id)
@@ -60,7 +56,7 @@ class ProductController extends Controller
 
     public function restore_product()
     {
-        return view('backend.product.restore', [
+        return view('backend.inventory.product.restore', [
             'products' => $this->service->getTrashed()
         ]);
     }
@@ -84,20 +80,6 @@ class ProductController extends Controller
         $this->service->bulkDelete($request->pro_ids);
         toastr()->success('Products deleted successfully.');
         return redirect()->back();
-    }
-
-    public function deleteGalleryImage(Request $request)
-    {
-        return response()->json(
-            $this->service->deleteGalleryImage($request->id)
-        );
-    }
-
-    public function getAttributeValues($id)
-    {
-        return response()->json(
-            $this->service->getAttributeValues($id)
-        );
     }
 
     public function import(Request $request)

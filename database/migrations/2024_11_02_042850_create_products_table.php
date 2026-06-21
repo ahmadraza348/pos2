@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->integer('minimum_stock')->default(0);
 
-            // Ensure these tables exist BEFORE this migration runs
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('restrict');
             $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('restrict');
             $table->foreignId('unit_id')->nullable()->constrained('units')->onDelete('restrict');
@@ -30,7 +29,15 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);
 
+            // Useful additions for a POS system
+            $table->boolean('is_featured')->default(false);
+            $table->softDeletes(); // your model already uses SoftDeletes — column was missing
+
             $table->timestamps();
+
+            // Helpful for fast POS lookups/search
+            $table->index(['name']);
+            $table->index(['status']);
         });
     }
 

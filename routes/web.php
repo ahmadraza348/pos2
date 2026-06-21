@@ -102,26 +102,23 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
         Route::delete('delete/{unit}', 'destroy')->name('destroy');
     });
     
-    Route::prefix('product')->name('product.')->controller(ProductController::class)->group(function () {
-        Route::get('/', 'index')
-            ->name('index');
+Route::prefix('product')->name('product.')->controller(ProductController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
 
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
+    Route::get('create', 'create')->name('create');
+    Route::post('store', 'store')->name('store');
 
-        Route::get('edit/{product}', 'edit')->name('edit');
-        Route::put('update/{product}', 'update')->name('update');
+    Route::get('edit/{product}', 'edit')->name('edit');
+    Route::put('update/{product}', 'update')->name('update');
 
-        Route::delete('delete/{product}', 'destroy')
-            ->name('destroy');
-    });
+    Route::delete('delete/{product}', 'destroy')->name('destroy');
+});
 
-    Route::post('/product/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulk-delete');
-    Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
-    Route::get('/restore-products', [ProductController::class, 'restore_product'])->name('product.restore');
-    Route::patch('/products/{id}/restore', [ProductController::class, 'restore'])->name('products.restore');
-    Route::delete('/products/{id}/force-delete', [ProductController::class, 'forceDelete'])->name('products.forceDelete');
-
+Route::post('/product/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulk-delete');
+Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
+Route::get('/restore-products', [ProductController::class, 'restore_product'])->name('product.restore');
+Route::patch('/products/{id}/restore', [ProductController::class, 'restore'])->name('products.restore');
+Route::delete('/products/{id}/force-delete', [ProductController::class, 'forceDelete'])->name('products.forceDelete');
 
 
     // Route::prefix('attribute')->name('attribute.')->controller(AttributeController::class)->group(function () {

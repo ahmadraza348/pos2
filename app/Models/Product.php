@@ -2,94 +2,108 @@
 
 namespace App\Models;
 
-use App\Models\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Scout\Searchable;
 
-
-
 class Product extends Model
 {
-    use HasFactory, SoftDeletes,  Searchable;
+    use HasFactory, SoftDeletes, Searchable;
 
     protected $fillable = [
         'name',
-        'slug',
         'sku',
-        'product_variation_type',
-        'status',
-        'sale_price',
-        'previous_price',
-        'purchase_price',
         'barcode',
+        'description',
+        'cost_price',
+        'selling_price',
         'stock',
-        'tags',
-        'label',
-        'is_featured',
-        'short_description',
-        'long_description',
-        'video',
+        'minimum_stock',
+        'category_id',
         'brand_id',
-        'attribute_id'
+        'unit_id',
+        'image',
+        'status',
+        'is_featured',
     ];
 
-    // for detail page to show colors and sizes
-    public function proAttributeValuesRecords()
+    protected $casts = [
+        'cost_price'     => 'decimal:2',
+        'selling_price'  => 'decimal:2',
+        'stock'          => 'integer',
+        'minimum_stock'  => 'integer',
+        'status'         => 'boolean',
+        'is_featured'    => 'boolean',
+    ];
+
+    /* =========================
+       RELATIONSHIPS
+    ==========================*/
+
+    public function category()
     {
-        return $this->hasMany(ProAttributeValue::class, 'product_id');
+        return $this->belongsTo(Category::class);
     }
 
-    public function gallery_images()
+    public function brand()
     {
-        return $this->hasMany(ProductImages::class, 'product_id');
+        return $this->belongsTo(Brand::class);
     }
 
-    // for filtering products on shop page
-    public function attributes()
+    public function unit()
     {
-        return $this->belongsToMany(Attribute::class, 'pro_attribute_values')
-            ->withPivot(['attribute_value_id', 'color_id', 'itemcode', 'stock', 'price'])
-            ->withTimestamps();
-    }
-    public function colors(){
-        return $this->belongsToMany(Color::class, 'pro_attribute_values', 'product_id', 'color_id')
-            ->withPivot(['attribute_value_id', 'itemcode', 'stock', 'price'])
-            ->withTimestamps();
-    }
-      public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'relational_categories', 'product_id', 'category_id')
-            ->withTimestamps();
+        return $this->belongsTo(Unit::class);
     }
 
-    // if we delete product then all its meta tags will also be deleted
-    public static function boot()
-    {
-        parent::boot();
-        static::deleting(function ($product) {
-            $product->categories()->detach();
-        });
-    }
-    public function categoryCount()
-    {
-        return $this->categories()->count();
-    }
-
-    // Laravel Scout Searchable implementation
-    public function toSearchableArray(): array {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'sku' => $this->sku,
-            'tags' => $this->tags,
-        ];
-    }
+    /* =========================
+       SCOPES
+    ==========================*/
 
     public function scopeActive($query)
-{
-    return $query->where('status', 1);
-}
+    {
+        return $query->where('status', 1);
+    }
 
+    public function scopeLowStock($query)
+    {
+        return $query->whereColumn('stock', '<=', 'minimum_stock');
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', 1);
+    }
+
+    /* =========================
+       ACCESSORS
+    ==========================*/
+
+    public function getProfitMarginAttribute(): float
+    {
+        if ((float) $this->cost_price <= 0) {
+            return 0;
+        }
+
+        return round((($this->selling_price - $this->cost_price) / $this->cost_price) * 100, 2);
+    }
+
+    public function getIsLowStockAttribute(): bool
+    {
+        return $this->stock <= $this->minimum_stock;
+    }
+
+    /* =========================
+       SCOUT SEARCH
+    ==========================*/
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'      => $this->id,
+            'name'    => $this->name,
+            'sku'     => $this->sku,
+            'barcode' => $this->barcode,
+        ];
+    }
 }
