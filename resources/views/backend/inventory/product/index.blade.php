@@ -43,9 +43,9 @@
                                 <th>Name</th>
                                 <th>SKU</th>
                                 <th>Category</th>                 
-                                <th>Cost</th>
+                                <th>Unit Cost</th>
                                 <th>Profit</th>
-                                <th>Price</th>
+                                <th>Selling Price</th>
                                 <th>Stock</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -71,9 +71,9 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->sku }}</td>
                                     <td>{{ $item->category->name ?? 'N/A' }}</td>
-                                    <td>{{ number_format($item->cost_price, 2) }}</td>    
+                                    <td>Rs. {{ number_format($item->cost_price, 2) }}</td>    
                                     <td>{{ number_format($item->profit_margin) }}%</td>    
-                                    <td>{{ number_format($item->selling_price, 2) }}</td>
+                                    <td>Rs. {{ number_format($item->selling_price, 2) }}</td>
                                     <td>
                                         {{ $item->stock }}
                                         @if ($item->is_low_stock)
