@@ -17,6 +17,7 @@ class Product extends Model
         'barcode',
         'description',
         'cost_price',
+        'profit_margin',
         'selling_price',
         'stock',
         'minimum_stock',
@@ -29,8 +30,9 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'cost_price'     => 'decimal:2',
-        'selling_price'  => 'decimal:2',
+        'profit_margin' => 'decimal:2',
+        'cost_price'    => 'decimal:2',
+        'selling_price' => 'decimal:2',
         'stock'          => 'integer',
         'minimum_stock'  => 'integer',
         'status'         => 'boolean',
@@ -78,16 +80,29 @@ class Product extends Model
     /* =========================
        ACCESSORS
     ==========================*/
+public function recalculateSellingPrice(): void
+{
+    $costPrice = (float) $this->cost_price;
+    $profitMargin = (float) $this->profit_margin;
 
-    public function getProfitMarginAttribute(): float
-    {
-        if ((float) $this->cost_price <= 0) {
-            return 0;
-        }
+    $sellingPrice = $costPrice + (($costPrice * $profitMargin) / 100);
 
-        return round((($this->selling_price - $this->cost_price) / $this->cost_price) * 100, 2);
-    }
+    $this->selling_price = round($sellingPrice, 2);
+}
 
+protected static function booted()
+{
+    static::saving(function ($product) {
+
+        $costPrice = (float) $product->cost_price;
+        $profitMargin = (float) $product->profit_margin;
+
+        $product->selling_price = round(
+            $costPrice + (($costPrice * $profitMargin) / 100),
+            2
+        );
+    });
+}
     public function getIsLowStockAttribute(): bool
     {
         return $this->stock <= $this->minimum_stock;

@@ -42,9 +42,7 @@ class CategoryService
         DB::transaction(function () use ($category) {
             if ($category->image) {
                 Storage::disk('public')->delete($category->image);
-            }
-            
-            RelationalCategory::where('category_id', $category->id)->delete();
+            }            
             $category->delete();
         });
     }
@@ -59,8 +57,6 @@ class CategoryService
                     Storage::disk('public')->delete($category->image);
                 }
             }
-
-            RelationalCategory::whereIn('category_id', $categoryIds)->delete();
             Category::whereIn('id', $categoryIds)->delete();
         });
     }

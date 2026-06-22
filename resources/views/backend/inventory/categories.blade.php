@@ -104,7 +104,7 @@
                                         <tr class="{{ $editable_category && $editable_category->id === $category->id ? 'table-primary' : '' }}">
                                             <td>
                                                 <label class="checkboxs">
-                                                    <input type="checkbox" class="select-category" data-id="{{ $category->id }}" onchange="toggleDeleteButton()">
+                                                    <input type="checkbox" class="select-option" data-id="{{ $category->id }}" onchange="toggleDeleteButton()">
                                                     <span class="checkmarks"></span>
                                                 </label>
                                             </td>
@@ -137,7 +137,7 @@
                                 </table>
                             </div>
 
-                            <button id="delete-selected-btn" class="btn btn-danger mt-3" style="display: none;" onclick="deleteSelectedCategories()">
+                            <button id="delete-selected-btn" class="btn btn-danger mt-3" style="display: none;" onclick="deleteSelectedOptions()">
                                 Delete Selected
                             </button>
                         </div>
@@ -147,7 +147,7 @@
 
             <form id="bulk-delete-form" action="{{ route('category.bulk-delete') }}" method="POST" style="display: none;">
                 @csrf
-                <input type="hidden" name="category_ids" id="category-ids">
+                <input type="hidden" name="category_ids" id="option-ids">
             </form>
         </div>
     </div>

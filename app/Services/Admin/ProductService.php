@@ -65,26 +65,37 @@ class ProductService
         });
     }
 
-    public function update($request, string $id): Product
-    {
-        return DB::transaction(function () use ($request, $id) {
-            $product = Product::findOrFail($id);
-            $data = $request->validated();
+public function update($request, string $id): Product
+{
+    return DB::transaction(function () use ($request, $id) {
 
-            if ($request->hasFile('image')) {
-                if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
-                }
+        $product = Product::findOrFail($id);
 
-                $data['image'] = $this->uploadImage($request->file('image'));
+        $data = $request->validated();
+
+        // Never trust form values for these
+        unset(
+            $data['stock'],
+            $data['cost_price'],
+            $data['selling_price']
+        );
+
+        if ($request->hasFile('image')) {
+
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
             }
 
-            $product->update($data);
+            $data['image'] = $this->uploadImage(
+                $request->file('image')
+            );
+        }
 
-            return $product;
-        });
-    }
+        $product->update($data);
 
+        return $product->fresh();
+    });
+}
     /* =========================
        DELETE / RESTORE
     ==========================*/

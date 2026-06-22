@@ -9,7 +9,7 @@
         <h4>Manage Products</h4>
     </div>
     <div class="page-btn d-flex gap-2">
-        <a href="{{ route('product.restore') }}" class="btn btn-outline-secondary">
+        <a href="{{ route('product.restoreProduct') }}" class="btn btn-outline-secondary">
             <img src="{{ asset('backend/assets/img/icons/trash12.svg') }}" alt="img"> Trashed Products
         </a>
         <a href="{{ route('product.create') }}" class="btn btn-added">
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-        <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('product.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group d-flex w-50 gap-2 mb-4">
                 <input type="file" name="products_file" id="products_file" class="form-control" required>
@@ -42,12 +42,11 @@
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>SKU</th>
-                                <th>Category</th>
-                                <th>Brand</th>
+                                <th>Category</th>                 
                                 <th>Cost</th>
+                                <th>Profit</th>
                                 <th>Price</th>
                                 <th>Stock</th>
-                                <th>Featured</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -57,7 +56,7 @@
                                 <tr>
                                     <td>
                                         <label class="checkboxs">
-                                            <input type="checkbox" class="select-category" data-id="{{ $item->id }}"
+                                            <input type="checkbox" class="select-option" data-id="{{ $item->id }}"
                                                 onchange="toggleDeleteButton()">
                                             <span class="checkmarks"></span>
                                         </label>
@@ -72,8 +71,8 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->sku }}</td>
                                     <td>{{ $item->category->name ?? 'N/A' }}</td>
-                                    <td>{{ $item->brand->name ?? 'N/A' }}</td>
-                                    <td>{{ number_format($item->cost_price, 2) }}</td>
+                                    <td>{{ number_format($item->cost_price, 2) }}</td>    
+                                    <td>{{ number_format($item->profit_margin) }}%</td>    
                                     <td>{{ number_format($item->selling_price, 2) }}</td>
                                     <td>
                                         {{ $item->stock }}
@@ -81,13 +80,7 @@
                                             <span class="badge rounded-pill bg-warning text-dark ms-1">Low</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if ($item->is_featured)
-                                            <span class="badge rounded-pill bg-success">Yes</span>
-                                        @else
-                                            <span class="badge rounded-pill bg-danger">No</span>
-                                        @endif
-                                    </td>
+                                 
                                     <td>
                                         @if ($item->status)
                                             <span class="badge rounded-pill bg-success">Active</span>
@@ -119,13 +112,13 @@
                 </div>
 
                 <button id="delete-selected-btn" class="btn btn-danger btn-sm mt-3" style="display: none;"
-                    onclick="deleteSelectedCategories()">Delete Selected</button>
+                    onclick="deleteSelectedOptions()">Delete Selected</button>
             </div>
         </div>
 
         <form id="bulk-delete-form" action="{{ route('product.bulk-delete') }}" method="POST" style="display: none;">
             @csrf
-            <input type="hidden" name="pro_ids" id="category-ids">
+            <input type="hidden" name="pro_ids" id="option-ids">
         </form>
 
     </div>

@@ -114,8 +114,15 @@
                                     </div>
 
                                     <div class="col-lg-6 col-sm-12 mb-3">
+                                        <label class="form-label" for="profit_margin">Profit Margin*</label>
+                                        <input type="number" step="0.01" name="profit_margin" required
+                                            class="form-control" value="{{ old('profit_margin', $pro_data->profit_margin) }}">
+                                        @error('profit_margin') <div class="text-danger">{{ $message }}</div> @enderror
+                                    </div>
+
+                                    <div class="col-lg-6 col-sm-12 mb-3">
                                         <label class="form-label" for="selling_price">Selling Price*</label>
-                                        <input type="number" step="0.01" name="selling_price" required
+                                        <input disabled type="number" step="0.01" name="selling_price" required
                                             class="form-control" value="{{ old('selling_price', $pro_data->selling_price) }}">
                                         @error('selling_price') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
@@ -147,14 +154,6 @@
                                         @error('image') <div class="text-danger">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <div class="col-lg-6 col-sm-12 mb-3 d-flex align-items-center">
-                                        <div class="form-check mt-4">
-                                            <input type="checkbox" id="is_featured" name="is_featured" value="1"
-                                                class="form-check-input"
-                                                {{ old('is_featured', $pro_data->is_featured) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="is_featured">Is Featured</label>
-                                        </div>
-                                    </div>
 
                                     <div class="col-lg-12 col-sm-12">
                                         <label class="form-label" for="description">Description</label>

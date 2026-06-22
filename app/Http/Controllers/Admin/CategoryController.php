@@ -48,16 +48,28 @@ public function edit(Category $category)
 
     public function destroy(Category $category)
     {
-        $this->service->delete($category);
-        toastr()->success('Category Deleted Successfully');
+
+    try {
+       $this->service->delete($category);
+        toastr()->success('Categories deleted successfully');
         return back();
+       } catch (\Throwable $th) {
+         toastr()->error('Category delete failed');
+           return back();
+       }
+
     }
 
     public function bulkDelete(BulkDeleteCategoryRequest $request) 
     {
+       try {
         $this->service->bulkDelete($request->getCategoryIds());
         toastr()->success('Categories deleted successfully');
         return back();
+       } catch (\Throwable $th) {
+         toastr()->error('Bulk delete failed');
+           return back();
+       }
     }
 
     public function import(ImportCategoryRequest $request) 

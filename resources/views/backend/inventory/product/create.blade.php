@@ -45,11 +45,21 @@
                                     </div>
                                 </div>
 
+                                
+                                    <div class="mb-3">
+                                        <label class="form-label" for="profit_margin">Profit Margin (%)*</label>
+                                        <input type="number" step="0.01" name="profit_margin" required
+                                            class="form-control" value="{{ old('profit_margin', '') }}">
+                                        <div class="text-danger">
+                                            @error('profit_margin') {{ $message }} @enderror
+                                        </div>
+                                    </div>       
+
                                 <div class="mb-0">
                                     <label class="form-label" for="status">Status*</label>
                                     <select name="status" required class="form-select" id="status">
-                                        <option value="1" {{ old('status', 1) == 1 ? 'selected' : '' }}>Active</option>
                                         <option value="0" {{ old('status', 0) == 0 ? 'selected' : '' }}>Blocked</option>
+                                        <option value="1" {{ old('status', 1) == 1 ? 'selected' : '' }}>Active</option>
                                     </select>
                                 </div>
                             </div>
@@ -92,7 +102,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-0">
+                                <div class="mb-3">
                                     <label class="form-label" for="unit_id">Unit</label>
                                     <select name="unit_id" id="unit_id" class="form-control">
                                         <option value="">Select</option>
@@ -107,6 +117,21 @@
                                         @error('unit_id') {{ $message }} @enderror
                                     </div>
                                 </div>
+
+                                
+                                    <div class="mb-3">
+                                        <label class="form-label" for="image">Product Image</label>
+                                        <input type="file" name="image" id="image" accept="image/*" class="form-control"onchange="previewImage(event)">
+                                        <div class="text-danger">
+                                            @error('image') {{ $message }} @enderror
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 150px; border-radius: 8px;">
+                                    </div>
+
+
+                                    
                             </div>
                         </div>
                     </div>
@@ -115,59 +140,7 @@
                     <div class="col-lg-12 col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="cost_price">Cost Price*</label>
-                                        <input type="number" step="0.01" name="cost_price" required
-                                            class="form-control" value="{{ old('cost_price', '') }}">
-                                        <div class="text-danger">
-                                            @error('cost_price') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="selling_price">Selling Price*</label>
-                                        <input type="number" step="0.01" name="selling_price" required
-                                            class="form-control" value="{{ old('selling_price', '') }}">
-                                        <div class="text-danger">
-                                            @error('selling_price') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="stock">Stock*</label>
-                                        <input type="number" name="stock" required
-                                            class="form-control" value="{{ old('stock', 0) }}">
-                                        <div class="text-danger">
-                                            @error('stock') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="minimum_stock">Minimum Stock</label>
-                                        <input type="number" name="minimum_stock"
-                                            class="form-control" value="{{ old('minimum_stock', 0) }}">
-                                        <div class="text-danger">
-                                            @error('minimum_stock') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-sm-12 mb-3">
-                                        <label class="form-label" for="image">Product Image</label>
-                                        <input type="file" name="image" id="image" class="form-control">
-                                        <div class="text-danger">
-                                            @error('image') {{ $message }} @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 col-sm-12 mb-3 d-flex align-items-center">
-                                        <div class="form-check mt-4">
-                                            <input type="checkbox" id="is_featured" name="is_featured" value="1"
-                                                class="form-check-input" {{ old('is_featured') ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="is_featured">Is Featured</label>
-                                        </div>
-                                    </div>
-
+                                     <div class="row">
                                     <div class="col-lg-12 col-sm-12">
                                         <label class="form-label" for="description">Description</label>
                                         <textarea name="description" id="description" rows="4"
@@ -176,6 +149,10 @@
                                             @error('description') {{ $message }} @enderror
                                         </div>
                                     </div>
+
+                            
+
+
                                 </div>
                             </div>
                         </div>

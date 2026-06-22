@@ -23,10 +23,11 @@ class ProductRequest extends FormRequest
             'barcode'        => 'nullable|string|max:255|unique:products,barcode,' . $id,
             'description'    => 'nullable|string',
 
-            'cost_price'     => 'required|numeric|min:0|max:99999999.99',
-            'selling_price'  => 'required|numeric|min:0|max:99999999.99|gte:cost_price',
+            'cost_price'     => 'nullable|numeric|min:0|max:99999999.99',
+            'profit_margin'  => 'nullable|numeric|min:0|max:100',
+            'selling_price'  => 'nullable|numeric|min:0|max:99999999.99',
 
-            'stock'          => 'required|integer|min:0',
+            'stock'          => 'nullable|integer|min:0',
             'minimum_stock'  => 'nullable|integer|min:0',
 
             'category_id'    => 'nullable|exists:categories,id',

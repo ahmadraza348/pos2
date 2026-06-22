@@ -52,14 +52,14 @@
                                         @endif
                                     </td>
                                     <td class="d-flex gap-2">
-                                        <form action="{{ route('products.restore', $item->id) }}" method="POST">
+                                        <form action="{{ route('product.restore', $item->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-sm btn-success">Restore</button>
                                         </form>
 
                                         <form id="deletepro-{{ $item->id }}"
-                                            action="{{ route('products.forceDelete', $item->id) }}" method="POST"
+                                            action="{{ route('product.forceDelete', $item->id) }}" method="POST"
                                             style="display: none;">
                                             @csrf
                                             @method('delete')

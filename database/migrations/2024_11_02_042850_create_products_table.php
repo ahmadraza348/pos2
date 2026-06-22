@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
 
             $table->decimal('cost_price', 12, 2)->default(0);
+            $table->decimal('profit_margin', 5, 2)->default(20); // percentage
             $table->decimal('selling_price', 12, 2)->default(0);
 
             $table->integer('stock')->default(0);
