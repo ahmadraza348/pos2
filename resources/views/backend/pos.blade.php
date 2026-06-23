@@ -2,7 +2,7 @@
 @section('title', 'Point of sale')
 @section('content')
 <div class="main-wrappers">
-    <div class="page-wrapper ms-0">
+    <div class="page-wrapper">
         <div class="content">
             <div class="row">
                 <div class="col-lg-8 col-sm-12 tabs_wrapper">

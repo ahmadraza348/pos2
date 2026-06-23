@@ -10,6 +10,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="{{ request()->route()->getName() == 'admin.pos' ? 'active' : '' }}">
+                    <a href="{{ route('admin.pos') }}">
+                        <img src="{{ asset('backend/assets/img/icons/dashboard.svg') }}" alt="img">
+                        <span>POS</span>
+                    </a>
+                </li>
 
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
@@ -54,6 +60,12 @@
                     <a href="{{ route('supplier.index') }}">
                         <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
                         <span>Suppliers</span>
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
+                    <a href="{{ route('customer.index') }}">
+                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <span>Customers</span>
                     </a>
                 </li>
 

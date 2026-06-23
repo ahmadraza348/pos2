@@ -4,4 +4,5 @@ namespace App\Services\Admin;
 
 class Pos
 {
+    
 }

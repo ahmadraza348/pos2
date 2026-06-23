@@ -13,8 +13,8 @@ class PosController extends Controller
         $this->posService = $posService;
     }
 
-    public function dashboard()
+    public function pos()
     {
-        return view('backend.pos.dashboard');
+        return view('backend.pos');
     }
 }

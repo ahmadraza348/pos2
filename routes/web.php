@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\{AdminUserController,AuthController, BrandController, CategoryController, DashboardController, ProductController, RoleController, UnitController, SupplierController};
+use App\Http\Controllers\Admin\{AdminUserController,AuthController, BrandController, CategoryController,CustomerController,PosController, DashboardController, ProductController, RoleController, UnitController, SupplierController};
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +22,7 @@ Route::prefix('admin')->controller(AuthController::class)->group(function () {
 
 Route::prefix('admin')->middleware('adminauth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/pos', [PosController::class, 'pos'])->name('admin.pos');
     Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
     Route::prefix('user')->controller(AdminUserController::class)->name('admin.user.')->group(function () {
@@ -109,7 +110,7 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
         Route::delete('delete/{supplier}', 'destroy')->name('destroy');
         Route::post('bulk-delete', 'bulkDelete')->name('bulk-delete');
     });
-
+  
 
     Route::prefix('purchase')->name('purchase.')->controller(PurchaseController::class)->group(function () {
     Route::get('/', 'index')->name('index');
@@ -119,8 +120,19 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
     Route::put('update/{purchase}', 'update')->name('update');
     Route::get('/restore',  'restore_trashed')->name('restorePurchase');
     Route::patch('/{id}/restore',  'restore')->name('restore');
-    Route::delete('delete/{purchase}', 'destroy')->name('destroy');
-});
+    Route::delete('destroy/{purchase}', 'destroy')->name('destroy');
+    Route::delete('delete/{purchase}', 'forceDelete')->name('forceDelete');
+    });
+
+  Route::prefix('customer')->name('customer.')->controller(CustomerController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{customer}', 'edit')->name('edit');
+        Route::put('update/{customer}', 'update')->name('update');
+        Route::delete('delete/{customer}', 'destroy')->name('destroy');
+        Route::post('bulk-delete', 'bulkDelete')->name('bulk-delete');
+    });
+
 
 
 

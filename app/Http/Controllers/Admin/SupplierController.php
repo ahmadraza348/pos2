@@ -19,7 +19,7 @@ class SupplierController extends Controller
 
     public function index()
     {
-        return view('backend.inventory.suppliers', [
+        return view('backend.suppliers', [
             'suppliers_data' => Supplier::all(),
             'editable_supplier' => null
         ]);
@@ -34,7 +34,7 @@ class SupplierController extends Controller
 
     public function edit(Supplier $supplier)
     {
-        return view('backend.inventory.suppliers', [
+        return view('backend.suppliers', [
             'suppliers_data' => Supplier::all(),
             'editable_supplier' => $supplier
         ]);

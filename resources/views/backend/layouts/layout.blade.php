@@ -48,12 +48,7 @@
     <!-- Main Wrapper -->
     <div class="main-wrapper">
         @include('backend.layouts.header')
-
-    @if(!request()->routeIs('pos.*'))
-    @include('backend.layouts.sidebar')
-   @endif
-
-        <!-- Content -->
+        @include('backend.layouts.sidebar')  
         <div class="page-content">
             @yield('content')
         </div>
