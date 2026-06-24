@@ -10,8 +10,8 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ request()->route()->getName() == 'admin.pos' ? 'active' : '' }}">
-                    <a href="{{ route('admin.pos') }}">
+                <li class="{{ request()->route()->getName() == 'pos.index' ? 'active' : '' }}">
+                    <a href="{{ route('pos.index') }}">
                         <img src="{{ asset('backend/assets/img/icons/dashboard.svg') }}" alt="img">
                         <span>POS</span>
                     </a>

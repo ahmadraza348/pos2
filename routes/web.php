@@ -134,6 +134,21 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
     });
 
 
+    Route::prefix('pos')->name('pos.')->controller(PosController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('search-products', 'searchProducts')->name('search-products');
+    Route::get('search-barcode', 'searchByBarcode')->name('search-barcode');
+    Route::get('search-customers', 'searchCustomers')->name('search-customers');
+    Route::post('store-customer', 'storeCustomer')->name('store-customer');
+    Route::post('calculate-totals', 'calculateTotals')->name('calculate-totals');
+    Route::post('checkout', 'checkout')->name('checkout');
+    Route::post('hold', 'hold')->name('hold');
+    Route::get('held-orders', 'heldOrders')->name('held-orders');
+    Route::get('held-orders/{id}/resume', 'resumeHeldOrder')->name('held-orders.resume');
+    Route::delete('held-orders/{id}', 'deleteHeldOrder')->name('held-orders.delete');
+    Route::get('recent-sales', 'recentSales')->name('recent-sales');
+    Route::get('receipt/{id}', 'receipt')->name('receipt');
+});
 
 
     // Route::prefix('sales')->name('sales.')->group(function () {
