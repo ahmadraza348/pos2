@@ -22,7 +22,6 @@ Route::prefix('admin')->controller(AuthController::class)->group(function () {
 
 Route::prefix('admin')->middleware('adminauth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/pos', [PosController::class, 'pos'])->name('admin.pos');
     Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
     Route::prefix('user')->controller(AdminUserController::class)->name('admin.user.')->group(function () {

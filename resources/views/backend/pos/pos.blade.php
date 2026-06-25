@@ -38,8 +38,7 @@
         content: 'Out of stock'; position: absolute; top: 8px; right: 8px;
         background: #dc3545; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 4px;
     }
-    .paymentmethod.active { border: 2px solid #0d6efd; border-radius: 6px; }
-    #barcode-input { font-weight: 600; letter-spacing: 1px; }
+    .paymentmethod.active { border: 2px solid #fd7e14; border-radius: 6px; }
     #change-due.text-success { color: #198754 !important; font-weight: 600; }
     #change-due.text-danger { color: #dc3545 !important; font-weight: 600; }
 </style>
@@ -53,6 +52,26 @@
         <div class="content">
             <div class="row">
                 <div class="col-lg-8 col-sm-12 tabs_wrapper">
+
+                 <div class="tabs_container">
+                        <div class="row mb-3">
+                            <div class="col-lg-7 col-sm-12 mb-2">
+                                <input type="text" id="product-search" class="form-control"
+                                    placeholder="Search product by name or SKU...">
+                            </div>
+                            <div class="col-lg-5 col-sm-12">
+                                <div class="input-group">
+                                    <input type="text" id="barcode-input" class="form-control"
+                                        placeholder="Scan or type barcode" autocomplete="off">
+                                    <button class="btn btn-outline-secondary" type="button" id="barcode-submit-btn">
+                                        <img src="{{ asset('backend/assets/img/icons/scanner1.svg') }}" alt="scan" width="18">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                    </div>
 
                     <ul class="tabs owl-carousel owl-theme owl-product border-0" id="category-tabs">
                         <li class="active" data-category-id="">
@@ -70,29 +89,13 @@
                                 </div>
                             </li>
                         @endforeach
+
+                        
                     </ul>
-
-                    <div class="tabs_container">
-                        <div class="row mb-3">
-                            <div class="col-lg-7 col-sm-12 mb-2">
-                                <input type="text" id="product-search" class="form-control"
-                                    placeholder="Search product by name or SKU...">
-                            </div>
-                            <div class="col-lg-5 col-sm-12">
-                                <div class="input-group">
-                                    <input type="text" id="barcode-input" class="form-control"
-                                        placeholder="Scan or type barcode, then press Enter" autocomplete="off">
-                                    <button class="btn btn-outline-secondary" type="button" id="barcode-submit-btn">
-                                        <img src="{{ asset('backend/assets/img/icons/scanner1.svg') }}" alt="scan" width="18">
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab_content active">
+ <div class="tab_content active">
                             <div class="row" id="product-grid"></div>
                         </div>
-                    </div>
+                   
                 </div>
 
                 <div class="col-lg-4 col-sm-12">
@@ -145,7 +148,7 @@
                                 <a href="javascript:void(0);" id="clear-all-link">Clear all</a>
                             </div>
                             <div class="product-table">
-                                <ul class="product-lists" id="cart-list"></ul>
+                                <ul class="product-lists d-block" id="cart-list"></ul>
                                 <p id="empty-cart-msg" class="text-center text-muted py-3">Cart is empty</p>
                             </div>
                         </div>
@@ -379,13 +382,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function apiFetch(url, options = {}) {
-        showLoader();
+        // showLoader();
         return fetch(url, options)
             .then(async (res) => {
                 const data = await res.json().catch(() => ({ success: false, message: 'Invalid server response' }));
                 return data;
             })
-            .finally(hideLoader);
+            // .finally(hideLoader);
     }
 
     /* =========================================================
