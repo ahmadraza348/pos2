@@ -57,4 +57,24 @@
 }
 
 
+.check-product{
+  display:none !important;
+}
+
+.btn-scanner {
+    color: #fff !important;
+    background-color: #ff9f43 !important;
+    border-color: #ff9f43 !important;
+    align-items: center;
+}
+.btn-adds {
+    border: 2px solid #ff9f43 !important;
+    color: #ff9f43 !important;
+ 
+}
+.btn-adds:hover {
+    background-color: white !important;
+ 
+}
+
 

@@ -242,42 +242,39 @@ class PosService
         return Sale::where('status', 'held')->with('customer')->latest()->get();
     }
 
-    public function resumeHeldOrder(int $id): array
-    {
-        return DB::transaction(function () use ($id) {
-            $sale = Sale::where('status', 'held')->with('items')->findOrFail($id);
+public function resumeHeldOrder(int $id): array
+{
+    return DB::transaction(function () use ($id) {
+        $sale = Sale::where('status', 'held')->with('items')->findOrFail($id);
 
-            // Use CURRENT product price/stock on resume — prices may have
-            // changed since the order was held, and we want the cart to
-            // reflect reality, not a stale snapshot.
-            $items = $sale->items->map(function ($item) {
-                $product = Product::find($item->product_id);
-                return [
-                    'product_id' => $item->product_id,
-                    'name'       => $item->product_name,
-                    'sku'        => $item->product_sku,
-                    'price'      => (float) ($product->selling_price ?? $item->selling_price),
-                    'stock'      => (float) ($product->stock ?? 0),
-                    'qty'        => $item->quantity,
-                    'discount'   => (float) $item->discount,
-                ];
-            })->values();
+        $items = $sale->items->map(function ($item) {
+            $product = Product::find($item->product_id);
+            return [
+                'product_id' => $item->product_id,
+                'name'       => $item->product_name,
+                'sku'        => $item->product_sku,
+                'price'      => (float) ($product->selling_price ?? $item->selling_price),
+                'stock'      => (float) ($product->stock ?? 0),
+                'qty'        => $item->quantity,
+                'discount'   => (float) $item->discount,
+            ];
+        })->values();
 
-            $customerId = $sale->customer_id;
+        $customerId = $sale->customer_id;
 
-            $sale->items()->delete();
-            $sale->delete();
-
-            return ['items' => $items, 'customer_id' => $customerId];
-        });
-    }
-
-    public function deleteHeldOrder(int $id): void
-    {
-        $sale = Sale::where('status', 'held')->findOrFail($id);
         $sale->items()->delete();
-        $sale->delete();
-    }
+        $sale->forceDelete(); // ← permanently remove, freeing the invoice number
+
+        return ['items' => $items, 'customer_id' => $customerId];
+    });
+}
+
+public function deleteHeldOrder(int $id): void
+{
+    $sale = Sale::where('status', 'held')->findOrFail($id);
+    $sale->items()->delete();
+    $sale->forceDelete(); // ← permanently remove, freeing the invoice number
+}
 
     /* =========================
        RECENT COMPLETED SALES
@@ -296,12 +293,18 @@ class PosService
        HELPERS
     ==========================*/
 
-    protected function generateInvoiceNumber(): string
-    {
-        $date = now()->format('Ymd');
-        $count = Sale::whereDate('created_at', now())->count() + 1;
-        return "INV-{$date}-" . str_pad($count, 4, '0', STR_PAD_LEFT);
-    }
+protected function generateInvoiceNumber(): string
+{
+    $date = now()->format('Ymd');
+
+    do {
+        $count = Sale::withTrashed()->whereDate('created_at', now())->count() + 1;
+        $candidate = "INV-{$date}-" . str_pad($count, 4, '0', STR_PAD_LEFT);
+        $exists = Sale::withTrashed()->where('invoice_no', $candidate)->exists();
+    } while ($exists);
+
+    return $candidate;
+}
 
     protected function resolvePaymentStatus(float $total, float $paid): string
     {

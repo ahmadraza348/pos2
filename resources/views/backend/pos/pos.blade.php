@@ -63,7 +63,7 @@
                                 <div class="input-group">
                                     <input type="text" id="barcode-input" class="form-control"
                                         placeholder="Scan or type barcode" autocomplete="off">
-                                    <button class="btn btn-outline-secondary" type="button" id="barcode-submit-btn">
+                                    <button class="btn btn-outline-secondary btn-scanner" type="button" id="barcode-submit-btn">
                                         <img src="{{ asset('backend/assets/img/icons/scanner1.svg') }}" alt="scan" width="18">
                                     </button>
                                 </div>
@@ -524,9 +524,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const li = document.createElement('li');
             li.innerHTML = `
                 <div class="productimg">
-                    <div class="productcontet">
-                        <h4>${escapeHtml(item.name)}</h4>
-                        <div class="productlinkset"><h5>${escapeHtml(item.sku)}</h5></div>
+                    <div class="productcontet ">
+                    <div class="productlinkset d-flex ">
+                         <h4>${escapeHtml(item.name)}</h4>
+                        </div>
                         <div class="increment-decrement">
                             <div class="input-groups">
                                 <input type="button" value="-" class="button-minus dec button" data-index="${index}">
@@ -536,12 +537,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </div>
                 </div>
+               <div class="d-flex justify-content-between align-center">
                 <li>${formatCurrency(item.price * item.qty - item.discount)}</li>
                 <li>
                     <a class="confirm-text remove-item" href="javascript:void(0);" data-index="${index}">
                         <img src="{{ asset('backend/assets/img/icons/delete-2.svg') }}" alt="img" />
                     </a>
                 </li>
+               </div>
+               <hr>
+
             `;
             cartList.appendChild(li);
         });

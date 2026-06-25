@@ -73,7 +73,7 @@ class PosController extends Controller
             'city'    => $request->city,
             'address' => $request->address,
             'opening_balance' => 0,
-            'balance_type'    => 'due', // adjust if your enum uses different values
+            // 'balance_type'    => '', 
             'status'  => 1,
         ]);
 
@@ -144,7 +144,7 @@ class PosController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         } catch (\Throwable $e) {
             report($e);
-            return response()->json(['success' => false, 'message' => 'Could not hold this order.'], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
