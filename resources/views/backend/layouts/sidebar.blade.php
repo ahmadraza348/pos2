@@ -101,6 +101,25 @@
                     </ul>
                 </li>
 
+                    <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
+                            alt="img"><span>
+                            Transactions </span> <span class="menu-arrow"></span></a>
+                    <ul>
+
+
+                        <li class="{{ request()->routeIs('pos.recent-sales') ? 'active' : '' }}">
+                            <a href="{{ route('pos.recent-sales') }}">
+                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                                <span>All Transactions</span>
+                            </a>
+                        </li>                      
+
+                        
+
+                    </ul>
+                </li>
+
 
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
