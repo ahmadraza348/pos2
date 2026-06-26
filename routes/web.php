@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\{AdminUserController,AuthController, BrandController, CategoryController,CustomerController,PosController, DashboardController, ProductController, RoleController, UnitController, SupplierController};
+use App\Http\Controllers\Admin\HeldOrderController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\ReturnController;
+use App\Http\Controllers\Admin\SalesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -149,18 +152,25 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
     Route::get('receipt/{id}', 'receipt')->name('receipt');
 });
 
+Route::prefix('sales')->name('sales.')->controller(SalesController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('{id}', 'show')->name('show');
+    Route::patch('{id}/void', 'void')->name('void');
+});
 
-    // Route::prefix('sales')->name('sales.')->group(function () {
-    //     Route::get('/', [SalesController::class, 'index'])->name('index');
-    //         Route::get('/details/{order}', [SalesController::class, 'details'])->name('detail');
-    //         Route::post('/update-order-status/{order}', [SalesController::class, 'updateOrderStatus'])->name('update.status');
+Route::prefix('returns')->name('returns.')->controller(ReturnController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::get('search-sale', 'searchSale')->name('search-sale');
+    Route::post('store', 'store')->name('store');
+    Route::get('{id}', 'show')->name('show');
+});
 
-    //         Route::get('/pdf/{id}', [SalesController::class, 'download_pdf'])->name('download_pdf');
-    //         Route::get('/print/{id}', [SalesController::class, 'print'])->name('print');
-    //         Route::get('/sales/export', [SalesController::class, 'export'])->name('export');
-    //     });
-
-    // }
+Route::prefix('held-orders')->name('held-orders.')->controller(HeldOrderController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('{id}/resume', 'resume')->name('resume');
+    Route::delete('{id}', 'destroy')->name('destroy');
+});
 
 });
 

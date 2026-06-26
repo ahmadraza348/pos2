@@ -4,10 +4,71 @@ namespace App\Services\Admin;
 
 use App\Models\Order;
 use App\Models\ProAttributeValue;
+use App\Models\Product;
+use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
 
 class SalesService
 {
+
+
+ public function getAll(array $filters = [])
+    {
+        return Sale::query()
+            ->with('customer')
+            ->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
+            ->when($filters['payment_status'] ?? null, fn ($q, $v) => $q->where('payment_status', $v))
+            ->when($filters['from'] ?? null, fn ($q, $v) => $q->whereDate('created_at', '>=', $v))
+            ->when($filters['to'] ?? null, fn ($q, $v) => $q->whereDate('created_at', '<=', $v))
+            ->when($filters['search'] ?? null, fn ($q, $v) => $q->where('invoice_no', 'like', "%{$v}%"))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+    }
+
+    public function find(int $id): Sale
+    {
+        return Sale::with('items', 'customer', 'creator', 'returns')->findOrFail($id);
+    }
+
+    public function void(int $id): Sale
+    {
+        return DB::transaction(function () use ($id) {
+            $sale = Sale::where('status', 'completed')->with('items')->findOrFail($id);
+
+            if ($sale->returns()->exists()) {
+                throw ValidationException::withMessages([
+                    'sale' => 'This sale already has returns recorded and cannot be voided directly.',
+                ]);
+            }
+
+            foreach ($sale->items as $item) {
+                Product::lockForUpdate()->find($item->product_id)?->increment('stock', $item->quantity);
+            }
+
+            $sale->update(['status' => 'cancelled']);
+
+            return $sale;
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function getsales()
     {
         return Order::with('items')->get();

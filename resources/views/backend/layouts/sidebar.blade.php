@@ -104,21 +104,31 @@
                     <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
                             alt="img"><span>
-                            Transactions </span> <span class="menu-arrow"></span></a>
+                            Sales </span> <span class="menu-arrow"></span></a>
                     <ul>
 
 
-                        <li class="{{ request()->routeIs('pos.recent-sales') ? 'active' : '' }}">
-                            <a href="{{ route('pos.recent-sales') }}">
+                        <li class="{{ request()->routeIs('sales.index') ? 'active' : '' }}">
+                            <a href="{{ route('sales.index') }}">
                                 <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                <span>All Transactions</span>
+                                <span>All Sales</span>
                             </a>
                         </li>                      
-
-                        
-
+                        <li class="{{ request()->routeIs('held-orders.index') ? 'active' : '' }}">
+                            <a href="{{ route('held-orders.index') }}">
+                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                                <span>On Hold</span>
+                            </a>
+                        </li>    
+                        <li class="{{ request()->routeIs('returns.*') ? 'active' : '' }}">
+                          <a href="{{ route('returns.index') }}">
+                              <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                              <span>Sale Return</span>
+                          </a>
+                      </li>
                     </ul>
                 </li>
+
 
 
                 <li class="submenu">

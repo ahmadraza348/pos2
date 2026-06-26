@@ -237,10 +237,10 @@ class PosService
         });
     }
 
-    public function getHeldOrders()
-    {
-        return Sale::where('status', 'held')->with('customer')->latest()->get();
-    }
+public function getHeldOrders()
+{
+    return Sale::where('status', 'held')->with('customer', 'items')->latest()->get();
+}
 
 public function resumeHeldOrder(int $id): array
 {

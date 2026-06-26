@@ -1,143 +1,71 @@
+{{-- backend/sales/index.blade.php --}}
 @extends('backend.layouts.layout')
-@section('title', 'Create Product - Raza Mall')
-
+@section('title', 'Sales History')
 @section('content')
-    <div class="page-wrapper">
-        <div class="content">
-            <div class="page-header">
-                <div class="page-title">
-                    <h4>Sales List</h4>
-                    <h6>Manage your sales</h6>
-                </div>
-                {{-- <div class="page-btn">
-                        <a href="add-sales.html" class="btn btn-added"><img src="{{asset('backend/assets/img/icons/plus.svg')}}" alt="img"
-                                class="me-1">Add Sales</a>
-                    </div> --}}
-            </div>
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header"><div class="page-title"><h4>Sales History</h4></div></div>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            {{-- <div class="search-path">
-                                    <a class="btn btn-filter" id="filter_search">
-                                        <img src="{{asset('backend/assets/img/icons/filter.svg')}}" alt="img">
-                                        <span><img src="{{asset('backend/assets/img/icons/closes.svg')}}" alt="img"></span>
-                                    </a>
-                                </div> --}}
-
-                        </div>
-                        <div class="wordset">
-                            <ul>
-                                <li><a href="{{ route('sales.export') }}" data-bs-toggle="tooltip" title="Download Excel">
-                                        <img src="{{ asset('backend/assets/img/icons/excel.svg') }}" alt="img">
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <form method="GET" class="row g-2">
+                    <div class="col-lg-2"><input type="text" name="search" class="form-control" placeholder="Invoice no" value="{{ $filters['search'] ?? '' }}"></div>
+                    <div class="col-lg-2">
+                        <select name="status" class="form-control">
+                            <option value="">Any status</option>
+                            @foreach (['completed','held','cancelled','refunded'] as $s)
+                                <option value="{{ $s }}" {{ ($filters['status'] ?? '') == $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    <div class="col-lg-2">
+                        <select name="payment_status" class="form-control">
+                            <option value="">Any payment</option>
+                            @foreach (['unpaid','partial','paid'] as $s)
+                                <option value="{{ $s }}" {{ ($filters['payment_status'] ?? '') == $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-2"><input type="date" name="from" class="form-control" value="{{ $filters['from'] ?? '' }}"></div>
+                    <div class="col-lg-2"><input type="date" name="to" class="form-control" value="{{ $filters['to'] ?? '' }}"></div>
+                    <div class="col-lg-2"><button type="submit" class="btn btn-primary w-100">Filter</button></div>
+                </form>
+            </div>
+        </div>
 
-                    {{-- <div class="card" id="filter_inputs">
-                            <div class="card-body pb-0">
-                                <div class="row">
-                                    <div class="col-lg-3 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <input type="text" placeholder="Enter Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <input type="text" placeholder="Enter Reference No">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <select class="select">
-                                                <option>Completed</option>
-                                                <option>Paid</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <a class="btn btn-filters ms-auto"><img
-                                                    src="{{asset('backend/assets/img/icons/search-whites.svg')}}" alt="img"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
-                    <div class="table-responsive">
-                        <table class="table  datanew">
-                            <thead>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table datanew">
+                        <thead><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Total</th><th>Paid</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody>
+                            @forelse ($sales as $sale)
+                                @php
+                                    $statusColors = ['completed'=>'success','held'=>'warning','cancelled'=>'danger','refunded'=>'secondary'];
+                                    $payColors = ['unpaid'=>'danger','partial'=>'warning','paid'=>'success'];
+                                @endphp
                                 <tr>
-                                    <th>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
-                                    <th>Date</th>
-                                    <th>Type</th>
-                                    <th>Reference</th>
-                                    <th>Customer</th>
-                                    <th>Total</th>
-                                    <th>Payment </th>
-                                    <th>Status</th>
-                                    <th class="text-center">Action</th>
+                                    <td>{{ $sale->created_at->format('d M Y, h:i A') }}</td>
+                                    <td>{{ $sale->invoice_no }}</td>
+                                    <td>{{ $sale->customer->name ?? 'Walk-in' }}</td>
+                                    <td>Rs. {{ number_format($sale->grand_total, 2) }}</td>
+                                    <td>Rs. {{ number_format($sale->paid_amount, 2) }}</td>
+                                    <td><span class="badge bg-{{ $payColors[$sale->payment_status] ?? 'secondary' }}">{{ ucfirst($sale->payment_status) }}</span></td>
+                                    <td><span class="badge bg-{{ $statusColors[$sale->status] ?? 'secondary' }}">{{ ucfirst($sale->status) }}</span></td>
+                                    <td>
+                                        <a href="{{ route('sales.show', $sale->id) }}" class="me-2"><img src="{{ asset('backend/assets/img/icons/eye.svg') }}" alt="view"></a>
+                                        <a href="{{ route('pos.receipt', $sale->id) }}" target="_blank"><img src="{{ asset('backend/assets/img/icons/printer.svg') }}" alt="print"></a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($sales as $item)
-                                    <tr>
-                                        <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
-                                        </td>
-                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d\ H:i') }}</td>
-                                        <td>Website</td>
-                                        <td>{{ $item->order_number }}</td>
-                                        <td>{{ $item->billing_first_name }} {{ $item->billing_last_name }}</td>
-                                        <td>{{ $item->total_amount }}</td>
-                                        <td>{{ $item->payment_method }}</td>
-                                        @if ($item->payment_status == 'paid')
-                                            <td><span class="badges bg-lightgreen">Paid</span></td>
-                                        @else
-                                            <td><span class="badges bg-danger">Pending</span></td>
-                                        @endif
-                                        <td class="text-center">
-                                            <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="true">
-                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="{{ route('sales.detail', $item->id) }}"
-                                                        class="dropdown-item"><img
-                                                            src="{{ asset('backend/assets/img/icons/eye1.svg') }}"
-                                                            class="me-2" alt="img">Sale
-                                                        Detail</a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('sales.download_pdf', ['id' => $item->id]) }}"
-                                                        class="dropdown-item"><img
-                                                            src="{{ asset('backend/assets/img/icons/download.svg') }}"
-                                                            class="me-2" alt="img">Download pdf</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr><td colspan="8" class="text-center text-muted">No sales found.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
+                {{ $sales->links() }}
             </div>
-
         </div>
     </div>
-
+</div>
 @endsection

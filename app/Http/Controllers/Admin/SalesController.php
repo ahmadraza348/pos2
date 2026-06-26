@@ -3,65 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Services\Admin\SalesService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use App\Exports\SalesExport;
-use Maatwebsite\Excel\Facades\Excel;
-
-use function Flasher\Toastr\Prime\toastr;
+use Illuminate\Validation\ValidationException;
 
 class SalesController extends Controller
 {
-    protected $service;
+    protected SalesService $service;
 
     public function __construct(SalesService $service)
     {
         $this->service = $service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $sales = $this->service->getsales();
-
-        return view('backend.sales.index', compact('sales'));
+        return view('backend.sales.index', [
+            'sales'   => $this->service->getAll($request->only(['status', 'payment_status', 'from', 'to', 'search'])),
+            'filters' => $request->only(['status', 'payment_status', 'from', 'to', 'search']),
+        ]);
     }
 
-    public function details(Order $order)
+    public function show(int $id)
     {
-        return view('backend.sales.details', compact('order'));
+        return view('backend.sales.show', ['sale' => $this->service->find($id)]);
     }
 
-    public function updateOrderStatus(Order $order, Request $request)
+    public function void(int $id)
     {
-        if ($order->order_status === 'cancelled') {
-            toastr()->error('This order is already cancelled. Status cannot be changed.');
-            return redirect()->back();
+        try {
+            $this->service->void($id);
+            toastr()->success('Sale voided and stock restored.');
+        } catch (ValidationException $e) {
+            toastr()->error($e->getMessage());
         }
-        if ($request->order_status === 'cancelled') {
-            $this->service->cancelOrder($order);
-        }
-        $this->service->updateOrderStatus($order);
-        toastr()->success('Order status updated successfully');
-
         return redirect()->back();
     }
-
-    public function download_pdf($id)
-    {
-        $order = Order::findOrFail($id);
-        $pdf = Pdf::loadView('backend.sales.pdf', compact('order'));
-        return $pdf->download('order-'.$order->order_number.'.pdf');
-    }
-
-    public function print($id)
-    {
-        $order = Order::findOrFail($id);
-       $printView = view('backend.sales.print', compact('order'));
-       return response($printView);
-}
-public function export(){
-    return Excel::download(new SalesExport, 'all-sales.xlsx');
-}
 }

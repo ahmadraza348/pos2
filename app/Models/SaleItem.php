@@ -28,4 +28,14 @@ class SaleItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function returnItems()
+{
+    return $this->hasMany(ReturnItem::class);
+}
+
+public function getReturnedQuantityAttribute(): int
+{
+    return (int) $this->returnItems()->sum('quantity_returned');
+}
 }
