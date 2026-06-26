@@ -12,123 +12,138 @@
                 </li>
                 <li class="{{ request()->route()->getName() == 'pos.index' ? 'active' : '' }}">
                     <a href="{{ route('pos.index') }}">
-                        <img src="{{ asset('backend/assets/img/icons/dashboard.svg') }}" alt="img">
-                        <span>POS</span>
+                        <img src="{{ asset('backend/assets/img/icons/transcation.svg') }}" alt="img">
+                        <span>Point of sale</span>
                     </a>
                 </li>
 
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/product.svg') }}"
                             alt="img"><span>
                             Inventory </span> <span class="menu-arrow"></span></a>
                     <ul>
 
 
-                        <li class="{{ request()->routeIs('category.*') ? 'active' : '' }}">
-                            <a href="{{ route('category.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('category.index') }}" class="{{ request()->routeIs('category.*') ? 'active' : '' }}">
                                 <span>Category</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('unit.*') ? 'active' : '' }}">
-                            <a href="{{ route('unit.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('unit.index') }}" class="{{ request()->routeIs('unit.*') ? 'active' : '' }}">
                                 <span>Units</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('brand.*') ? 'active' : '' }}">
-                            <a href="{{ route('brand.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('brand.index') }}" class="{{ request()->routeIs('brand.*') ? 'active' : '' }}">
                                 <span>Brands</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
-                            <a href="{{ route('product.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
                                 <span>Products</span>
                             </a>
                         </li>
 
                     </ul>
                 </li>
-                
 
-                <li class="{{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                    <a href="{{ route('supplier.index') }}">
-                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                        <span>Suppliers</span>
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
-                    <a href="{{ route('customer.index') }}">
-                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                        <span>Customers</span>
-                    </a>
-                </li>
 
-                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/purchase1.svg') }}"
                             alt="img"><span>
                             Purchases </span> <span class="menu-arrow"></span></a>
                     <ul>
 
 
-                        <li class="{{ request()->routeIs('purchase.index') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('purchase.index') }}" class="{{ request()->routeIs('purchase.index') ? 'active' : '' }}">
                                 <span>All Purchase</span>
                             </a>
                         </li>
-                        <li class="{{ request()->routeIs('purchase.create') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.create') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('purchase.create') }}" class="{{ request()->routeIs('purchase.create') ? 'active' : '' }}">
                                 <span>Create Purchase</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('purchase.trashed') ? 'active' : '' }}">
-                            <a href="{{ route('purchase.restorePurchase') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('purchase.restorePurchase') }}" class="{{ request()->routeIs('purchase.*') ? 'active' : '' }}">
                                 <span>Trashed Purchases</span>
                             </a>
                         </li>
 
-                        
+
 
                     </ul>
                 </li>
 
-                    <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/sales1.svg') }}"
                             alt="img"><span>
                             Sales </span> <span class="menu-arrow"></span></a>
                     <ul>
 
 
-                        <li class="{{ request()->routeIs('sales.index') ? 'active' : '' }}">
-                            <a href="{{ route('sales.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('sales.index') }}" class="{{ request()->routeIs('sales.*') ? 'active' : '' }}">
                                 <span>All Sales</span>
                             </a>
-                        </li>                      
-                        <li class="{{ request()->routeIs('held-orders.index') ? 'active' : '' }}">
-                            <a href="{{ route('held-orders.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        </li>
+                        <li>
+                            <a href="{{ route('held-orders.index') }}" class="{{ request()->routeIs('held-orders.*') ? 'active' : '' }}">
                                 <span>On Hold</span>
                             </a>
-                        </li>    
-                        <li class="{{ request()->routeIs('returns.*') ? 'active' : '' }}">
-                          <a href="{{ route('returns.index') }}">
-                              <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                              <span>Sale Return</span>
-                          </a>
-                      </li>
+                        </li>
+
                     </ul>
+
+
+
                 </li>
 
+
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/return1.svg') }}"
+                            alt="img"><span>
+                            Return </span> <span class="menu-arrow"></span></a>
+                    <ul>
+
+
+                        <li>
+                            <a href="{{ route('returns.index') }}" class="{{ request()->routeIs('returns.index') ? 'active' : '' }}">
+                                <span>Sale Return List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('returns.create') }}" class="{{ request()->routeIs('returns.create') ? 'active' : '' }}">
+                                <span>Add Sale Return</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+
+                </li>
+
+                <li>
+                    <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'active' : '' }}">
+                        <img src="{{ asset('backend/assets/img/icons/places.svg') }}" alt="img">
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('customer.index') }}" class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
+                        <img src="{{ asset('backend/assets/img/icons/quotation1.svg') }}" alt="img">
+                        <span>Customers</span>
+                    </a>
+                </li>
 
 
                 <li class="submenu">
@@ -136,29 +151,25 @@
                             alt="img"><span>
                             For Admin Only </span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li class="{{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.user.show') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('admin.user.show') }}" class="{{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
                                 <span> Users</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.roles.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
                                 <span> Roles</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.permissions.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('admin.permissions.index') }}" class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
                                 <span> Permissions</span>
                             </a>
 
-                        <li class="{{ request()->routeIs('admin.roles_permissions.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.roles_permissions.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
+                        <li>
+                            <a href="{{ route('admin.roles_permissions.index') }}" class="{{ request()->routeIs('admin.roles_permissions.*') ? 'active' : '' }}">
                                 <span> Roles & Permissions</span>
                             </a>
                         </li>
@@ -167,94 +178,6 @@
                     </ul>
                 </li>
 
-                {{--               
-                  
-               
-           
-
-        
-                    <li class="submenu">
-                        <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/product.svg') }}"
-                                alt="img"><span>
-                                Product Attributes</span> <span class="menu-arrow"></span></a>
-                        <ul>
-                            @can('view_colors')
-                                <li class="{{ request()->routeIs('colors.*') ? 'active' : '' }}">
-                                    <a href="{{ route('colors.index') }}">
-                                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                        <span> Colors</span>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('view_varients')
-                                <li class="{{ request()->routeIs('attribute.*') ? 'active' : '' }}">
-                                    <a href="{{ route('attribute.index') }}">
-                                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                        <span> Attributes</span>
-                                    </a>
-                                </li>
-                                <li class="{{ request()->routeIs('attributevalue.*') ? 'active' : '' }}">
-                                    <a href="{{ route('attributevalue.index') }}">
-                                        <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                        <span> Attributes Values</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                        </ul>
-                    </li>
-               
-
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/product.svg') }}"
-                            alt="img"><span>
-                            Manage Products </span> <span class="menu-arrow"></span></a>
-                    <ul>
-                        <li class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
-                            <a href="{{ route('product.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                <span> All Products</span>
-                            </a>
-                        </li>
-                        <li class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
-                            <a href="{{ route('product.create') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                <span> Create Product</span>
-                            </a>
-                        </li>
-                        <li class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
-                            <a href="{{ route('product.restore') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                <span> Restore Product</span>
-                            </a>
-                        </li>
-                    </ul>
-
-                </li>
-
-
-
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/product.svg') }}"
-                            alt="img"><span>
-                            Manage Sales </span> <span class="menu-arrow"></span></a>
-                    <ul>
-                        <li class="{{ request()->routeIs('sales.*') ? 'active' : '' }}">
-                            <a href="{{ route('sales.index') }}">
-                                <img src="{{ asset('backend/assets/img/icons/users1.svg') }}" alt="img">
-                                <span>Sales</span>
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </li>
-
-
-
-               
-                   
-           --}}
 
             </ul>
 
