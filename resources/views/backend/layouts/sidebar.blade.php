@@ -132,6 +132,31 @@
 
                 </li>
 
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/expense1.svg') }}"
+                            alt="img"><span>
+                            Expenses </span> <span class="menu-arrow"></span></a>
+                    <ul>
+
+
+                        <li>
+                            <a href="{{ route('returns.index') }}" class="{{ request()->routeIs('returns.index') ? 'active' : '' }}">
+                                <span>Sale Return List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('returns.create') }}" class="{{ request()->routeIs('returns.create') ? 'active' : '' }}">
+                                <span>Add Sale Return</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+
+                </li>
+
                 <li>
                     <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'active' : '' }}">
                         <img src="{{ asset('backend/assets/img/icons/places.svg') }}" alt="img">

@@ -76,7 +76,7 @@
                     <ul class="tabs owl-carousel owl-theme owl-product border-0" id="category-tabs">
                         <li class="active" data-category-id="">
                             <div class="product-details">
-                                <img src="{{ asset('backend/assets/img/noimage.png') }}" alt="All" />
+                                <img src="{{ asset('backend/assets/img/logo-small.png') }}" alt="All" />
                                 <h6>All</h6>
                             </div>
                         </li>
