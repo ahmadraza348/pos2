@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\{AdminUserController,AuthController, BrandController, CategoryController,CustomerController,PosController, DashboardController, ProductController, RoleController, UnitController, SupplierController};
+use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\ExpenseReportController;
 use App\Http\Controllers\Admin\HeldOrderController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\ReturnController;
@@ -172,8 +175,39 @@ Route::prefix('held-orders')->name('held-orders.')->controller(HeldOrderControll
     Route::delete('{id}', 'destroy')->name('destroy');
 });
 
+Route::prefix('expense-categories')->name('expense-categories.')->controller(ExpenseCategoryController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('store', 'store')->name('store');
+    Route::put('update/{expense_category}', 'update')->name('update');
+    Route::delete('delete/{expense_category}', 'destroy')->name('destroy');
 });
 
+Route::prefix('expenses')->name('expenses.')->controller(ExpenseController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store', 'store')->name('store');
+    Route::get('edit/{expense}', 'edit')->name('edit');
+    Route::put('update/{expense}', 'update')->name('update');
+    Route::delete('delete/{expense}', 'destroy')->name('destroy');
+});
+
+Route::get('/restore-expenses', [ExpenseController::class, 'restore_trashed'])->name('expenses.restore');
+Route::patch('/expenses/{id}/restore', [ExpenseController::class, 'restore'])->name('expenses.restore.action');
+Route::delete('/expenses/{id}/force-delete', [ExpenseController::class, 'forceDelete'])->name('expenses.forceDelete');
+
+Route::prefix('expense-reports')->name('expense-reports.')->controller(ExpenseReportController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('trend-data', 'trendData')->name('trend-data');
+});
+
+
+Route::prefix('sticky-notices')->name('sticky-notices.')->controller(DashboardController::class)->group(function () {
+    Route::get('/', 'sticky_notices')->name('sticky_notices');
+    
+});
+
+});
+    
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

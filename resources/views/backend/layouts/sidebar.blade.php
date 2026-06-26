@@ -141,6 +141,33 @@
 
 
                         <li>
+                            <a href="{{ route('expense-categories.index') }}" class="{{ request()->routeIs('expense-categories.index') ? 'active' : '' }}">
+                                <span>Expense Category</span>
+                            </a>
+                        </li>
+                         <li>
+                            <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.index') ? 'active' : '' }}">
+                                <span>Expense </span>
+                            </a>
+                        </li>
+                         <li>
+                            <a href="{{ route('expense-reports.index') }}" class="{{ request()->routeIs('expense-reports.index') ? 'active' : '' }}">
+                                <span>Expense Reports </span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/time.svg') }}"
+                            alt="img"><span>
+                            Reports </span> <span class="menu-arrow"></span></a>
+                    <ul>
+
+
+                        <li>
                             <a href="{{ route('returns.index') }}" class="{{ request()->routeIs('returns.index') ? 'active' : '' }}">
                                 <span>Sale Return List</span>
                             </a>
@@ -152,22 +179,37 @@
                         </li>
 
                     </ul>
-
-
-
                 </li>
 
-                <li>
-                    <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'active' : '' }}">
-                        <img src="{{ asset('backend/assets/img/icons/places.svg') }}" alt="img">
-                        <span>Suppliers</span>
-                    </a>
+
+
+
+
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/quotation1.svg') }}"
+                            alt="img"><span>
+                            Customers</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('customer.index') }}" class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
+                                <span> Customers</span>
+                            </a>
+
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="{{ route('customer.index') }}" class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
-                        <img src="{{ asset('backend/assets/img/icons/quotation1.svg') }}" alt="img">
-                        <span>Customers</span>
-                    </a>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/places.svg') }}"
+                            alt="img"><span>
+                            Suppliers</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('supplier.index') }}" class="{{ request()->routeIs('supplier.*') ? 'active' : '' }}">
+                                <span> Suppliers</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
 
@@ -202,7 +244,46 @@
 
                     </ul>
                 </li>
+                     <li>
 
+                    <a href="{{ route('sticky-notices.sticky_notices') }}" class="{{ request()->routeIs('sticky-notices.sticky_notices') ? 'active' : '' }}"><img src="{{ asset('backend/assets/img/icons/edit.svg') }}"
+                            alt="img"><span>
+                            Sticky Notices</span> <span class="menu-arrow"></span></a>
+                </li>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/settings.svg') }}"
+                            alt="img"><span>
+                            Settings</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('admin.user.show') }}" class="{{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+                                <span> Users</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                <span> Roles</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.permissions.index') }}" class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
+                                <span> Permissions</span>
+                            </a>
+
+                        <li>
+                            <a href="{{ route('admin.roles_permissions.index') }}" class="{{ request()->routeIs('admin.roles_permissions.*') ? 'active' : '' }}">
+                                <span> Roles & Permissions</span>
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+                </li>
+
+           
 
             </ul>
 

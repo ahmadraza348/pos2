@@ -35,4 +35,8 @@ class DashboardController extends Controller
             'chart'   => $data['chart'],
         ]);
     }
+
+    public function sticky_notices(){
+        return view('backend.sticky_notices');
+    }
 }

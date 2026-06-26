@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('backend/assets/plugins/stickynote/sticky.css') }}">
+
        <link
       rel="stylesheet"
       href="{{ asset('backend/assets/plugins/owlcarousel/owl.carousel.min.css') }}"
@@ -59,6 +61,8 @@
     <script src="{{ asset('backend/assets/js/feather.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('backend/assets/js/jquery-ui.min.js') }}"></script>
+
     <script src="{{ asset('backend/assets/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('backend/assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
@@ -72,6 +76,8 @@
     <script src="{{ asset('backend/assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('backend/assets/plugins/fileupload/fileupload.min.js') }}"></script>
     <script src="{{ asset('backend/assets/plugins/owlcarousel/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('backend/assets/plugins/stickynote/sticky.js') }}"></script>
+
 
     @include('backend.layouts.scripts') 
 
