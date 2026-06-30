@@ -11,7 +11,7 @@
                     <table class="table datanew">
                         <thead><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Items</th><th>Total</th><th>Action</th></tr></thead>
                         <tbody>
-                            @forelse ($orders as $order)
+                            @foreach ($orders as $order)
                                 <tr>
                                     <td>{{ $order->created_at->format('d M Y, h:i A') }}</td>
                                     <td>{{ $order->invoice_no }}</td>
@@ -26,9 +26,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr><td colspan="6" class="text-center text-muted">No held orders.</td></tr>
-                            @endforelse
+                          @endforeach
                         </tbody>
                     </table>
                 </div>

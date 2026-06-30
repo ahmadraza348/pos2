@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\ExpenseReportController;
 use App\Http\Controllers\Admin\HeldOrderController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReturnController;
 use App\Http\Controllers\Admin\SalesController;
 use App\Http\Controllers\ProfileController;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/hash', function () {
     return Hash::make('ahmadraza');
+});
+
+Route::get('/', function () {
+    return redirect()->route('admin.login');
 });
 
 // Admin Routes
@@ -198,6 +203,19 @@ Route::delete('/expenses/{id}/force-delete', [ExpenseController::class, 'forceDe
 Route::prefix('expense-reports')->name('expense-reports.')->controller(ExpenseReportController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('trend-data', 'trendData')->name('trend-data');
+});
+
+Route::prefix('reports')->name('reports.')->controller(ReportController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('sales', 'sales')->name('sales');
+    Route::get('purchases', 'purchases')->name('purchases');
+    Route::get('inventory', 'inventory')->name('inventory');
+    Route::get('stock-movement', 'stockMovement')->name('stock-movement');
+    Route::get('profit-loss', 'profitLoss')->name('profit-loss');
+    Route::get('day-end', 'dayEnd')->name('day-end');
+    Route::get('customers', 'customers')->name('customers');
+    Route::get('suppliers', 'suppliers')->name('suppliers');
+    Route::get('returns', 'returns')->name('returns');
 });
 
 

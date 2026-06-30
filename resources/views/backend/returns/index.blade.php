@@ -20,7 +20,7 @@
                             <tr><th>Date</th><th>Return No</th><th>Sale Invoice</th><th>Customer</th><th>Refund</th><th>Method</th><th>Action</th></tr>
                         </thead>
                         <tbody>
-                            @forelse ($returns as $return)
+                            @foreach ($returns as $return)
                                 <tr>
                                     <td>{{ $return->created_at->format('d M Y, h:i A') }}</td>
                                     <td>{{ $return->return_no }}</td>
@@ -31,9 +31,7 @@
                                     <td><a href="{{ route('returns.show', $return->id) }}">
                                         <img src="{{ asset('backend/assets/img/icons/eye.svg') }}" alt="view"></a></td>
                                 </tr>
-                            @empty
-                                <tr><td colspan="7" class="text-center text-muted">No returns recorded yet.</td></tr>
-                            @endforelse
+                           @endforeach
                         </tbody>
                     </table>
                 </div>

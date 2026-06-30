@@ -40,11 +40,15 @@
                 <div class="table-responsive">
                     <table class="table datanew">
                         <thead>
-                            <tr><th>Date</th><th>Expense No</th><th>Title</th><th>Category</th><th>Amount</th><th>Method</th><th>Action</th></tr>
+                            <tr>
+                               
+                                <th>Date</th>
+                                <th>Expense No</th><th>Title</th><th>Category</th><th>Amount</th><th>Method</th><th>Action</th></tr>
                         </thead>
                         <tbody>
-                            @forelse ($expenses as $expense)
+                            @foreach ($expenses as $expense)
                                 <tr>
+                       
                                     <td>{{ $expense->expense_date->format('d M Y') }}</td>
                                     <td>{{ $expense->expense_no }}</td>
                                     <td>{{ $expense->title }}</td>
@@ -63,13 +67,11 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr><td colspan="7" class="text-center text-muted">No expenses recorded yet.</td></tr>
-                            @endforelse
+                            
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-                {{ $expenses->links() }}
             </div>
         </div>
     </div>

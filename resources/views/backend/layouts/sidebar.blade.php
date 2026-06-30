@@ -160,28 +160,88 @@
                 </li>
 
 
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/time.svg') }}"
-                            alt="img"><span>
-                            Reports </span> <span class="menu-arrow"></span></a>
-                    <ul>
+      <li class="submenu">
+    <a href="javascript:void(0);"
+        class="{{ request()->routeIs('reports.*') ? 'subdrop active' : '' }}">
+        <img src="{{ asset('backend/assets/img/icons/time.svg') }}" alt="img">
+        <span>Reports</span>
+        <span class="menu-arrow"></span>
+    </a>
 
+    <ul style="{{ request()->routeIs('reports.*') ? 'display: block;' : '' }}">
 
-                        <li>
-                            <a href="{{ route('returns.index') }}" class="{{ request()->routeIs('returns.index') ? 'active' : '' }}">
-                                <span>Sale Return List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('returns.create') }}" class="{{ request()->routeIs('returns.create') ? 'active' : '' }}">
-                                <span>Add Sale Return</span>
-                            </a>
-                        </li>
+        <li>
+            <a href="{{ route('reports.index') }}"
+                class="{{ request()->routeIs('reports.index') ? 'active' : '' }}">
+                <span>Overview Dashboard</span>
+            </a>
+        </li>
 
-                    </ul>
-                </li>
+        <li>
+            <a href="{{ route('reports.sales') }}"
+                class="{{ request()->routeIs('reports.sales') ? 'active' : '' }}">
+                <span>Sales Reports</span>
+            </a>
+        </li>
 
+        <li>
+            <a href="{{ route('reports.purchases') }}"
+                class="{{ request()->routeIs('reports.purchases') ? 'active' : '' }}">
+                <span>Purchase Reports</span>
+            </a>
+        </li>
 
+        <li>
+            <a href="{{ route('reports.inventory') }}"
+                class="{{ request()->routeIs('reports.inventory') ? 'active' : '' }}">
+                <span>Inventory Reports</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.stock-movement') }}"
+                class="{{ request()->routeIs('reports.stock-movement') ? 'active' : '' }}">
+                <span>Stock Movement</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.profit-loss') }}"
+                class="{{ request()->routeIs('reports.profit-loss') ? 'active' : '' }}">
+                <span>Profit & Loss</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.day-end') }}"
+                class="{{ request()->routeIs('reports.day-end') ? 'active' : '' }}">
+                <span>Day End Report</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.customers') }}"
+                class="{{ request()->routeIs('reports.customers') ? 'active' : '' }}">
+                <span>Customer Reports</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.suppliers') }}"
+                class="{{ request()->routeIs('reports.suppliers') ? 'active' : '' }}">
+                <span>Supplier Reports</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('reports.returns') }}"
+                class="{{ request()->routeIs('reports.returns') ? 'active' : '' }}">
+                <span>Return Reports</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
 
 
 

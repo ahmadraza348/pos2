@@ -15,6 +15,7 @@ class Supplier extends Model
         'status',
         'opening_balance'
     ];   
+public function purchases() { return $this->hasMany(Purchase::class); }
 
  
 }

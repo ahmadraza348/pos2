@@ -18,7 +18,7 @@
                     <table class="table datanew">
                         <thead><tr><th>Name</th><th>Expenses Count</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody>
-                            @forelse ($categories as $category)
+                            @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->expenses_count }}</td>
@@ -46,9 +46,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr><td colspan="4" class="text-center text-muted">No expense categories yet.</td></tr>
-                            @endforelse
+                         @endforeach
                         </tbody>
                     </table>
                 </div>
