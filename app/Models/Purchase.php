@@ -48,11 +48,27 @@ class Purchase extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        // created_by references the admins table (see migration), not users.
+        return $this->belongsTo(Admin::class, 'created_by');
     }
 
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
+    }
+
+    public function scopeReceived($query)
+    {
+        return $query->where('status', 'received');
+    }
+
+    /**
+     * Once a purchase has affected stock (received) — or been cancelled —
+     * its items are locked. Only a still-pending purchase can have its
+     * items freely edited, because no stock has moved yet.
+     */
+    public function getItemsLockedAttribute(): bool
+    {
+        return $this->status !== 'pending';
     }
 }

@@ -47,7 +47,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="description">Description</label>
-                                <textarea name="description" id="description" rows="5"
+                                <textarea name="description" id="description" rows="4"
                                     class="form-control">{{ old('description', $pro_data->description) }}</textarea>
                             </div>
 
@@ -81,8 +81,8 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="status">Status *</label>
                                         <select name="status" required class="form-select" id="status">
-                                            <option value="1" {{ old('status', $pro_data->status) == 1 ? 'selected' : '' }}>Active</option>
-                                            <option value="0" {{ old('status', $pro_data->status) == 0 ? 'selected' : '' }}>Blocked</option>
+                                            <option value="1" {{ old('status', $pro_data->status) == 1 ? 'selected' : '' }}>Active — visible at POS</option>
+                                            <option value="0" {{ old('status', $pro_data->status) == 0 ? 'selected' : '' }}>Blocked — hidden from POS</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -132,43 +132,39 @@
                                 </div>
                                 <div class="card-body">
 
+                                    <div class="alert alert-light border small mb-3">
+                                        Stock and purchase price are set by <strong>Purchases</strong> now — they're shown
+                                        here for reference only. Record a Purchase to change them.
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-6 mb-3">
-                                            <label class="form-label" for="stock">
-                                                Stock *
-                                                <span class="badge bg-warning text-dark ms-1">Manual override</span>
-                                            </label>
-                                            <input type="number" name="stock" id="stock" required min="0"
-                                                class="form-control @error('stock') is-invalid @enderror"
-                                                value="{{ old('stock', $pro_data->stock) }}">
-                                            @error('stock') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                            <small class="text-muted">Normally managed via purchases.</small>
+                                            <label class="form-label text-muted" for="stock_display">Current Stock</label>
+                                            <input type="text" id="stock_display"
+                                                class="form-control bg-light" value="{{ $pro_data->stock }}"
+                                                disabled readonly>
                                         </div>
 
                                         <div class="col-6 mb-3">
-                                            <label class="form-label" for="minimum_stock">Min. Stock Alert</label>
+                                            <label class="form-label" for="minimum_stock">Low Stock Alert</label>
                                             <input type="number" name="minimum_stock" id="minimum_stock" min="0"
                                                 class="form-control"
                                                 value="{{ old('minimum_stock', $pro_data->minimum_stock) }}">
                                         </div>
 
                                         <div class="col-6 mb-3">
-                                            <label class="form-label" for="cost_price">
-                                                Cost Price *
-                                                <span class="badge bg-warning text-dark ms-1">Manual override</span>
-                                            </label>
+                                            <label class="form-label text-muted" for="cost_price_display">Purchase Price</label>
                                             <div class="input-group">
-                                                <span class="input-group-text">Rs.</span>
-                                                <input type="number" step="0.01" name="cost_price" id="cost_price" required min="0"
-                                                    class="form-control @error('cost_price') is-invalid @enderror"
-                                                    value="{{ old('cost_price', $pro_data->cost_price) }}">
+                                                <span class="input-group-text text-muted">Rs.</span>
+                                                <input type="text" id="cost_price_display"
+                                                    class="form-control bg-light"
+                                                    value="{{ number_format($pro_data->cost_price, 2) }}"
+                                                    disabled readonly>
                                             </div>
-                                            @error('cost_price') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                            <small class="text-muted">Normally updated via purchases.</small>
                                         </div>
 
                                         <div class="col-6 mb-3">
-                                            <label class="form-label fw-bold" for="profit_margin">Profit Margin *</label>
+                                            <label class="form-label" for="profit_margin">Profit Margin *</label>
                                             <div class="input-group">
                                                 <input type="number" step="0.01" min="0" max="1000"
                                                     name="profit_margin" id="profit_margin" required
@@ -180,7 +176,7 @@
                                         </div>
 
                                         <div class="col-12 mb-0">
-                                            <label class="form-label text-muted">Selling Price (auto-calculated)</label>
+                                            <label class="form-label text-muted">Selling Price (calculated)</label>
                                             <div class="input-group">
                                                 <span class="input-group-text text-muted">Rs.</span>
                                                 <input type="text" id="selling_price_preview"
@@ -189,7 +185,7 @@
                                                     disabled readonly>
                                             </div>
                                             <small class="text-muted">
-                                                Formula: Cost × (1 + Margin%) — updates live as you type.
+                                                Purchase price × (1 + margin) — updates live as you change the margin.
                                             </small>
                                         </div>
                                     </div>
@@ -213,29 +209,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const costInput    = document.getElementById('cost_price');
-    const marginInput  = document.getElementById('profit_margin');
-    const previewEl    = document.getElementById('selling_price_preview');
+    const fixedCost   = {{ (float) $pro_data->cost_price }};
+    const marginInput = document.getElementById('profit_margin');
+    const previewEl   = document.getElementById('selling_price_preview');
 
     function recalcSellingPrice() {
-        const cost   = parseFloat(costInput.value) || 0;
         const margin = parseFloat(marginInput.value) || 0;
-
-        if (cost > 0) {
-            const selling = cost * (1 + margin / 100);
-            previewEl.value = selling.toFixed(2);
-            previewEl.classList.remove('text-muted');
-            previewEl.classList.add('text-success', 'fw-bold');
-        } else {
-            previewEl.value = '—';
-        }
+        previewEl.value = (fixedCost * (1 + margin / 100)).toFixed(2);
     }
 
-    costInput.addEventListener('input', recalcSellingPrice);
     marginInput.addEventListener('input', recalcSellingPrice);
-
-    // Run once on load to reflect current values
-    recalcSellingPrice();
 });
 </script>
 @endsection

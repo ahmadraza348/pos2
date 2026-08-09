@@ -58,7 +58,7 @@
                                     <option value="received" {{ old('status', 'received') == 'received' ? 'selected' : '' }}>Received</option>
                                     <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                 </select>
-                                <small class="text-muted">Stock only increases when marked "Received".</small>
+                                <small class="text-muted">Stock only increases when marked "Received". Once received, items can no longer be edited — only cancelled.</small>
                                 @error('status') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
@@ -92,6 +92,9 @@
                             </div>
 
                             @error('items') <div class="text-danger mb-2">{{ $message }}</div> @enderror
+                            <div id="duplicate-warning" class="text-danger mb-2 small" style="display:none;">
+                                A product is selected more than once — please combine it into a single row instead.
+                            </div>
 
                             <div class="table-responsive">
                                 <table class="table" id="items-table">
@@ -156,7 +159,7 @@
 
                 <div class="col-lg-12 col-sm-12">
                     <div class="form-group mt-2">
-                        <button type="submit" class="btn btn-primary">Save Purchase</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Save Purchase</button>
                     </div>
                 </div>
 
@@ -170,6 +173,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const products = @json($products);
     const itemsBody = document.getElementById('items-body');
     const addBtn = document.getElementById('add-item-row');
+    const duplicateWarning = document.getElementById('duplicate-warning');
+    const submitBtn = document.getElementById('submit-btn');
     let rowIndex = 0;
 
     function productOptions(selectedId = '') {
@@ -214,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cost = selectedOption.getAttribute('data-cost');
             if (cost) costInput.value = cost;
             recalcRow(row);
+            checkDuplicateProducts();
         });
 
         [qtyInput, costInput, discountInput].forEach(input => {
@@ -223,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
         removeBtn.addEventListener('click', function () {
             row.remove();
             recalcTotals();
+            checkDuplicateProducts();
         });
     }
 
@@ -247,6 +254,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('display-subtotal').textContent = subtotal.toFixed(2);
         document.getElementById('display-total').textContent = total.toFixed(2);
+    }
+
+    // Same product picked in two rows silently overwrites its own cost —
+    // catch it here rather than let it fail confusingly on the server.
+    function checkDuplicateProducts() {
+        const selected = Array.from(document.querySelectorAll('.product-select'))
+            .map(s => s.value)
+            .filter(v => v !== '');
+        const hasDuplicates = new Set(selected).size !== selected.length;
+
+        duplicateWarning.style.display = hasDuplicates ? 'block' : 'none';
+        submitBtn.disabled = hasDuplicates;
     }
 
     document.getElementById('discount').addEventListener('input', recalcTotals);

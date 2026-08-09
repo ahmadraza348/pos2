@@ -29,22 +29,24 @@ class Product extends Model
         'is_featured'   => 'boolean',
     ];
 
-    /* =========================
-       AUTO-CALCULATE selling_price EVERY TIME cost_price OR profit_margin CHANGES
-       This runs on every save — whether from the product form, a purchase receipt,
-       or any other code path. One place, always consistent.
-    ==========================*/
+    /**
+     * selling_price is ALWAYS derived from cost_price + profit_margin.
+     *
+     * This is intentionally the ONLY place selling_price is calculated.
+     * It is never accepted as direct input from the product form (see
+     * ProductRequest — there is no selling_price rule), so it can never
+     * drift out of sync with cost/margin, and there's no risk of a form
+     * value silently overriding this calculation or vice versa.
+     */
     protected static function boot()
     {
         parent::boot();
 
         static::saving(function ($product) {
-            if ((float) $product->cost_price > 0 && (float) $product->profit_margin >= 0) {
-                $product->selling_price = round(
-                    (float) $product->cost_price * (1 + (float) $product->profit_margin / 100),
-                    2
-                );
-            }
+            $cost   = (float) $product->cost_price;
+            $margin = (float) $product->profit_margin;
+
+            $product->selling_price = round($cost * (1 + $margin / 100), 2);
         });
     }
 
@@ -77,11 +79,6 @@ class Product extends Model
     public function scopeLowStock($query)
     {
         return $query->whereColumn('stock', '<=', 'minimum_stock');
-    }
-
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', 1);
     }
 
     /* =========================

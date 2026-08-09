@@ -20,26 +20,26 @@ class PurchaseService
         return Purchase::with('supplier')->latest()->get();
     }
 
-public function getCreateData(): array
-{
-    return [
-        'suppliers' => Supplier::where('status', 1)->get(),
-        'products'  => Product::where('status', 1)
-            ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
-    ];
-}
+    public function getCreateData(): array
+    {
+        return [
+            'suppliers' => Supplier::where('status', 1)->get(),
+            'products'  => Product::where('status', 1)
+                ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
+        ];
+    }
 
-public function getEditData(string $id): array
-{
-    $purchase = Purchase::with('items.product')->findOrFail($id);
+    public function getEditData(string $id): array
+    {
+        $purchase = Purchase::with('items.product')->findOrFail($id);
 
-    return [
-        'purchase'  => $purchase,
-        'suppliers' => Supplier::where('status', 1)->get(),
-        'products'  => Product::where('status', 1)
-            ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
-    ];
-}
+        return [
+            'purchase'  => $purchase,
+            'suppliers' => Supplier::where('status', 1)->get(),
+            'products'  => Product::where('status', 1)
+                ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
+        ];
+    }
 
     public function getTrashed()
     {
@@ -47,7 +47,7 @@ public function getEditData(string $id): array
     }
 
     /* =========================
-       STORE / UPDATE
+       STORE
     ==========================*/
 
     public function store(array $data): Purchase
@@ -81,7 +81,7 @@ public function getEditData(string $id): array
                 $item['purchase_id'] = $purchase->id;
                 PurchaseItem::create($item);
 
-                // Stock only moves in when the purchase is actually received
+                // Stock only moves in when the purchase is actually received.
                 if ($purchase->status === 'received') {
                     $this->adjustStock($item['product_id'], $item['quantity'], $item['unit_cost']);
                 }
@@ -91,29 +91,66 @@ public function getEditData(string $id): array
         });
     }
 
+    /* =========================
+       UPDATE
+    ==========================*/
+
+    /**
+     * Updating a purchase behaves differently depending on whether it has
+     * already affected stock:
+     *
+     * - PENDING  → items are still fully editable. No stock has moved yet,
+     *              so we can safely replace the item list and, if the new
+     *              status is "received", apply stock for the first time.
+     *
+     * - RECEIVED / CANCELLED → items are locked. We never touch them again,
+     *              because reversing-and-reapplying against quantities that
+     *              may have already been partially sold is exactly the kind
+     *              of silent stock corruption this system needs to avoid.
+     *              The only stock-affecting action left is cancelling a
+     *              received purchase, which reverses its original items
+     *              exactly once. Everything else (supplier, dates, payment
+     *              info, notes) can still be corrected freely.
+     */
     public function update(array $data, string $id): Purchase
     {
         return DB::transaction(function () use ($data, $id) {
 
             $purchase = Purchase::with('items')->findOrFail($id);
             $wasReceived = $purchase->status === 'received';
+            $itemsLocked = $purchase->items_locked;
+            $newStatus = $data['status'] ?? $purchase->status;
 
-            // Reverse old stock impact before applying new one
-            if ($wasReceived) {
-                foreach ($purchase->items as $oldItem) {
-                    $this->reverseStock($oldItem->product_id, $oldItem->quantity);
+            if (! $itemsLocked) {
+                $purchase->items()->delete();
+
+                [$subtotal, $itemsData] = $this->prepareItems($data['items']);
+
+                foreach ($itemsData as $item) {
+                    $item['purchase_id'] = $purchase->id;
+                    PurchaseItem::create($item);
+                }
+
+                if ($newStatus === 'received') {
+                    foreach ($itemsData as $item) {
+                        $this->adjustStock($item['product_id'], $item['quantity'], $item['unit_cost']);
+                    }
+                }
+            } else {
+                // Items are locked — totals stay exactly as originally recorded.
+                $subtotal = (float) $purchase->subtotal;
+
+                if ($wasReceived && $newStatus === 'cancelled') {
+                    foreach ($purchase->items as $item) {
+                        $this->reverseStock($item->product_id, $item->quantity);
+                    }
                 }
             }
 
-            $purchase->items()->delete();
-
-            [$subtotal, $itemsData] = $this->prepareItems($data['items']);
-
-            $discount = $data['discount'] ?? 0;
-            $tax = $data['tax'] ?? 0;
+            $discount = $data['discount'] ?? (float) $purchase->discount;
+            $tax = $data['tax'] ?? (float) $purchase->tax;
             $total = $subtotal - $discount + $tax;
-            $paid = $data['paid_amount'] ?? 0;
-            $newStatus = $data['status'] ?? $purchase->status;
+            $paid = $data['paid_amount'] ?? (float) $purchase->paid_amount;
 
             $purchase->update([
                 'invoice_no'     => $data['invoice_no'],
@@ -130,15 +167,6 @@ public function getEditData(string $id): array
                 'notes'          => $data['notes'] ?? null,
             ]);
 
-            foreach ($itemsData as $item) {
-                $item['purchase_id'] = $purchase->id;
-                PurchaseItem::create($item);
-
-                if ($newStatus === 'received') {
-                    $this->adjustStock($item['product_id'], $item['quantity'], $item['unit_cost']);
-                }
-            }
-
             return $purchase;
         });
     }
@@ -148,7 +176,7 @@ public function getEditData(string $id): array
     ==========================*/
 
     public function delete(string $id): void
-    {      
+    {
         DB::transaction(function () use ($id) {
             $purchase = Purchase::with('items')->findOrFail($id);
 
@@ -197,25 +225,27 @@ public function getEditData(string $id): array
         return [$subtotal, $prepared];
     }
 
-// Replace only the adjustStock method in your existing PurchaseService
+    protected function adjustStock(int $productId, int $quantity, float $unitCost): void
+    {
+        $product = Product::findOrFail($productId);
+        $product->increment('stock', $quantity);
 
-protected function adjustStock(int $productId, int $quantity, float $unitCost): void
-{
-    $product = Product::findOrFail($productId);
-    $product->increment('stock', $quantity);
+        // Update cost_price to the latest purchase price.
+        // Product::boot() auto-recalculates selling_price from this new
+        // cost + the existing profit_margin — receiving a purchase at a
+        // new cost updates the shelf price automatically.
+        $product->update(['cost_price' => $unitCost]);
+    }
 
-    // Update cost_price to the latest purchase price.
-    // Model boot() will auto-recalculate selling_price from this new cost + existing profit_margin.
-    // This means: receive a purchase at a new cost → selling price updates automatically.
-    $product->update(['cost_price' => $unitCost]);
-}
-
-protected function reverseStock(int $productId, int $quantity): void
-{
-    $product = Product::findOrFail($productId);
-    $product->decrement('stock', min($quantity, $product->stock));
-    // selling_price stays as-is on reversal — we don't know what cost to revert to.
-}
+    protected function reverseStock(int $productId, int $quantity): void
+    {
+        $product = Product::findOrFail($productId);
+        // Clamped so a purchase reversal can never push stock negative —
+        // if some of this stock was already sold, the reversal will be
+        // partial. selling_price/cost_price are left as-is, since we don't
+        // know what the correct prior cost was.
+        $product->decrement('stock', min($quantity, $product->stock));
+    }
 
     protected function resolvePaymentStatus(float $total, float $paid): string
     {

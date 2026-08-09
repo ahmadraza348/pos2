@@ -1,6 +1,23 @@
 @extends('backend.layouts.layout')
 @section('title', 'Edit Purchase')
 @section('content')
+
+@php
+    $itemsLocked = $purchase->items_locked; // true once status is received or cancelled
+
+    $statusLabels = [
+        'pending'   => 'Pending',
+        'received'  => 'Received',
+        'cancelled' => 'Cancelled',
+    ];
+
+    $allowedStatuses = match ($purchase->status) {
+        'received'  => ['received', 'cancelled'],
+        'cancelled' => ['cancelled'],
+        default     => ['pending', 'received', 'cancelled'],
+    };
+@endphp
+
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -55,11 +72,19 @@
                             <div class="mb-3">
                                 <label class="form-label" for="status">Purchase Status*</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option value="pending" {{ old('status', $purchase->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="received" {{ old('status', $purchase->status) == 'received' ? 'selected' : '' }}>Received</option>
-                                    <option value="cancelled" {{ old('status', $purchase->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    @foreach ($allowedStatuses as $value)
+                                        <option value="{{ $value }}" {{ old('status', $purchase->status) == $value ? 'selected' : '' }}>
+                                            {{ $statusLabels[$value] }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                <small class="text-muted">Changing status recalculates stock impact.</small>
+                                @if ($purchase->status === 'pending')
+                                    <small class="text-muted">Marking "Received" adds this stock to your products and locks the items below.</small>
+                                @elseif ($purchase->status === 'received')
+                                    <small class="text-muted">Items are locked because this stock has already been added. To undo it, set this to "Cancelled".</small>
+                                @else
+                                    <small class="text-muted">This purchase is cancelled and can no longer be changed.</small>
+                                @endif
                                 @error('status') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
@@ -87,10 +112,21 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <label class="form-label mb-0">Purchase Items*</label>
-                                <button type="button" id="add-item-row" class="btn btn-sm btn-primary">+ Add Item</button>
+                                @if (! $itemsLocked)
+                                    <button type="button" id="add-item-row" class="btn btn-sm btn-primary">+ Add Item</button>
+                                @endif
                             </div>
 
+                            @if ($itemsLocked)
+                                <div class="alert alert-light border small mb-3">
+                                    These items already affected stock, so they can't be edited here. Cancel the purchase to reverse the stock, or record a new purchase for corrections.
+                                </div>
+                            @endif
+
                             @error('items') <div class="text-danger mb-2">{{ $message }}</div> @enderror
+                            <div id="duplicate-warning" class="text-danger mb-2 small" style="display:none;">
+                                A product is selected more than once — please combine it into a single row instead.
+                            </div>
 
                             <div class="table-responsive">
                                 <table class="table" id="items-table">
@@ -101,10 +137,24 @@
                                             <th style="width:140px;">Unit Cost</th>
                                             <th style="width:140px;">Discount</th>
                                             <th style="width:140px;">Line Total</th>
-                                            <th style="width:60px;"></th>
+                                            @if (! $itemsLocked)
+                                                <th style="width:60px;"></th>
+                                            @endif
                                         </tr>
                                     </thead>
-                                    <tbody id="items-body"></tbody>
+                                    <tbody id="items-body">
+                                        @if ($itemsLocked)
+                                            @foreach ($purchase->items as $item)
+                                                <tr>
+                                                    <td>{{ $item->product->name ?? 'Deleted product' }} ({{ $item->product->sku ?? '—' }})</td>
+                                                    <td>{{ $item->quantity }}</td>
+                                                    <td>{{ number_format($item->unit_cost, 2) }}</td>
+                                                    <td>{{ number_format($item->discount, 2) }}</td>
+                                                    <td>{{ number_format($item->total, 2) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -152,7 +202,7 @@
 
                 <div class="col-lg-12 col-sm-12">
                     <div class="form-group mt-2">
-                        <button type="submit" class="btn btn-primary">Update Purchase</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Update Purchase</button>
                     </div>
                 </div>
 
@@ -172,14 +222,39 @@
     })->values();
 @endphp
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const itemsLocked = @json($itemsLocked);
+    const lockedSubtotal = @json((float) $purchase->subtotal);
     const products = @json($products);
     const existingItems = @json($existingItemsData);
-    
+
+    const discountInputEl = document.getElementById('discount');
+    const taxInputEl = document.getElementById('tax');
+
+    if (itemsLocked) {
+        // No editable rows exist — totals are fixed to the original
+        // subtotal and only react to discount/tax changes.
+        function recalcLockedTotals() {
+            const overallDiscount = parseFloat(discountInputEl.value) || 0;
+            const tax = parseFloat(taxInputEl.value) || 0;
+            const total = lockedSubtotal - overallDiscount + tax;
+
+            document.getElementById('display-subtotal').textContent = lockedSubtotal.toFixed(2);
+            document.getElementById('display-total').textContent = total.toFixed(2);
+        }
+
+        discountInputEl.addEventListener('input', recalcLockedTotals);
+        taxInputEl.addEventListener('input', recalcLockedTotals);
+        recalcLockedTotals();
+        return;
+    }
+
+    // ===== Editable mode (purchase still pending) =====
     const itemsBody = document.getElementById('items-body');
     const addBtn = document.getElementById('add-item-row');
+    const duplicateWarning = document.getElementById('duplicate-warning');
+    const submitBtn = document.getElementById('submit-btn');
     let rowIndex = 0;
 
     function productOptions(selectedId = '') {
@@ -224,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cost = selectedOption.getAttribute('data-cost');
             if (cost) costInput.value = cost;
             recalcRow(row);
+            checkDuplicateProducts();
         });
 
         [qtyInput, costInput, discountInput].forEach(input => {
@@ -233,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
         removeBtn.addEventListener('click', function () {
             row.remove();
             recalcTotals();
+            checkDuplicateProducts();
         });
     }
 
@@ -251,20 +328,29 @@ document.addEventListener('DOMContentLoaded', function () {
             subtotal += parseFloat(el.textContent) || 0;
         });
 
-        const overallDiscount = parseFloat(document.getElementById('discount').value) || 0;
-        const tax = parseFloat(document.getElementById('tax').value) || 0;
+        const overallDiscount = parseFloat(discountInputEl.value) || 0;
+        const tax = parseFloat(taxInputEl.value) || 0;
         const total = subtotal - overallDiscount + tax;
 
         document.getElementById('display-subtotal').textContent = subtotal.toFixed(2);
         document.getElementById('display-total').textContent = total.toFixed(2);
     }
 
-    document.getElementById('discount').addEventListener('input', recalcTotals);
-    document.getElementById('tax').addEventListener('input', recalcTotals);
+    function checkDuplicateProducts() {
+        const selected = Array.from(document.querySelectorAll('.product-select'))
+            .map(s => s.value)
+            .filter(v => v !== '');
+        const hasDuplicates = new Set(selected).size !== selected.length;
+
+        duplicateWarning.style.display = hasDuplicates ? 'block' : 'none';
+        submitBtn.disabled = hasDuplicates;
+    }
+
+    discountInputEl.addEventListener('input', recalcTotals);
+    taxInputEl.addEventListener('input', recalcTotals);
 
     addBtn.addEventListener('click', () => addRow());
 
-    // Load existing items, or one empty row if none
     if (existingItems.length > 0) {
         existingItems.forEach(item => addRow(item));
     } else {

@@ -33,7 +33,7 @@ class ProductService
             'pro_data'   => Product::findOrFail($id),
             'categories' => Category::where('status', 1)->get(),
             'brands'     => Brand::where('status', 1)->get(),
-           'units'      => Unit::all(),
+            'units'      => Unit::all(),
         ];
     }
 
@@ -42,27 +42,21 @@ class ProductService
         return Product::onlyTrashed()->get();
     }
 
-// Replace store() with this:
-public function store($request): Product
-{
-    return DB::transaction(function () use ($request) {
-        $data = $request->validated();
+    public function store($request): Product
+    {
+        return DB::transaction(function () use ($request) {
+            $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'));
-        }
+            if ($request->hasFile('image')) {
+                $data['image'] = $this->uploadImage($request->file('image'));
+            }
 
-        // selling_price: if not provided or zero, calculate from cost + margin
-        if (empty($data['selling_price']) && !empty($data['cost_price']) && !empty($data['profit_margin'])) {
-            $data['selling_price'] = round(
-                (float) $data['cost_price'] * (1 + (float) $data['profit_margin'] / 100),
-                2
-            );
-        }
-
-        return Product::create($data);
-    });
-}
+            // selling_price is intentionally NOT set here.
+            // Product::boot() calculates it from cost_price + profit_margin
+            // on every save, so there is exactly one place this math happens.
+            return Product::create($data);
+        });
+    }
 
     public function update($request, string $id): Product
     {
@@ -77,8 +71,6 @@ public function store($request): Product
                 $data['image'] = $this->uploadImage($request->file('image'));
             }
 
-            // selling_price is NEVER in $data (prohibited in request).
-            // model boot() recalculates it automatically from cost_price + profit_margin.
             $product->update($data);
 
             return $product;
