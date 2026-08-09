@@ -12,37 +12,45 @@ class Product extends Model
     use HasFactory, SoftDeletes, Searchable;
 
     protected $fillable = [
-        'name',
-        'sku',
-        'barcode',
-        'description',
-        'cost_price',
-        'profit_margin',
-        'selling_price',
-        'stock',
-        'minimum_stock',
-        'category_id',
-        'brand_id',
-        'unit_id',
-        'image',
-        'status',
-        'is_featured',
+        'name', 'sku', 'barcode', 'description',
+        'cost_price', 'profit_margin', 'selling_price',
+        'stock', 'minimum_stock',
+        'category_id', 'brand_id', 'unit_id',
+        'image', 'status', 'is_featured',
     ];
 
     protected $casts = [
-        'profit_margin' => 'decimal:2',
         'cost_price'    => 'decimal:2',
+        'profit_margin' => 'decimal:2',
         'selling_price' => 'decimal:2',
-        'stock'          => 'integer',
-        'minimum_stock'  => 'integer',
-        'status'         => 'boolean',
-        'is_featured'    => 'boolean',
+        'stock'         => 'integer',
+        'minimum_stock' => 'integer',
+        'status'        => 'boolean',
+        'is_featured'   => 'boolean',
     ];
+
+    /* =========================
+       AUTO-CALCULATE selling_price EVERY TIME cost_price OR profit_margin CHANGES
+       This runs on every save — whether from the product form, a purchase receipt,
+       or any other code path. One place, always consistent.
+    ==========================*/
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($product) {
+            if ((float) $product->cost_price > 0 && (float) $product->profit_margin >= 0) {
+                $product->selling_price = round(
+                    (float) $product->cost_price * (1 + (float) $product->profit_margin / 100),
+                    2
+                );
+            }
+        });
+    }
 
     /* =========================
        RELATIONSHIPS
     ==========================*/
-
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -61,7 +69,6 @@ class Product extends Model
     /* =========================
        SCOPES
     ==========================*/
-
     public function scopeActive($query)
     {
         return $query->where('status', 1);
@@ -80,38 +87,14 @@ class Product extends Model
     /* =========================
        ACCESSORS
     ==========================*/
-public function recalculateSellingPrice(): void
-{
-    $costPrice = (float) $this->cost_price;
-    $profitMargin = (float) $this->profit_margin;
-
-    $sellingPrice = $costPrice + (($costPrice * $profitMargin) / 100);
-
-    $this->selling_price = round($sellingPrice, 2);
-}
-
-protected static function booted()
-{
-    static::saving(function ($product) {
-
-        $costPrice = (float) $product->cost_price;
-        $profitMargin = (float) $product->profit_margin;
-
-        $product->selling_price = round(
-            $costPrice + (($costPrice * $profitMargin) / 100),
-            2
-        );
-    });
-}
     public function getIsLowStockAttribute(): bool
     {
         return $this->stock <= $this->minimum_stock;
     }
 
     /* =========================
-       SCOUT SEARCH
+       SCOUT
     ==========================*/
-
     public function toSearchableArray(): array
     {
         return [

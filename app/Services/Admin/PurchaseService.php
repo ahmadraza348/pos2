@@ -20,24 +20,26 @@ class PurchaseService
         return Purchase::with('supplier')->latest()->get();
     }
 
-    public function getCreateData(): array
-    {
-        return [
-            'suppliers' => Supplier::where('status', 1)->get(),
-            'products'  => Product::where('status', 1)->get(['id', 'name', 'sku', 'cost_price']),
-        ];
-    }
+public function getCreateData(): array
+{
+    return [
+        'suppliers' => Supplier::where('status', 1)->get(),
+        'products'  => Product::where('status', 1)
+            ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
+    ];
+}
 
-    public function getEditData(string $id): array
-    {
-        $purchase = Purchase::with('items.product')->findOrFail($id);
+public function getEditData(string $id): array
+{
+    $purchase = Purchase::with('items.product')->findOrFail($id);
 
-        return [
-            'purchase'  => $purchase,
-            'suppliers' => Supplier::where('status', 1)->get(),
-            'products'  => Product::where('status', 1)->get(['id', 'name', 'sku', 'cost_price']),
-        ];
-    }
+    return [
+        'purchase'  => $purchase,
+        'suppliers' => Supplier::where('status', 1)->get(),
+        'products'  => Product::where('status', 1)
+            ->get(['id', 'name', 'sku', 'cost_price', 'profit_margin', 'selling_price', 'stock']),
+    ];
+}
 
     public function getTrashed()
     {
@@ -195,26 +197,25 @@ class PurchaseService
         return [$subtotal, $prepared];
     }
 
-protected function adjustStock(
-    int $productId,
-    int $quantity,
-    float $unitCost
-): void {
+// Replace only the adjustStock method in your existing PurchaseService
 
+protected function adjustStock(int $productId, int $quantity, float $unitCost): void
+{
     $product = Product::findOrFail($productId);
+    $product->increment('stock', $quantity);
 
-    $product->stock += $quantity;
-
-    $product->cost_price = $unitCost;
-
-    $product->save(); // booted() auto recalculates selling price
+    // Update cost_price to the latest purchase price.
+    // Model boot() will auto-recalculate selling_price from this new cost + existing profit_margin.
+    // This means: receive a purchase at a new cost → selling price updates automatically.
+    $product->update(['cost_price' => $unitCost]);
 }
 
-    protected function reverseStock(int $productId, int $quantity): void
-    {
-        $product = Product::findOrFail($productId);
-        $product->decrement('stock', min($quantity, $product->stock));
-    }
+protected function reverseStock(int $productId, int $quantity): void
+{
+    $product = Product::findOrFail($productId);
+    $product->decrement('stock', min($quantity, $product->stock));
+    // selling_price stays as-is on reversal — we don't know what cost to revert to.
+}
 
     protected function resolvePaymentStatus(float $total, float $paid): string
     {
