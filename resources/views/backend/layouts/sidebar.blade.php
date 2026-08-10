@@ -41,6 +41,9 @@
                                 <span>Brands</span>
                             </a>
                         </li>
+                        <li>
+                           <a href="{{ route('barcode-print') }}" class="{{ request()->routeIs('barcode-print') ? 'active' : '' }}">Barcode Print</a>
+                        </li>
 
                         <li>
                             <a href="{{ route('product.index') }}" class="{{ request()->routeIs('product.*') ? 'active' : '' }}">
@@ -72,7 +75,7 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('purchase.restorePurchase') }}" class="{{ request()->routeIs('purchase.*') ? 'active' : '' }}">
+                            <a href="{{ route('purchase.restorePurchase') }}" class="{{ request()->routeIs('purchase.restorePurchase') ? 'active' : '' }}">
                                 <span>Trashed Purchases</span>
                             </a>
                         </li>

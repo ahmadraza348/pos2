@@ -21,8 +21,9 @@ class PurchaseRequest extends FormRequest
         // The purchase as it currently exists in the DB (null on create).
         $existing = $purchaseId ? Purchase::find($purchaseId) : null;
 
-        // Items can only be added/changed while the purchase is still
-        // pending — once received (stock moved) or cancelled, they're locked.
+        // Items can be edited any time EXCEPT once the purchase is
+        // cancelled. A "received" purchase is still editable here —
+        // PurchaseService checks stock availability before applying it.
         $itemsLocked = $existing ? $existing->items_locked : false;
 
         return [
@@ -30,8 +31,11 @@ class PurchaseRequest extends FormRequest
             'supplier_id'    => 'required|exists:suppliers,id',
             'purchase_date'  => 'required|date',
 
+            // Invoice-level only — this affects what you owe the supplier,
+            // not the per-unit cost recorded against each product.
             'discount'       => 'nullable|numeric|min:0',
             'tax'            => 'nullable|numeric|min:0',
+
             'paid_amount'    => 'nullable|numeric|min:0',
             'payment_status' => 'nullable|in:unpaid,partial,paid',
             'status'         => ['nullable', Rule::in($this->allowedStatuses($existing))],
@@ -41,27 +45,24 @@ class PurchaseRequest extends FormRequest
             'items.*.product_id' => 'required_with:items|distinct|exists:products,id',
             'items.*.quantity'   => 'required_with:items|integer|min:1',
             'items.*.unit_cost'  => 'required_with:items|numeric|min:0',
-            'items.*.discount'   => 'nullable|numeric|min:0',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'items.required'               => 'Add at least one product to the purchase.',
+            'items.required'                   => 'Add at least one product to the purchase.',
             'items.*.product_id.required_with' => 'Select a product for every item row.',
-            'items.*.product_id.distinct'  => 'Each product can only appear once per purchase — adjust the quantity instead of adding it twice.',
-            'status.in'                    => 'That status change isn\'t allowed. A received purchase can only be cancelled, not reopened.',
+            'items.*.product_id.distinct'      => 'Each product can only appear once per purchase — adjust the quantity instead of adding it twice.',
+            'status.in'                        => 'That status change isn\'t allowed.',
         ];
     }
 
     /**
-     * Which status values are valid to submit, given the purchase's
-     * current state:
-     * - pending   → can go to pending, received, or cancelled
-     * - received  → can only stay received or move to cancelled
-     * - cancelled → locked, stays cancelled
-     * - new (create) → any of the three
+     * - pending           → pending, received, or cancelled
+     * - received          → received or cancelled (can't "un-receive" back to pending)
+     * - cancelled         → cancelled only (fully closed)
+     * - new (create form) → any of the three
      */
     protected function allowedStatuses(?Purchase $existing): array
     {

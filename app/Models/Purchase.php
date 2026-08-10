@@ -63,12 +63,13 @@ class Purchase extends Model
     }
 
     /**
-     * Once a purchase has affected stock (received) — or been cancelled —
-     * its items are locked. Only a still-pending purchase can have its
-     * items freely edited, because no stock has moved yet.
+     * A purchase's items are locked ONLY once it's cancelled — that's a
+     * deliberate, closed action. A "received" purchase can still be
+     * edited; PurchaseService checks stock availability before allowing
+     * it, rather than blocking editing outright.
      */
     public function getItemsLockedAttribute(): bool
     {
-        return $this->status !== 'pending';
+        return $this->status === 'cancelled';
     }
 }

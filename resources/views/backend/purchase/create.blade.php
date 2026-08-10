@@ -58,7 +58,7 @@
                                     <option value="received" {{ old('status', 'received') == 'received' ? 'selected' : '' }}>Received</option>
                                     <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                 </select>
-                                <small class="text-muted">Stock only increases when marked "Received". Once received, items can no longer be edited — only cancelled.</small>
+                                <small class="text-muted">Stock only increases when marked "Received".</small>
                                 @error('status') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
@@ -101,9 +101,9 @@
                                     <thead>
                                         <tr>
                                             <th style="min-width:220px;">Product</th>
+                                            <th style="width:100px;">Current Stock</th>
                                             <th style="width:100px;">Qty</th>
                                             <th style="width:140px;">Unit Cost</th>
-                                            <th style="width:140px;">Discount</th>
                                             <th style="width:140px;">Line Total</th>
                                             <th style="width:60px;"></th>
                                         </tr>
@@ -126,6 +126,7 @@
                                     <label class="form-label" for="discount">Overall Discount</label>
                                     <input type="number" step="0.01" name="discount" id="discount"
                                         class="form-control" value="{{ old('discount', 0) }}">
+                                    <small class="text-muted">Off the total invoice — e.g. a supplier discount.</small>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label" for="tax">Tax</label>
@@ -181,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let opts = '<option value="">Select Product</option>';
         products.forEach(p => {
             const sel = (String(p.id) === String(selectedId)) ? 'selected' : '';
-            opts += `<option value="${p.id}" data-cost="${p.cost_price}" ${sel}>${p.name} (${p.sku})</option>`;
+            opts += `<option value="${p.id}" data-cost="${p.cost_price}" data-stock="${p.stock}" ${sel}>${p.name} (${p.sku})</option>`;
         });
         return opts;
     }
@@ -196,9 +197,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     ${productOptions(data.product_id || '')}
                 </select>
             </td>
+            <td class="text-muted stock-display">—</td>
             <td><input type="number" min="1" name="items[${i}][quantity]" class="form-control qty-input" value="${data.quantity || 1}" required></td>
             <td><input type="number" step="0.01" min="0" name="items[${i}][unit_cost]" class="form-control cost-input" value="${data.unit_cost || 0}" required></td>
-            <td><input type="number" step="0.01" min="0" name="items[${i}][discount]" class="form-control discount-input" value="${data.discount || 0}"></td>
             <td><span class="line-total">0.00</span></td>
             <td><button type="button" class="btn btn-sm btn-danger remove-row">&times;</button></td>
         `;
@@ -211,18 +212,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const productSelect = row.querySelector('.product-select');
         const qtyInput = row.querySelector('.qty-input');
         const costInput = row.querySelector('.cost-input');
-        const discountInput = row.querySelector('.discount-input');
+        const stockDisplay = row.querySelector('.stock-display');
         const removeBtn = row.querySelector('.remove-row');
 
         productSelect.addEventListener('change', function () {
             const selectedOption = productSelect.options[productSelect.selectedIndex];
             const cost = selectedOption.getAttribute('data-cost');
+            const stock = selectedOption.getAttribute('data-stock');
             if (cost) costInput.value = cost;
+            stockDisplay.textContent = stock ?? '—';
             recalcRow(row);
             checkDuplicateProducts();
         });
 
-        [qtyInput, costInput, discountInput].forEach(input => {
+        [qtyInput, costInput].forEach(input => {
             input.addEventListener('input', () => recalcRow(row));
         });
 
@@ -236,8 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function recalcRow(row) {
         const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
         const cost = parseFloat(row.querySelector('.cost-input').value) || 0;
-        const discount = parseFloat(row.querySelector('.discount-input').value) || 0;
-        const lineTotal = (qty * cost) - discount;
+        const lineTotal = qty * cost;
         row.querySelector('.line-total').textContent = lineTotal.toFixed(2);
         recalcTotals();
     }
@@ -256,8 +258,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('display-total').textContent = total.toFixed(2);
     }
 
-    // Same product picked in two rows silently overwrites its own cost —
-    // catch it here rather than let it fail confusingly on the server.
+    // Same product picked in two rows would silently overwrite its own
+    // cost average — catch it here rather than let it fail confusingly.
     function checkDuplicateProducts() {
         const selected = Array.from(document.querySelectorAll('.product-select'))
             .map(s => s.value)

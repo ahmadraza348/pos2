@@ -111,7 +111,9 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
         Route::patch('/{id}/restore', 'restore')->name('restore');
         Route::delete('/{id}/force-delete', 'forceDelete')->name('forceDelete');
     });
-
+Route::get('barcode-print', [\App\Http\Controllers\Admin\BarcodeController::class, 'index'])
+    ->name('barcode-print');
+    
     Route::prefix('supplier')->name('supplier.')->controller(SupplierController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store', 'store')->name('store');
@@ -142,6 +144,7 @@ Route::prefix('admin')->middleware('adminauth')->group(function () {
         Route::delete('delete/{customer}', 'destroy')->name('destroy');
         Route::post('bulk-delete', 'bulkDelete')->name('bulk-delete');
     });
+    
 
 
     Route::prefix('pos')->name('pos.')->controller(PosController::class)->group(function () {

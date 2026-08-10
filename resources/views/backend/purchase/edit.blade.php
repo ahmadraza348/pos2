@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $itemsLocked = $purchase->items_locked; // true once status is received or cancelled
+    $itemsLocked = $purchase->items_locked; // true only once cancelled
 
     $statusLabels = [
         'pending'   => 'Pending',
@@ -79,9 +79,9 @@
                                     @endforeach
                                 </select>
                                 @if ($purchase->status === 'pending')
-                                    <small class="text-muted">Marking "Received" adds this stock to your products and locks the items below.</small>
+                                    <small class="text-muted">Marking "Received" adds this stock to your products.</small>
                                 @elseif ($purchase->status === 'received')
-                                    <small class="text-muted">Items are locked because this stock has already been added. To undo it, set this to "Cancelled".</small>
+                                    <small class="text-muted">Stock is already in — editing items here will adjust it accordingly. Setting to "Cancelled" reverses it.</small>
                                 @else
                                     <small class="text-muted">This purchase is cancelled and can no longer be changed.</small>
                                 @endif
@@ -119,11 +119,18 @@
 
                             @if ($itemsLocked)
                                 <div class="alert alert-light border small mb-3">
-                                    These items already affected stock, so they can't be edited here. Cancel the purchase to reverse the stock, or record a new purchase for corrections.
+                                    This purchase is cancelled, so its items can no longer be changed.
+                                </div>
+                            @elseif ($purchase->status === 'received')
+                                <div class="alert alert-light border small mb-3">
+                                    This stock has already been added to your products. You can still correct
+                                    quantities or prices — if a product's stock has since dropped below what this
+                                    purchase originally added (because some was sold), saving will be blocked with
+                                    an explanation instead of silently getting the numbers wrong.
                                 </div>
                             @endif
 
-                            @error('items') <div class="text-danger mb-2">{{ $message }}</div> @enderror
+                            @error('items') <div class="alert alert-danger small mb-2">{{ $message }}</div> @enderror
                             <div id="duplicate-warning" class="text-danger mb-2 small" style="display:none;">
                                 A product is selected more than once — please combine it into a single row instead.
                             </div>
@@ -133,9 +140,11 @@
                                     <thead>
                                         <tr>
                                             <th style="min-width:220px;">Product</th>
+                                            @if (! $itemsLocked)
+                                                <th style="width:100px;">Current Stock</th>
+                                            @endif
                                             <th style="width:100px;">Qty</th>
                                             <th style="width:140px;">Unit Cost</th>
-                                            <th style="width:140px;">Discount</th>
                                             <th style="width:140px;">Line Total</th>
                                             @if (! $itemsLocked)
                                                 <th style="width:60px;"></th>
@@ -149,7 +158,6 @@
                                                     <td>{{ $item->product->name ?? 'Deleted product' }} ({{ $item->product->sku ?? '—' }})</td>
                                                     <td>{{ $item->quantity }}</td>
                                                     <td>{{ number_format($item->unit_cost, 2) }}</td>
-                                                    <td>{{ number_format($item->discount, 2) }}</td>
                                                     <td>{{ number_format($item->total, 2) }}</td>
                                                 </tr>
                                             @endforeach
@@ -217,7 +225,6 @@
             'product_id' => $item->product_id,
             'quantity'   => $item->quantity,
             'unit_cost'  => $item->unit_cost,
-            'discount'   => $item->discount,
         ];
     })->values();
 @endphp
@@ -226,15 +233,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     const itemsLocked = @json($itemsLocked);
     const lockedSubtotal = @json((float) $purchase->subtotal);
-    const products = @json($products);
-    const existingItems = @json($existingItemsData);
 
     const discountInputEl = document.getElementById('discount');
     const taxInputEl = document.getElementById('tax');
 
     if (itemsLocked) {
-        // No editable rows exist — totals are fixed to the original
-        // subtotal and only react to discount/tax changes.
         function recalcLockedTotals() {
             const overallDiscount = parseFloat(discountInputEl.value) || 0;
             const tax = parseFloat(taxInputEl.value) || 0;
@@ -250,7 +253,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ===== Editable mode (purchase still pending) =====
+    // ===== Editable mode (pending or received) =====
+    const products = @json($products);
+    const existingItems = @json($existingItemsData);
+
     const itemsBody = document.getElementById('items-body');
     const addBtn = document.getElementById('add-item-row');
     const duplicateWarning = document.getElementById('duplicate-warning');
@@ -261,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let opts = '<option value="">Select Product</option>';
         products.forEach(p => {
             const sel = (String(p.id) === String(selectedId)) ? 'selected' : '';
-            opts += `<option value="${p.id}" data-cost="${p.cost_price}" ${sel}>${p.name} (${p.sku})</option>`;
+            opts += `<option value="${p.id}" data-cost="${p.cost_price}" data-stock="${p.stock}" ${sel}>${p.name} (${p.sku})</option>`;
         });
         return opts;
     }
@@ -276,33 +282,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     ${productOptions(data.product_id || '')}
                 </select>
             </td>
+            <td class="text-muted stock-display">—</td>
             <td><input type="number" min="1" name="items[${i}][quantity]" class="form-control qty-input" value="${data.quantity || 1}" required></td>
             <td><input type="number" step="0.01" min="0" name="items[${i}][unit_cost]" class="form-control cost-input" value="${data.unit_cost || 0}" required></td>
-            <td><input type="number" step="0.01" min="0" name="items[${i}][discount]" class="form-control discount-input" value="${data.discount || 0}"></td>
             <td><span class="line-total">0.00</span></td>
             <td><button type="button" class="btn btn-sm btn-danger remove-row">&times;</button></td>
         `;
         itemsBody.appendChild(row);
         bindRow(row);
         recalcRow(row);
+
+        // Show current stock immediately for pre-filled rows too.
+        const opt = row.querySelector('.product-select').selectedOptions[0];
+        if (opt && opt.value) {
+            row.querySelector('.stock-display').textContent = opt.getAttribute('data-stock') ?? '—';
+        }
     }
 
     function bindRow(row) {
         const productSelect = row.querySelector('.product-select');
         const qtyInput = row.querySelector('.qty-input');
         const costInput = row.querySelector('.cost-input');
-        const discountInput = row.querySelector('.discount-input');
+        const stockDisplay = row.querySelector('.stock-display');
         const removeBtn = row.querySelector('.remove-row');
 
         productSelect.addEventListener('change', function () {
             const selectedOption = productSelect.options[productSelect.selectedIndex];
             const cost = selectedOption.getAttribute('data-cost');
+            const stock = selectedOption.getAttribute('data-stock');
             if (cost) costInput.value = cost;
+            stockDisplay.textContent = stock ?? '—';
             recalcRow(row);
             checkDuplicateProducts();
         });
 
-        [qtyInput, costInput, discountInput].forEach(input => {
+        [qtyInput, costInput].forEach(input => {
             input.addEventListener('input', () => recalcRow(row));
         });
 
@@ -316,8 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function recalcRow(row) {
         const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
         const cost = parseFloat(row.querySelector('.cost-input').value) || 0;
-        const discount = parseFloat(row.querySelector('.discount-input').value) || 0;
-        const lineTotal = (qty * cost) - discount;
+        const lineTotal = qty * cost;
         row.querySelector('.line-total').textContent = lineTotal.toFixed(2);
         recalcTotals();
     }

@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 class PurchaseService
 {
@@ -96,61 +98,56 @@ class PurchaseService
     ==========================*/
 
     /**
-     * Updating a purchase behaves differently depending on whether it has
-     * already affected stock:
-     *
-     * - PENDING  → items are still fully editable. No stock has moved yet,
-     *              so we can safely replace the item list and, if the new
-     *              status is "received", apply stock for the first time.
-     *
-     * - RECEIVED / CANCELLED → items are locked. We never touch them again,
-     *              because reversing-and-reapplying against quantities that
-     *              may have already been partially sold is exactly the kind
-     *              of silent stock corruption this system needs to avoid.
-     *              The only stock-affecting action left is cancelling a
-     *              received purchase, which reverses its original items
-     *              exactly once. Everything else (supplier, dates, payment
-     *              info, notes) can still be corrected freely.
+     * A purchase can be edited at any time UNLESS it's cancelled (fully
+     * closed). If it was already "received" (stock already moved), we
+     * reverse its old items and reapply the new ones — but only after
+     * confirming every product involved still has enough stock on hand
+     * to safely reverse. If any product has already had some of that
+     * stock sold, the whole update is rejected with a clear explanation
+     * instead of silently under-reversing.
      */
     public function update(array $data, string $id): Purchase
     {
         return DB::transaction(function () use ($data, $id) {
 
             $purchase = Purchase::with('items')->findOrFail($id);
+
+            if ($purchase->status === 'cancelled') {
+                throw ValidationException::withMessages([
+                    'status' => 'This purchase is cancelled and can no longer be edited.',
+                ]);
+            }
+
             $wasReceived = $purchase->status === 'received';
-            $itemsLocked = $purchase->items_locked;
             $newStatus = $data['status'] ?? $purchase->status;
 
-            if (! $itemsLocked) {
-                $purchase->items()->delete();
+            if ($wasReceived) {
+                $this->assertReversalIsSafe($purchase->items);
 
-                [$subtotal, $itemsData] = $this->prepareItems($data['items']);
-
-                foreach ($itemsData as $item) {
-                    $item['purchase_id'] = $purchase->id;
-                    PurchaseItem::create($item);
-                }
-
-                if ($newStatus === 'received') {
-                    foreach ($itemsData as $item) {
-                        $this->adjustStock($item['product_id'], $item['quantity'], $item['unit_cost']);
-                    }
-                }
-            } else {
-                // Items are locked — totals stay exactly as originally recorded.
-                $subtotal = (float) $purchase->subtotal;
-
-                if ($wasReceived && $newStatus === 'cancelled') {
-                    foreach ($purchase->items as $item) {
-                        $this->reverseStock($item->product_id, $item->quantity);
-                    }
+                foreach ($purchase->items as $oldItem) {
+                    $this->reverseStock($oldItem->product_id, $oldItem->quantity);
                 }
             }
 
-            $discount = $data['discount'] ?? (float) $purchase->discount;
-            $tax = $data['tax'] ?? (float) $purchase->tax;
+            $purchase->items()->delete();
+
+            [$subtotal, $itemsData] = $this->prepareItems($data['items']);
+
+            foreach ($itemsData as $item) {
+                $item['purchase_id'] = $purchase->id;
+                PurchaseItem::create($item);
+            }
+
+            if ($newStatus === 'received') {
+                foreach ($itemsData as $item) {
+                    $this->adjustStock($item['product_id'], $item['quantity'], $item['unit_cost']);
+                }
+            }
+
+            $discount = $data['discount'] ?? 0;
+            $tax = $data['tax'] ?? 0;
             $total = $subtotal - $discount + $tax;
-            $paid = $data['paid_amount'] ?? (float) $purchase->paid_amount;
+            $paid = $data['paid_amount'] ?? 0;
 
             $purchase->update([
                 'invoice_no'     => $data['invoice_no'],
@@ -181,6 +178,8 @@ class PurchaseService
             $purchase = Purchase::with('items')->findOrFail($id);
 
             if ($purchase->status === 'received') {
+                $this->assertReversalIsSafe($purchase->items);
+
                 foreach ($purchase->items as $item) {
                     $this->reverseStock($item->product_id, $item->quantity);
                 }
@@ -210,14 +209,13 @@ class PurchaseService
         $prepared = [];
 
         foreach ($items as $item) {
-            $lineTotal = ($item['quantity'] * $item['unit_cost']) - ($item['discount'] ?? 0);
+            $lineTotal = $item['quantity'] * $item['unit_cost'];
             $subtotal += $lineTotal;
 
             $prepared[] = [
                 'product_id' => $item['product_id'],
                 'quantity'   => $item['quantity'],
                 'unit_cost'  => $item['unit_cost'],
-                'discount'   => $item['discount'] ?? 0,
                 'total'      => $lineTotal,
             ];
         }
@@ -225,25 +223,74 @@ class PurchaseService
         return [$subtotal, $prepared];
     }
 
-    protected function adjustStock(int $productId, int $quantity, float $unitCost): void
+    /**
+     * Blocks an edit/delete/cancel if reversing any item would need to
+     * remove more stock than the product currently has — meaning some of
+     * it has already been sold. Checked BEFORE anything is changed, so
+     * the whole operation either fully succeeds or doesn't touch the
+     * database at all.
+     */
+    protected function assertReversalIsSafe(Collection $items): void
     {
-        $product = Product::findOrFail($productId);
-        $product->increment('stock', $quantity);
+        foreach ($items as $item) {
+            $product = Product::find($item->product_id);
 
-        // Update cost_price to the latest purchase price.
-        // Product::boot() auto-recalculates selling_price from this new
-        // cost + the existing profit_margin — receiving a purchase at a
-        // new cost updates the shelf price automatically.
-        $product->update(['cost_price' => $unitCost]);
+            if (! $product) {
+                continue; // product was deleted separately — nothing to check against
+            }
+
+            if ($product->stock < $item->quantity) {
+                throw ValidationException::withMessages([
+                    'items' => "Can't save changes — \"{$product->name}\" only has {$product->stock} left in "
+                        . "stock, but this purchase originally added {$item->quantity}. Some of it has already "
+                        . "been sold, so this purchase can't be edited or cancelled anymore. Record a separate "
+                        . "purchase or stock adjustment instead.",
+                ]);
+            }
+        }
     }
 
+    /**
+     * Adds stock and blends the new purchase cost into the product's
+     * existing cost using a weighted average — so buying more of a
+     * product at a different price nudges the cost, rather than the
+     * latest purchase silently overwriting what earlier stock cost.
+     *
+     * Example: 4 in stock at Rs. 100, +4 more at Rs. 120
+     *        → (4×100 + 4×120) / 8 = Rs. 110 average cost.
+     *
+     * Product::boot() then recalculates selling_price from this new
+     * cost + the existing profit_margin automatically.
+     */
+    protected function adjustStock(int $productId, int $quantity, float $unitCost): void
+    {
+        $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
+
+        $oldStock = $product->stock;
+        $oldCost = (float) $product->cost_price;
+        $newStock = $oldStock + $quantity;
+
+        $avgCost = $newStock > 0
+            ? (($oldStock * $oldCost) + ($quantity * $unitCost)) / $newStock
+            : $unitCost;
+
+        $product->update([
+            'stock'      => $newStock,
+            'cost_price' => round($avgCost, 2),
+        ]);
+    }
+
+    /**
+     * Removes stock that a (now edited/cancelled) purchase had added.
+     * cost_price is intentionally left as-is — a weighted average can't
+     * be precisely "un-blended" without keeping full purchase history,
+     * which is more bookkeeping than a small store needs. Call sites
+     * always check assertReversalIsSafe() first, so this never needs to
+     * silently clamp in practice.
+     */
     protected function reverseStock(int $productId, int $quantity): void
     {
-        $product = Product::findOrFail($productId);
-        // Clamped so a purchase reversal can never push stock negative —
-        // if some of this stock was already sold, the reversal will be
-        // partial. selling_price/cost_price are left as-is, since we don't
-        // know what the correct prior cost was.
+        $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
         $product->decrement('stock', min($quantity, $product->stock));
     }
 

@@ -18,8 +18,8 @@
             checkout:         "{{ route('pos.checkout') }}",
             hold:             "{{ route('pos.hold') }}",
             heldOrders:       "{{ route('pos.held-orders') }}",
-            resumeHeldOrder:  "{{ url('admin/pos/held-orders') }}", // + /{id}/resume
-            deleteHeldOrder:  "{{ url('admin/pos/held-orders') }}", // + /{id}
+            resumeHeldOrder:  "{{ url('admin/pos/held-orders') }}",
+            deleteHeldOrder:  "{{ url('admin/pos/held-orders') }}",
             recentSales:      "{{ route('pos.recent-sales') }}",
         },
         csrfToken: "{{ csrf_token() }}",
@@ -27,56 +27,586 @@
     };
 </script>
 
+{{-- ============================================================
+     REDESIGNED POS STYLES — modern, clean, professional
+============================================================ --}}
 <style>
+    /* ── Loader ── */
     #pos-loader {
-        position: fixed; inset: 0; background: rgba(255,255,255,0.55);
-        display: none; align-items: center; justify-content: center; z-index: 2000;
+        position: fixed;
+        inset: 0;
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
     }
-    #pos-loader .spinner-border { width: 3rem; height: 3rem; }
-    .productset.out-of-stock { opacity: 0.45; pointer-events: none; position: relative; }
+    #pos-loader .spinner-border {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-width: 0.3rem;
+    }
+
+    /* ── Product Grid ── */
+    .productset {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #eef1f5;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        margin-bottom: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+    }
+    .productset:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(255, 159, 67, 0.15);
+        border-color: #ff9f43;
+    }
+    .productset .productsetimg {
+        position: relative;
+        overflow: hidden;
+        background: #fafbfc;
+        padding: 8px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .productset .productsetimg img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+    .productset:hover .productsetimg img {
+        transform: scale(1.05);
+    }
+    .productset .productsetimg .stock-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(40, 199, 111, 0.9);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+    }
+    .productset .productsetimg .stock-badge.low {
+        background: rgba(234, 84, 85, 0.9);
+    }
+    .productset.out-of-stock {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
     .productset.out-of-stock::after {
-        content: 'Out of stock'; position: absolute; top: 8px; right: 8px;
-        background: #dc3545; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 4px;
+        content: 'Out of Stock';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-25deg);
+        background: #dc3545;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 6px 24px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 16px rgba(220,53,69,0.3);
+        z-index: 5;
+        pointer-events: none;
     }
-    .paymentmethod.active { border: 2px solid #fd7e14; border-radius: 6px; }
-    #change-due.text-success { color: #198754 !important; font-weight: 600; }
-    #change-due.text-danger { color: #dc3545 !important; font-weight: 600; }
+    .productset .productsetcontent {
+        padding: 12px 14px 14px;
+        text-align: center;
+        border-top: 1px solid #f0f2f5;
+    }
+    .productset .productsetcontent .product-sku {
+        font-size: 11px;
+        color: #9aa6b2;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+    .productset .productsetcontent .product-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a2634;
+        margin: 4px 0 6px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.3;
+    }
+    .productset .productsetcontent .product-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #ff9f43;
+    }
+
+    /* ── Category Tabs ── */
+    #category-tabs .product-details {
+        background: #fff;
+        border: 1px solid #eef1f5;
+        border-radius: 12px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        cursor: pointer;
+        min-width: 100px;
+        text-align: center;
+    }
+    #category-tabs .product-details img {
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin: 0 auto 6px;
+        display: block;
+    }
+    #category-tabs .product-details h6 {
+        font-size: 12px;
+        font-weight: 600;
+        color: #4a5568;
+        margin: 0;
+        white-space: nowrap;
+    }
+    #category-tabs .active .product-details {
+        border-color: #ff9f43;
+        background: #fff8f0;
+        box-shadow: 0 4px 16px rgba(255, 159, 67, 0.15);
+    }
+    #category-tabs .active .product-details h6 {
+        color: #ff9f43;
+    }
+
+    /* ── Search & Barcode ── */
+    .pos-search-wrapper {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        border: 1px solid #eef1f5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .pos-search-wrapper .form-control {
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        padding: 10px 16px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+    .pos-search-wrapper .form-control:focus {
+        border-color: #ff9f43;
+        box-shadow: 0 0 0 4px rgba(255, 159, 67, 0.1);
+        background: #fff;
+    }
+    .pos-search-wrapper .btn-scanner {
+        border-radius: 10px;
+        background: #ff9f43;
+        border: none;
+        color: #fff;
+        padding: 10px 18px;
+        transition: all 0.3s ease;
+    }
+    .pos-search-wrapper .btn-scanner:hover {
+        background: #e8892a;
+        transform: scale(1.02);
+    }
+
+    /* ── Cart Panel ── */
+    .cart-panel {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid #eef1f5;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+    .cart-panel .cart-header {
+        padding: 16px 20px;
+        background: #fafbfc;
+        border-bottom: 1px solid #eef1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .cart-panel .cart-header .order-id {
+        font-weight: 700;
+        color: #1a2634;
+        font-size: 16px;
+    }
+    .cart-panel .cart-header .order-id small {
+        font-weight: 400;
+        color: #9aa6b2;
+        font-size: 13px;
+    }
+    .cart-panel .cart-header .cart-actions {
+        display: flex;
+        gap: 8px;
+    }
+    .cart-panel .cart-header .cart-actions button {
+        background: none;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        color: #9aa6b2;
+    }
+    .cart-panel .cart-header .cart-actions button:hover {
+        background: #fef0f0;
+        color: #dc3545;
+    }
+
+    /* ── Cart Items ── */
+    .cart-items-container {
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 0 16px;
+    }
+    .cart-items-container::-webkit-scrollbar {
+        width: 4px;
+    }
+    .cart-items-container::-webkit-scrollbar-track {
+        background: #f0f2f5;
+        border-radius: 10px;
+    }
+    .cart-items-container::-webkit-scrollbar-thumb {
+        background: #ff9f43;
+        border-radius: 10px;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f2f5;
+        gap: 12px;
+    }
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+    .cart-item .item-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .cart-item .item-info .item-name {
+        font-weight: 600;
+        color: #1a2634;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .cart-item .item-info .item-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 2px;
+        font-size: 12px;
+        color: #9aa6b2;
+    }
+    .cart-item .item-qty {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 2px;
+        border: 1px solid #e2e8f0;
+    }
+    .cart-item .item-qty button {
+        background: none;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #4a5568;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .cart-item .item-qty button:hover {
+        background: #ff9f43;
+        color: #fff;
+    }
+    .cart-item .item-qty input {
+        width: 32px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        font-size: 14px;
+        color: #1a2634;
+        padding: 0;
+    }
+    .cart-item .item-qty input:focus {
+        outline: none;
+    }
+    .cart-item .item-price {
+        font-weight: 700;
+        color: #1a2634;
+        font-size: 15px;
+        min-width: 70px;
+        text-align: right;
+    }
+    .cart-item .item-remove {
+        background: none;
+        border: none;
+        color: #d1d5db;
+        padding: 4px 6px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    .cart-item .item-remove:hover {
+        color: #dc3545;
+        background: #fef0f0;
+    }
+
+    /* ── Totals ── */
+    .totals-section {
+        padding: 16px 20px;
+        background: #fafbfc;
+        border-top: 1px solid #eef1f5;
+    }
+    .totals-section .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        font-size: 14px;
+        color: #4a5568;
+    }
+    .totals-section .total-row.grand-total {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a2634;
+        padding-top: 10px;
+        border-top: 2px solid #e2e8f0;
+        margin-top: 6px;
+    }
+    .totals-section .total-row.grand-total .total-label {
+        color: #ff9f43;
+    }
+
+    /* ── Payment Methods ── */
+    .payment-methods {
+        display: flex;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border-top: 1px solid #eef1f5;
+        flex-wrap: wrap;
+    }
+    .payment-methods .pm-btn {
+        flex: 1;
+        min-width: 70px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        text-align: center;
+        font-weight: 600;
+        font-size: 13px;
+        color: #4a5568;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .payment-methods .pm-btn:hover {
+        border-color: #ff9f43;
+        background: #fff8f0;
+    }
+    .payment-methods .pm-btn.active {
+        border-color: #ff9f43;
+        background: #ff9f43;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(255, 159, 67, 0.25);
+    }
+    .payment-methods .pm-btn img {
+        width: 18px;
+        height: 18px;
+        filter: grayscale(0.5);
+    }
+    .payment-methods .pm-btn.active img {
+        filter: brightness(0) invert(1);
+    }
+
+    /* ── Checkout Bar ── */
+    .checkout-bar {
+        padding: 12px 20px 16px;
+        background: #1a2634;
+        border-radius: 0 0 16px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .checkout-bar:hover {
+        background: #2d3a4a;
+    }
+    .checkout-bar .checkout-label {
+        color: rgba(255,255,255,0.6);
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    .checkout-bar .checkout-amount {
+        color: #fff;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    /* ── Payment Inputs ── */
+    .payment-inputs {
+        padding: 12px 20px;
+        background: #fff;
+        border-top: 1px solid #eef1f5;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .payment-inputs .form-control {
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        padding: 8px 12px;
+        font-size: 14px;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+    }
+    .payment-inputs .form-control:focus {
+        border-color: #ff9f43;
+        box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.1);
+        background: #fff;
+    }
+    .payment-inputs .form-control[readonly] {
+        background: #f0f2f5;
+        cursor: default;
+    }
+
+    /* ── Action Buttons ── */
+    .pos-actions {
+        display: flex;
+        gap: 6px;
+        padding: 10px 20px 16px;
+        background: #fff;
+        border-top: 1px solid #eef1f5;
+        flex-wrap: wrap;
+        border-radius: 0 0 16px 16px;
+    }
+    .pos-actions .btn-pos-action {
+        flex: 1;
+        min-width: 60px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        color: #4a5568;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+    .pos-actions .btn-pos-action:hover {
+        border-color: #ff9f43;
+        background: #fff8f0;
+        color: #ff9f43;
+    }
+    .pos-actions .btn-pos-action img {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 991px) {
+        .productset .productsetimg { height: 120px; }
+        .payment-inputs { grid-template-columns: 1fr; }
+        .checkout-bar .checkout-amount { font-size: 18px; }
+    }
+    @media (max-width: 575px) {
+        .productset .productsetimg { height: 100px; }
+        .pos-search-wrapper { padding: 12px 16px; }
+        .cart-panel .cart-header { flex-wrap: wrap; gap: 8px; }
+        .payment-methods .pm-btn { min-width: 50px; font-size: 11px; padding: 6px 8px; }
+        .pos-actions .btn-pos-action { min-width: 45px; font-size: 10px; padding: 6px 8px; }
+    }
+
+    /* ── Misc ── */
+    .empty-cart-message {
+        text-align: center;
+        padding: 40px 16px;
+        color: #b0bcc8;
+    }
+    .empty-cart-message i {
+        font-size: 48px;
+        margin-bottom: 12px;
+        display: block;
+        color: #dce3ea;
+    }
+    .empty-cart-message p {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .balance-success { color: #28c76f !important; font-weight: 600; }
+    .balance-danger { color: #dc3545 !important; font-weight: 600; }
 </style>
 
 <div id="pos-loader">
-    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
 
 <div class="main-wrappers">
     <div class="page-wrapper">
         <div class="content">
-            <div class="row">
-                <div class="col-lg-8 col-sm-12 tabs_wrapper">
+            <div class="row g-3">
 
-                 <div class="tabs_container">
-                        <div class="row mb-3">
-                            <div class="col-lg-7 col-sm-12 mb-2">
+                {{-- ========== LEFT COLUMN: Products ========== --}}
+                <div class="col-lg-8 col-sm-12">
+
+                    {{-- Search & Barcode --}}
+                    <div class="pos-search-wrapper">
+                        <div class="row g-2">
+                            <div class="col-md-7">
                                 <input type="text" id="product-search" class="form-control"
-                                    placeholder="Search product by name or SKU...">
+                                    placeholder="🔍 Search product by name or SKU...">
                             </div>
-                            <div class="col-lg-5 col-sm-12">
+                            <div class="col-md-5">
                                 <div class="input-group">
                                     <input type="text" id="barcode-input" class="form-control"
-                                        placeholder="Scan or type barcode" autocomplete="off">
-                                    <button class="btn btn-outline-secondary btn-scanner" type="button" id="barcode-submit-btn">
-                                        <img src="{{ asset('backend/assets/img/icons/scanner1.svg') }}" alt="scan" width="18">
+                                        placeholder="📷 Scan or type barcode" autocomplete="off">
+                                    <button class="btn btn-scanner" type="button" id="barcode-submit-btn">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10"/></svg>
                                     </button>
                                 </div>
                             </div>
                         </div>
-
-                       
                     </div>
 
-                    <ul class="tabs owl-carousel owl-theme owl-product border-0" id="category-tabs">
+                    {{-- Category Tabs --}}
+                    <ul class="tabs owl-carousel owl-theme owl-product border-0 mb-3" id="category-tabs">
                         <li class="active" data-category-id="">
                             <div class="product-details">
-                                <img src="{{ asset('backend/assets/img/logo-small.png') }}" alt="All" />
+                                <i class="fa fa-th" style="font-size:24px;color:#ff9f43;"></i>
                                 <h6>All</h6>
                             </div>
                         </li>
@@ -85,193 +615,197 @@
                                 <div class="product-details">
                                     <img src="{{ $category->image ? asset('storage/'.$category->image) : asset('backend/assets/img/noimage.png') }}"
                                          alt="{{ $category->name }}" />
-                                    <h6>{{ $category->name }}</h6>
+                                    <h6>{{ Str::limit($category->name, 12) }}</h6>
                                 </div>
                             </li>
                         @endforeach
-
-                        
                     </ul>
- <div class="tab_content active">
-                            <div class="row" id="product-grid"></div>
-                        </div>
-                   
+
+                    {{-- Product Grid --}}
+                    <div class="row" id="product-grid"></div>
                 </div>
 
+                {{-- ========== RIGHT COLUMN: Cart ========== --}}
                 <div class="col-lg-4 col-sm-12">
-                    <div class="order-list">
-                        <div class="orderid">
-                            <h4>Order List</h4>
-                            <h5>Reference: <span id="temp-txn-id">#{{ rand(10000, 99999) }}</span></h5>
-                        </div>
-                        <div class="actionproducts">
-                            <ul>
-                                <li>
-                                    <a href="javascript:void(0);" id="clear-cart-btn" class="deletebg confirm-text">
-                                        <img src="{{ asset('backend/assets/img/icons/delete-2.svg') }}" alt="img" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <div class="cart-panel">
 
-                    <div class="card card-order">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <a href="javascript:void(0);" class="btn btn-adds" data-bs-toggle="modal"
-                                        data-bs-target="#create"><i class="fa fa-plus me-2"></i>Add Customer</a>
+                        {{-- Header --}}
+                        <div class="cart-header">
+                            <div class="order-id">
+                                🧾 Order
+                                <small>#<span id="temp-txn-id">{{ rand(10000, 99999) }}</span></small>
+                            </div>
+                            <div class="cart-actions">
+                                <button id="clear-cart-btn" title="Clear cart">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Customer --}}
+                        <div style="padding:12px 20px;border-bottom:1px solid #eef1f5;">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <select class="form-control" id="customer-select" style="font-size:13px;border-radius:8px;border:1px solid #e2e8f0;padding:6px 10px;">
+                                        <option value="">👤 Walk-in</option>
+                                    </select>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="select-split">
-                                        <div class="select-group w-100">
-                                            <select class="select" id="customer-select">
-                                                <option value="">Walk-in Customer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="select-split">
-                                        <div class="select-group w-100">
-                                            <input type="text" id="customer-search-input" class="form-control"
-                                                placeholder="Search customer by name or phone...">
-                                        </div>
+                                <div class="col-6">
+                                    <div class="d-flex gap-1">
+                                        <input type="text" id="customer-search-input" class="form-control" placeholder="Search customer..." style="font-size:13px;border-radius:8px;border:1px solid #e2e8f0;padding:6px 10px;">
+                                        <button class="btn btn-sm" style="background:#ff9f43;color:#fff;border-radius:8px;padding:4px 10px;" data-bs-toggle="modal" data-bs-target="#create">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="split-card"></div>
-                        <div class="card-body pt-0">
-                            <div class="totalitem">
-                                <h4 id="total-items-label">Total items : 0</h4>
-                                <a href="javascript:void(0);" id="clear-all-link">Clear all</a>
+
+                        {{-- Cart Items --}}
+                        <div style="padding:8px 0 0;">
+                            <div class="d-flex justify-content-between px-3 py-1" style="font-size:12px;color:#9aa6b2;font-weight:600;">
+                                <span>Item</span>
+                                <span>Qty</span>
+                                <span>Price</span>
+                                <span></span>
                             </div>
-                            <div class="product-table">
-                                <ul class="product-lists d-block" id="cart-list"></ul>
-                                <p id="empty-cart-msg" class="text-center text-muted py-3">Cart is empty</p>
+                            <div class="cart-items-container" id="cart-container">
+                                <div id="empty-cart-msg" class="empty-cart-message">
+                                    <i class="fa fa-shopping-bag"></i>
+                                    <p>Your cart is empty</p>
+                                </div>
+                                <ul class="list-unstyled m-0" id="cart-list"></ul>
                             </div>
                         </div>
-                        <div class="split-card"></div>
-                        <div class="card-body pt-0 pb-2">
-                            <div class="setvalue" id="totals-area">
-                                <ul>
-                                    <li><h5>Subtotal</h5><h6 id="display-subtotal">Rs. 0.00</h6></li>
-                                    <li><h5>Discount</h5><h6 id="display-discount">Rs. 0.00</h6></li>
-                                    <li><h5>Tax</h5><h6 id="display-tax">Rs. 0.00</h6></li>
-                                    <li class="total-value"><h5>Total</h5><h6 id="display-total">Rs. 0.00</h6></li>
-                                </ul>
-                            </div>
 
-                            <div class="row mb-2">
-                                <div class="col-6">
-                                    <label class="form-label">Discount (Rs.)</label>
-                                    <input type="number" id="overall-discount" class="form-control" value="0" min="0" step="0.01">
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Tax (Rs.)</label>
-                                    <input type="number" id="overall-tax" class="form-control" value="0" min="0" step="0.01">
-                                </div>
+                        {{-- Totals --}}
+                        <div class="totals-section" id="totals-area">
+                            <div class="total-row"><span>Subtotal</span><span id="display-subtotal">Rs. 0.00</span></div>
+                            <div class="total-row"><span>Discount</span><span id="display-discount">Rs. 0.00</span></div>
+                            <div class="total-row"><span>Tax</span><span id="display-tax">Rs. 0.00</span></div>
+                            <div class="total-row grand-total">
+                                <span class="total-label">Total</span>
+                                <span id="display-total">Rs. 0.00</span>
                             </div>
+                        </div>
 
-                            <div class="setvaluecash">
-                                <ul>
-                                    <li>
-                                        <a href="javascript:void(0);" class="paymentmethod active" data-method="cash">
-                                            <img src="{{ asset('backend/assets/img/icons/cash.svg') }}" alt="img" class="me-2" />Cash</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="paymentmethod" data-method="card">
-                                            <img src="{{ asset('backend/assets/img/icons/debitcard.svg') }}" alt="img" class="me-2" />Card</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="paymentmethod" data-method="bank_transfer">
-                                            <img src="{{ asset('backend/assets/img/icons/scan.svg') }}" alt="img" class="me-2" />Bank</a>
-                                    </li>
-                                </ul>
+                        {{-- Discount & Tax Inputs --}}
+                        <div style="padding:8px 20px;background:#fafbfc;border-top:1px solid #eef1f5;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <div>
+                                <label style="font-size:11px;font-weight:600;color:#9aa6b2;display:block;margin-bottom:2px;">Discount (Rs.)</label>
+                                <input type="number" id="overall-discount" class="form-control" value="0" min="0" step="0.01" style="padding:6px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:13px;">
                             </div>
+                            <div>
+                                <label style="font-size:11px;font-weight:600;color:#9aa6b2;display:block;margin-bottom:2px;">Tax (Rs.)</label>
+                                <input type="number" id="overall-tax" class="form-control" value="0" min="0" step="0.01" style="padding:6px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:13px;">
+                            </div>
+                        </div>
 
-                            <div class="row mb-2" id="payment-reference-row" style="display:none;">
-                                <div class="col-12">
-                                    <label class="form-label">Transaction Reference</label>
-                                    <input type="text" id="payment-reference" class="form-control" placeholder="Optional reference no.">
-                                </div>
-                            </div>
+                        {{-- Payment Methods --}}
+                        <div class="payment-methods">
+                            <button class="pm-btn active" data-method="cash">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+                                Cash
+                            </button>
+                            <button class="pm-btn" data-method="card">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+                                Card
+                            </button>
+                            <button class="pm-btn" data-method="bank_transfer">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                Bank
+                            </button>
+                        </div>
 
-                            <div class="row mb-2">
-                                <div class="col-6">
-                                    <label class="form-label">Paid Amount (Rs.)</label>
-                                    <input type="number" id="paid-amount" class="form-control" value="0" min="0" step="0.01">
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Balance</label>
-                                    <input type="text" id="change-due" class="form-control" value="Rs. 0.00" readonly>
-                                </div>
+                        {{-- Payment Inputs --}}
+                        <div class="payment-inputs" id="payment-reference-row" style="display:none;">
+                            <div class="col-12">
+                                <label style="font-size:11px;font-weight:600;color:#9aa6b2;display:block;margin-bottom:2px;">Reference</label>
+                                <input type="text" id="payment-reference" class="form-control" placeholder="Optional reference">
                             </div>
+                        </div>
+                        <div class="payment-inputs" style="border-top:none;padding-top:0;">
+                            <div>
+                                <label style="font-size:11px;font-weight:600;color:#9aa6b2;display:block;margin-bottom:2px;">Paid Amount</label>
+                                <input type="number" id="paid-amount" class="form-control" value="0" min="0" step="0.01">
+                            </div>
+                            <div>
+                                <label style="font-size:11px;font-weight:600;color:#9aa6b2;display:block;margin-bottom:2px;">Balance</label>
+                                <input type="text" id="change-due" class="form-control" value="Rs. 0.00" readonly>
+                            </div>
+                        </div>
 
-                            <div class="btn-totallabel" id="checkout-btn" style="cursor:pointer;">
-                                <h5>Checkout</h5>
-                                <h6 id="checkout-total" data-raw="0">Rs. 0.00</h6>
-                            </div>
+                        {{-- Checkout Bar --}}
+                        <div class="checkout-bar" id="checkout-btn">
+                            <span class="checkout-label">💳 Checkout</span>
+                            <span class="checkout-amount" id="checkout-total" data-raw="0">Rs. 0.00</span>
+                        </div>
 
-                            <div class="btn-pos">
-                                <ul>
-                                    <li><a href="javascript:void(0);" id="hold-order-btn" class="btn">
-                                        <img src="{{ asset('backend/assets/img/icons/pause1.svg') }}" alt="img" class="me-1" />Hold</a></li>
-                                    <li><a href="javascript:void(0);" id="quotation-btn" class="btn">
-                                        <img src="{{ asset('backend/assets/img/icons/edit-6.svg') }}" alt="img" class="me-1" />Quotation</a></li>
-                                    <li><a href="javascript:void(0);" id="void-order-btn" class="btn">
-                                        <img src="{{ asset('backend/assets/img/icons/trash12.svg') }}" alt="img" class="me-1" />Void</a></li>
-                                    <li><a href="javascript:void(0);" id="payment-focus-btn" class="btn">
-                                        <img src="{{ asset('backend/assets/img/icons/wallet1.svg') }}" alt="img" class="me-1" />Payment</a></li>
-                                    <li><a href="javascript:void(0);" class="btn" data-bs-toggle="modal" data-bs-target="#recents">
-                                        <img src="{{ asset('backend/assets/img/icons/transcation.svg') }}" alt="img" class="me-1" />Transaction</a></li>
-                                </ul>
-                            </div>
+                        {{-- Action Buttons --}}
+                        <div class="pos-actions">
+                            <button class="btn-pos-action" id="hold-order-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="12"/></svg>
+                                Hold
+                            </button>
+                            <button class="btn-pos-action" id="quotation-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                Quote
+                            </button>
+                            <button class="btn-pos-action" id="void-order-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                Void
+                            </button>
+                            <button class="btn-pos-action" id="payment-focus-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                Pay
+                            </button>
+                            <button class="btn-pos-action" data-bs-toggle="modal" data-bs-target="#recents">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                History
+                            </button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
-{{-- ===================== MODALS ===================== --}}
+{{-- ===================== MODALS (unchanged) ===================== --}}
 
 <div class="modal fade" id="create" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Customer</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header" style="border-bottom:1px solid #eef1f5;padding:16px 24px;">
+                <h5 class="modal-title" style="font-weight:700;">Add Customer</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="border:none;background:none;font-size:24px;color:#9aa6b2;">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding:24px;">
                 <form id="quick-customer-form">
                     <div class="row">
                         <div class="col-lg-6 col-sm-12">
-                            <div class="form-group"><label>Customer Name*</label>
-                                <input type="text" id="qc-name" class="form-control" required></div>
+                            <div class="form-group"><label style="font-weight:600;font-size:13px;">Customer Name *</label>
+                                <input type="text" id="qc-name" class="form-control" required style="border-radius:8px;border:1px solid #e2e8f0;padding:8px 12px;"></div>
                         </div>
                         <div class="col-lg-6 col-sm-12">
-                            <div class="form-group"><label>Email</label>
-                                <input type="text" id="qc-email" class="form-control"></div>
+                            <div class="form-group"><label style="font-weight:600;font-size:13px;">Email</label>
+                                <input type="text" id="qc-email" class="form-control" style="border-radius:8px;border:1px solid #e2e8f0;padding:8px 12px;"></div>
                         </div>
                         <div class="col-lg-6 col-sm-12">
-                            <div class="form-group"><label>Phone</label>
-                                <input type="text" id="qc-phone" class="form-control"></div>
+                            <div class="form-group"><label style="font-weight:600;font-size:13px;">Phone</label>
+                                <input type="text" id="qc-phone" class="form-control" style="border-radius:8px;border:1px solid #e2e8f0;padding:8px 12px;"></div>
                         </div>
                         <div class="col-lg-6 col-sm-12">
-                            <div class="form-group"><label>City</label>
-                                <input type="text" id="qc-city" class="form-control"></div>
+                            <div class="form-group"><label style="font-weight:600;font-size:13px;">City</label>
+                                <input type="text" id="qc-city" class="form-control" style="border-radius:8px;border:1px solid #e2e8f0;padding:8px 12px;"></div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="form-group"><label>Address</label>
-                                <input type="text" id="qc-address" class="form-control"></div>
+                            <div class="form-group"><label style="font-weight:600;font-size:13px;">Address</label>
+                                <input type="text" id="qc-address" class="form-control" style="border-radius:8px;border:1px solid #e2e8f0;padding:8px 12px;"></div>
                         </div>
                     </div>
-                    <div class="col-lg-12 mt-2">
-                        <button type="submit" class="btn btn-submit me-2">Save Customer</button>
-                        <a class="btn btn-cancel" data-bs-dismiss="modal">Cancel</a>
+                    <div class="col-lg-12 mt-3">
+                        <button type="submit" class="btn" style="background:#ff9f43;color:#fff;font-weight:600;padding:10px 32px;border-radius:8px;border:none;">Save Customer</button>
+                        <a class="btn" data-bs-dismiss="modal" style="background:#eef1f5;color:#4a5568;font-weight:600;padding:10px 32px;border-radius:8px;border:none;margin-left:8px;">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -281,19 +815,18 @@
 
 <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Void Order</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header" style="border-bottom:1px solid #eef1f5;padding:16px 24px;">
+                <h5 class="modal-title" style="font-weight:700;">Void Order</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="border:none;background:none;font-size:24px;color:#9aa6b2;">×</button>
             </div>
-            <div class="modal-body">
-                <div class="delete-order">
-                    <img src="{{ asset('backend/assets/img/icons/close-circle1.svg') }}" alt="img" />
-                </div>
-                <div class="para-set text-center"><p>The current cart will be cleared. This cannot be undone.</p></div>
-                <div class="col-lg-12 text-center">
-                    <a class="btn btn-danger me-2" id="confirm-clear-cart">Yes, clear cart</a>
-                    <a class="btn btn-cancel" data-bs-dismiss="modal">Cancel</a>
+            <div class="modal-body" style="padding:24px;text-align:center;">
+                <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
+                <p style="font-size:16px;color:#4a5568;margin-bottom:4px;">The current cart will be cleared.</p>
+                <p style="font-size:14px;color:#9aa6b2;">This action cannot be undone.</p>
+                <div class="mt-4">
+                    <button class="btn" id="confirm-clear-cart" style="background:#dc3545;color:#fff;font-weight:600;padding:10px 32px;border-radius:8px;border:none;margin-right:8px;">Yes, clear cart</button>
+                    <button class="btn" data-bs-dismiss="modal" style="background:#eef1f5;color:#4a5568;font-weight:600;padding:10px 32px;border-radius:8px;border:none;">Cancel</button>
                 </div>
             </div>
         </div>
@@ -302,40 +835,40 @@
 
 <div class="modal fade" id="recents" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Transactions</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header" style="border-bottom:1px solid #eef1f5;padding:16px 24px;">
+                <h5 class="modal-title" style="font-weight:700;">Transactions</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="border:none;background:none;font-size:24px;color:#9aa6b2;">×</button>
             </div>
-            <div class="modal-body">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#salespane" type="button">Sales History</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#heldpane" type="button">Held Orders</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#paymentpane" type="button">Payment</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#returnpane" type="button">Return</button></li>
+            <div class="modal-body" style="padding:20px 24px;">
+                <ul class="nav nav-tabs" role="tablist" style="border-bottom:2px solid #eef1f5;gap:4px;">
+                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#salespane" type="button" style="border:none;padding:8px 16px;border-radius:8px;font-weight:600;color:#4a5568;">Sales</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#heldpane" type="button" style="border:none;padding:8px 16px;border-radius:8px;font-weight:600;color:#4a5568;">Held</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#paymentpane" type="button" style="border:none;padding:8px 16px;border-radius:8px;font-weight:600;color:#4a5568;">Payment</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#returnpane" type="button" style="border:none;padding:8px 16px;border-radius:8px;font-weight:600;color:#4a5568;">Return</button></li>
                 </ul>
                 <div class="tab-content mt-3">
                     <div class="tab-pane fade show active" id="salespane">
                         <div class="table-responsive">
-                            <table class="table datanew">
-                                <thead><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Total</th></tr></thead>
+                            <table class="table" style="font-size:14px;">
+                                <thead style="background:#f8fafc;"><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Total</th></tr></thead>
                                 <tbody id="recent-sales-body"></tbody>
                             </table>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="heldpane">
                         <div class="table-responsive">
-                            <table class="table datanew">
-                                <thead><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Total</th><th class="text-end">Action</th></tr></thead>
+                            <table class="table" style="font-size:14px;">
+                                <thead style="background:#f8fafc;"><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Total</th><th class="text-end">Action</th></tr></thead>
                                 <tbody id="held-orders-body"></tbody>
                             </table>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="paymentpane">
-                        <p class="text-muted text-center py-4">Recording payments toward customer dues is planned for a future update — keeping this release focused on accurate sales and inventory.</p>
+                        <p class="text-muted text-center py-4">Recording customer payments is coming soon.</p>
                     </div>
                     <div class="tab-pane fade" id="returnpane">
-                        <p class="text-muted text-center py-4">Returns/refunds workflow is planned for a future update — keeping this release focused on accurate sales and inventory.</p>
+                        <p class="text-muted text-center py-4">Returns/refunds workflow is coming soon.</p>
                     </div>
                 </div>
             </div>
@@ -356,7 +889,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const productGrid = document.getElementById('product-grid');
     const cartList = document.getElementById('cart-list');
     const emptyCartMsg = document.getElementById('empty-cart-msg');
-    const totalItemsLabel = document.getElementById('total-items-label');
     const checkoutBtn = document.getElementById('checkout-btn');
 
     function showLoader() { document.getElementById('pos-loader').style.display = 'flex'; }
@@ -382,18 +914,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function apiFetch(url, options = {}) {
-        // showLoader();
         return fetch(url, options)
             .then(async (res) => {
                 const data = await res.json().catch(() => ({ success: false, message: 'Invalid server response' }));
                 return data;
-            })
-            // .finally(hideLoader);
+            });
     }
 
-    /* =========================================================
-       PRODUCTS
-    ==========================================================*/
+    /* ── Products ── */
     function loadProducts(term = '') {
         const params = new URLSearchParams();
         if (term) params.append('term', term);
@@ -407,38 +935,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderProductGrid(products) {
         productGrid.innerHTML = '';
-
         if (!products || products.length === 0) {
-            productGrid.innerHTML = '<div class="col-12 text-center text-muted py-4">No products found</div>';
+            productGrid.innerHTML = '<div class="col-12 text-center text-muted py-5">No products found</div>';
             return;
         }
 
         products.forEach(p => {
             const outOfStock = parseInt(p.stock) <= 0;
+            const stockBadge = outOfStock ? 'Out of Stock' : (parseInt(p.stock) < 5 ? `Only ${p.stock} left` : `Qty: ${p.stock}`);
+            const isLow = parseInt(p.stock) > 0 && parseInt(p.stock) < 5;
+
             const col = document.createElement('div');
-            col.className = 'col-lg-3 col-sm-6 d-flex';
+            col.className = 'col-lg-3 col-md-4 col-sm-6';
             col.innerHTML = `
-                <div class="productset flex-fill ${outOfStock ? 'out-of-stock' : ''}"
+                <div class="productset ${outOfStock ? 'out-of-stock' : ''}"
                      data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-sku="${escapeHtml(p.sku)}"
-                     data-price="${p.selling_price}" data-stock="${p.stock}"
-                     style="${outOfStock ? '' : 'cursor:pointer;'}">
+                     data-price="${p.selling_price}" data-stock="${p.stock}">
                     <div class="productsetimg">
                         <img src="${p.image_url}" alt="${escapeHtml(p.name)}" onerror="this.src='${cfg.defaultImage}'">
-                        <h6>${outOfStock ? 'Out of stock' : 'Qty: ' + parseInt(p.stock)}</h6>
-                        <div class="check-product"><i class="fa fa-check"></i></div>
+                        <span class="stock-badge ${isLow ? 'low' : ''}">${stockBadge}</span>
                     </div>
                     <div class="productsetcontent">
-                        <h5>${escapeHtml(p.sku)}</h5>
-                        <h4>${escapeHtml(p.name)}</h4>
-                        <h6>${formatCurrency(p.selling_price)}</h6>
+                        <div class="product-sku">${escapeHtml(p.sku)}</div>
+                        <div class="product-name">${escapeHtml(p.name)}</div>
+                        <div class="product-price">${formatCurrency(p.selling_price)}</div>
                     </div>
                 </div>`;
             productGrid.appendChild(col);
         });
 
-        document.querySelectorAll('.productset').forEach(el => {
+        document.querySelectorAll('.productset:not(.out-of-stock)').forEach(el => {
             el.addEventListener('click', function () {
-                if (this.classList.contains('out-of-stock')) return;
                 addToCart({
                     product_id: parseInt(this.dataset.id),
                     name: this.dataset.name,
@@ -450,6 +977,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /* ── Categories ── */
     document.querySelectorAll('#category-tabs li').forEach(tab => {
         tab.addEventListener('click', function () {
             document.querySelectorAll('#category-tabs li').forEach(t => t.classList.remove('active'));
@@ -459,6 +987,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    /* ── Search ── */
     let searchDebounce;
     document.getElementById('product-search').addEventListener('input', function () {
         clearTimeout(searchDebounce);
@@ -466,10 +995,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchDebounce = setTimeout(() => loadProducts(term), 350);
     });
 
-    /* =========================================================
-       BARCODE — dedicated always-visible input, works with USB scanners
-       (which type digits then send Enter automatically)
-    ==========================================================*/
+    /* ── Barcode ── */
     function handleBarcodeSubmit() {
         const input = document.getElementById('barcode-input');
         const barcode = input.value.trim();
@@ -478,18 +1004,12 @@ document.addEventListener('DOMContentLoaded', function () {
         apiFetch(`${cfg.routes.searchBarcode}?barcode=${encodeURIComponent(barcode)}`).then(res => {
             input.value = '';
             input.focus();
-
             if (!res.success) { notify(res.message || 'Product not found', 'error'); return; }
-
             const p = res.data;
             if (parseInt(p.stock) <= 0) { notify(`${p.name} is out of stock`, 'error'); return; }
-
             addToCart({
-                product_id: p.id,
-                name: p.name,
-                sku: p.sku,
-                price: parseFloat(p.selling_price),
-                stock: parseFloat(p.stock),
+                product_id: p.id, name: p.name, sku: p.sku,
+                price: parseFloat(p.selling_price), stock: parseFloat(p.stock),
             });
         });
     }
@@ -499,9 +1019,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.getElementById('barcode-submit-btn').addEventListener('click', handleBarcodeSubmit);
 
-    /* =========================================================
-       CART
-    ==========================================================*/
+    /* ── Cart ── */
     function addToCart(product) {
         const existing = cart.find(c => c.product_id === product.product_id);
         if (existing) {
@@ -518,46 +1036,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderCart() {
         cartList.innerHTML = '';
-        emptyCartMsg.style.display = cart.length === 0 ? 'block' : 'none';
+        const hasItems = cart.length > 0;
+        emptyCartMsg.style.display = hasItems ? 'none' : 'block';
 
         cart.forEach((item, index) => {
             const li = document.createElement('li');
+            li.className = 'cart-item';
             li.innerHTML = `
-                <div class="productimg">
-                    <div class="productcontet ">
-                    <div class="productlinkset d-flex ">
-                         <h4>${escapeHtml(item.name)}</h4>
-                        </div>
-                        <div class="increment-decrement">
-                            <div class="input-groups">
-                                <input type="button" value="-" class="button-minus dec button" data-index="${index}">
-                                <input type="text" value="${item.qty}" class="quantity-field" readonly>
-                                <input type="button" value="+" class="button-plus inc button" data-index="${index}">
-                            </div>
-                        </div>
+                <div class="item-info">
+                    <div class="item-name">${escapeHtml(item.name)}</div>
+                    <div class="item-meta">
+                        <span>${escapeHtml(item.sku)}</span>
+                        <span>•</span>
+                        <span>${formatCurrency(item.price)}</span>
                     </div>
                 </div>
-               <div class="d-flex justify-content-between align-center">
-                <li>${formatCurrency(item.price * item.qty - item.discount)}</li>
-                <li>
-                    <a class="confirm-text remove-item" href="javascript:void(0);" data-index="${index}">
-                        <img src="{{ asset('backend/assets/img/icons/delete-2.svg') }}" alt="img" />
-                    </a>
-                </li>
-               </div>
-               <hr>
-
+                <div class="item-qty">
+                    <button class="dec-btn" data-index="${index}">−</button>
+                    <input type="text" value="${item.qty}" readonly>
+                    <button class="inc-btn" data-index="${index}">+</button>
+                </div>
+                <div class="item-price">${formatCurrency(item.price * item.qty)}</div>
+                <button class="item-remove" data-index="${index}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             `;
             cartList.appendChild(li);
         });
 
-        totalItemsLabel.textContent = `Total items : ${cart.reduce((s, i) => s + i.qty, 0)}`;
-
-        document.querySelectorAll('.button-plus').forEach(btn =>
+        document.querySelectorAll('.inc-btn').forEach(btn =>
             btn.addEventListener('click', () => changeQty(parseInt(btn.dataset.index), 1)));
-        document.querySelectorAll('.button-minus').forEach(btn =>
+        document.querySelectorAll('.dec-btn').forEach(btn =>
             btn.addEventListener('click', () => changeQty(parseInt(btn.dataset.index), -1)));
-        document.querySelectorAll('.remove-item').forEach(btn =>
+        document.querySelectorAll('.item-remove').forEach(btn =>
             btn.addEventListener('click', () => { cart.splice(parseInt(btn.dataset.index), 1); renderCart(); }));
 
         refreshTotals();
@@ -574,14 +1085,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function clearCart() { cart = []; renderCart(); }
 
-    document.getElementById('clear-all-link').addEventListener('click', clearCart);
-    document.getElementById('void-order-btn').addEventListener('click', function () {
-        if (cart.length === 0) { notify('Cart is already empty', 'error'); return; }
-        new bootstrap.Modal(document.getElementById('delete')).show();
-    });
     document.getElementById('clear-cart-btn').addEventListener('click', function (e) {
         e.preventDefault();
         if (cart.length === 0) return;
+        new bootstrap.Modal(document.getElementById('delete')).show();
+    });
+    document.getElementById('void-order-btn').addEventListener('click', function () {
+        if (cart.length === 0) { notify('Cart is already empty', 'error'); return; }
         new bootstrap.Modal(document.getElementById('delete')).show();
     });
     document.getElementById('confirm-clear-cart').addEventListener('click', function () {
@@ -597,9 +1107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('paid-amount').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
-    /* =========================================================
-       TOTALS — server-verified, no client-side trust for the final figure
-    ==========================================================*/
+    /* ── Totals ── */
     function refreshTotals() {
         const overallDiscount = parseFloat(document.getElementById('overall-discount').value) || 0;
         const tax = parseFloat(document.getElementById('overall-tax').value) || 0;
@@ -645,10 +1153,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (diff >= 0) {
             el.value = 'Change: ' + formatCurrency(diff);
-            el.classList.remove('text-danger'); el.classList.add('text-success');
+            el.className = 'form-control balance-success';
         } else {
             el.value = 'Due: ' + formatCurrency(Math.abs(diff));
-            el.classList.remove('text-success'); el.classList.add('text-danger');
+            el.className = 'form-control balance-danger';
         }
     }
 
@@ -656,9 +1164,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('overall-tax').addEventListener('input', refreshTotals);
     document.getElementById('paid-amount').addEventListener('input', updateBalanceDisplay);
 
-    /* =========================================================
-       CUSTOMER
-    ==========================================================*/
+    /* ── Customer ── */
     let customerDebounce;
     document.getElementById('customer-search-input').addEventListener('input', function () {
         clearTimeout(customerDebounce);
@@ -668,7 +1174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             apiFetch(`${cfg.routes.searchCustomers}?term=${encodeURIComponent(term)}`).then(res => {
                 if (!res.success) return;
                 const select = document.getElementById('customer-select');
-                select.innerHTML = '<option value="">Walk-in Customer</option>';
+                select.innerHTML = '<option value="">👤 Walk-in</option>';
                 res.data.forEach(c => {
                     const opt = document.createElement('option');
                     opt.value = c.id;
@@ -715,12 +1221,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* =========================================================
-       PAYMENT METHOD
-    ==========================================================*/
-    document.querySelectorAll('.paymentmethod').forEach(el => {
+    /* ── Payment Method ── */
+    document.querySelectorAll('.pm-btn').forEach(el => {
         el.addEventListener('click', function () {
-            document.querySelectorAll('.paymentmethod').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.pm-btn').forEach(p => p.classList.remove('active'));
             this.classList.add('active');
             selectedPaymentMethod = this.dataset.method;
 
@@ -729,9 +1233,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* =========================================================
-       HOLD ORDER
-    ==========================================================*/
+    /* ── Hold Order ── */
     document.getElementById('hold-order-btn').addEventListener('click', function () {
         if (cart.length === 0) { notify('Cart is empty', 'error'); return; }
 
@@ -752,9 +1254,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* =========================================================
-       HELD ORDERS LIST (loads when Transactions modal opens)
-    ==========================================================*/
+    /* ── Held Orders ── */
     function loadHeldOrders() {
         apiFetch(cfg.routes.heldOrders).then(res => {
             const body = document.getElementById('held-orders-body');
@@ -771,8 +1271,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${order.customer ? escapeHtml(order.customer.name) : 'Walk-in'}</td>
                     <td>${formatCurrency(order.grand_total)}</td>
                     <td class="text-end">
-                        <button class="btn btn-sm btn-success resume-held" data-id="${order.id}">Resume</button>
-                        <button class="btn btn-sm btn-danger delete-held" data-id="${order.id}">Delete</button>
+                        <button class="btn btn-sm btn-success resume-held" data-id="${order.id}" style="border-radius:6px;padding:4px 12px;background:#28c76f;color:#fff;border:none;font-weight:600;">Resume</button>
+                        <button class="btn btn-sm btn-danger delete-held" data-id="${order.id}" style="border-radius:6px;padding:4px 12px;background:#dc3545;color:#fff;border:none;font-weight:600;">Delete</button>
                     </td>`;
                 body.appendChild(tr);
             });
@@ -836,9 +1336,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loadHeldOrders();
     });
 
-    /* =========================================================
-       CHECKOUT
-    ==========================================================*/
+    /* ── Checkout ── */
     checkoutBtn.addEventListener('click', function () {
         if (cart.length === 0) { notify('Cart is empty', 'error'); return; }
         if (checkoutBtn.dataset.submitting === '1') return;
@@ -874,8 +1372,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('overall-discount').value = 0;
             document.getElementById('overall-tax').value = 0;
             document.getElementById('payment-reference').value = '';
-            loadProducts(); // refresh stock counts shown on cards
-            window.open(res.receipt_url, '_blank');
+            loadProducts();
+            if (res.receipt_url) window.open(res.receipt_url, '_blank');
         }).catch(() => {
             checkoutBtn.dataset.submitting = '0';
             checkoutBtn.style.opacity = '1';
@@ -883,12 +1381,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* =========================================================
-       INIT
-    ==========================================================*/
+    /* ── Init ── */
     loadProducts();
     renderCart();
     document.getElementById('barcode-input').focus();
+
+    // Auto-focus barcode input on any click outside inputs
+    document.addEventListener('click', function(e) {
+        const tag = e.target.tagName.toLowerCase();
+        if (tag !== 'input' && tag !== 'button' && tag !== 'select') {
+            document.getElementById('barcode-input').focus();
+        }
+    });
 });
 </script>
 @endsection
