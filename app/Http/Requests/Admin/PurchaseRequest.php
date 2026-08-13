@@ -21,9 +21,11 @@ class PurchaseRequest extends FormRequest
         // The purchase as it currently exists in the DB (null on create).
         $existing = $purchaseId ? Purchase::find($purchaseId) : null;
 
-        // Items can be edited any time EXCEPT once the purchase is
-        // cancelled. A "received" purchase is still editable here —
-        // PurchaseService checks stock availability before applying it.
+        // Items can only be edited while a purchase is still "pending".
+        // Once it's "received" its items have already moved real stock and
+        // been blended into the product's cost, so they're locked (view
+        // only) — the sole remaining action is cancelling it. "cancelled"
+        // is locked too, being fully closed.
         $itemsLocked = $existing ? $existing->items_locked : false;
 
         return [

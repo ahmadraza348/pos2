@@ -62,16 +62,24 @@
                                             <img src="{{ asset('backend/assets/img/icons/edit.svg') }}" alt="edit">
                                         </a>
 
-                                        <form id="deletepur-{{ $item->id }}"
-                                            action="{{ route('purchase.destroy', $item->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('delete')
-                                        </form>
+                                        @if ($item->status === 'received')
+                                            {{-- Received purchases must be cancelled first (from the edit page)
+                                                 so their stock/cost reversal stays controlled and precise. --}}
+                                            <span class="text-muted" title="Cancel this purchase first to delete it">
+                                                <img src="{{ asset('backend/assets/img/icons/delete.svg') }}" alt="delete" style="opacity:.35;">
+                                            </span>
+                                        @else
+                                            <form id="deletepur-{{ $item->id }}"
+                                                action="{{ route('purchase.destroy', $item->id) }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                                @method('delete')
+                                            </form>
 
-                                        <a onclick="if(confirm('Are you sure to delete this purchase? Stock changes will be reversed.')) { document.getElementById('deletepur-{{ $item->id }}').submit(); } return false;">
-                                            <img src="{{ asset('backend/assets/img/icons/delete.svg') }}" alt="delete">
-                                        </a>
+                                            <a onclick="if(confirm('Are you sure to delete this purchase?')) { document.getElementById('deletepur-{{ $item->id }}').submit(); } return false;">
+                                                <img src="{{ asset('backend/assets/img/icons/delete.svg') }}" alt="delete">
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

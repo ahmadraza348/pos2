@@ -534,6 +534,79 @@
         height: 16px;
     }
 
+    /* ── Calculator ── */
+    #calc-expression {
+        min-height: 16px;
+        text-align: right;
+        color: #9aa6b2;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        padding: 0 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    #calc-display {
+        background: #fafbfc;
+        border: 1px solid #eef1f5;
+        border-radius: 10px;
+        padding: 14px 16px;
+        text-align: right;
+        font-size: 30px;
+        font-weight: 700;
+        color: #1a2634;
+        margin: 4px 0 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    .calc-btn {
+        padding: 14px 0;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a2634;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .calc-btn:hover {
+        border-color: #ff9f43;
+        background: #fff8f0;
+    }
+    .calc-btn:active {
+        transform: scale(0.95);
+    }
+    .calc-btn-fn {
+        background: #f8fafc;
+        color: #4a5568;
+    }
+    .calc-btn-op {
+        background: #fff8f0;
+        color: #ff9f43;
+    }
+    .calc-btn-op.active-op {
+        background: #ff9f43;
+        color: #fff;
+        border-color: #ff9f43;
+    }
+    .calc-btn-eq {
+        background: #ff9f43;
+        color: #fff;
+        border-color: #ff9f43;
+    }
+    .calc-btn-eq:hover {
+        background: #f79433;
+        color: #fff;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 991px) {
         .productset .productsetimg { height: 120px; }
@@ -546,6 +619,8 @@
         .cart-panel .cart-header { flex-wrap: wrap; gap: 8px; }
         .payment-methods .pm-btn { min-width: 50px; font-size: 11px; padding: 6px 8px; }
         .pos-actions .btn-pos-action { min-width: 45px; font-size: 10px; padding: 6px 8px; }
+        .calc-btn { padding: 12px 0; font-size: 16px; }
+        #calc-display { font-size: 24px; padding: 12px 14px; }
     }
 
     /* ── Misc ── */
@@ -761,6 +836,10 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                                 History
                             </button>
+                            <button class="btn-pos-action" id="calculator-btn" data-bs-toggle="modal" data-bs-target="#calculator-modal">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="8" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg>
+                                Calc
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -827,6 +906,49 @@
                 <div class="mt-4">
                     <button class="btn" id="confirm-clear-cart" style="background:#dc3545;color:#fff;font-weight:600;padding:10px 32px;border-radius:8px;border:none;margin-right:8px;">Yes, clear cart</button>
                     <button class="btn" data-bs-dismiss="modal" style="background:#eef1f5;color:#4a5568;font-weight:600;padding:10px 32px;border-radius:8px;border:none;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="calculator-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:320px;">
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header" style="border-bottom:1px solid #eef1f5;padding:16px 20px;">
+                <h5 class="modal-title" style="font-weight:700;">Calculator</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="border:none;background:none;font-size:24px;color:#9aa6b2;">×</button>
+            </div>
+            <div class="modal-body" style="padding:14px 20px 20px;">
+                {{-- This calculator is fully independent of the cart/checkout math below —
+                     it never reads from or writes to any POS total. --}}
+                <div id="calc-expression">&nbsp;</div>
+                <div id="calc-display">0</div>
+                <div class="calc-grid">
+                    <button type="button" class="calc-btn calc-btn-fn" data-calc="clear">C</button>
+                    <button type="button" class="calc-btn calc-btn-fn" data-calc="backspace">⌫</button>
+                    <button type="button" class="calc-btn calc-btn-fn" data-calc="percent">%</button>
+                    <button type="button" class="calc-btn calc-btn-op" data-calc="op" data-op="/">÷</button>
+
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="7">7</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="8">8</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="9">9</button>
+                    <button type="button" class="calc-btn calc-btn-op" data-calc="op" data-op="*">×</button>
+
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="4">4</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="5">5</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="6">6</button>
+                    <button type="button" class="calc-btn calc-btn-op" data-calc="op" data-op="-">−</button>
+
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="1">1</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="2">2</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="3">3</button>
+                    <button type="button" class="calc-btn calc-btn-op" data-calc="op" data-op="+">+</button>
+
+                    <button type="button" class="calc-btn" data-calc="sign">±</button>
+                    <button type="button" class="calc-btn" data-calc="digit" data-digit="0">0</button>
+                    <button type="button" class="calc-btn" data-calc="decimal">.</button>
+                    <button type="button" class="calc-btn calc-btn-eq" data-calc="equals">=</button>
                 </div>
             </div>
         </div>
@@ -1380,6 +1502,249 @@ document.addEventListener('DOMContentLoaded', function () {
             notify('Network error. Please try again.', 'error');
         });
     });
+
+    /* ── Calculator (independent of the cart/checkout math) ──
+       This never reads from or writes to `cart`, discounts, tax, payment,
+       or checkout totals. It's a self-contained arithmetic tool only. */
+    (function initCalculator() {
+        const calcModalEl = document.getElementById('calculator-modal');
+        const calcDisplayEl = document.getElementById('calc-display');
+        const calcExpressionEl = document.getElementById('calc-expression');
+        const calcGrid = calcModalEl ? calcModalEl.querySelector('.calc-grid') : null;
+        if (!calcModalEl || !calcDisplayEl || !calcExpressionEl || !calcGrid) return;
+
+        const MAX_DIGITS = 15;
+        const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
+        let display = '0';
+        let previousValue = null;
+        let pendingOperator = null;
+        let waitingForOperand = false;
+        let justEvaluated = false;
+        let lastOperand = null;
+        let lastOperator = null;
+
+        function compute(a, b, operator) {
+            switch (operator) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return b === 0 ? null : a / b; // division-by-zero guard
+                default: return b;
+            }
+        }
+
+        // Rounds away floating-point noise (e.g. 0.1 + 0.2) and returns a
+        // plain numeric string, never scientific notation at this stage.
+        function trimNumber(num) {
+            if (!isFinite(num)) return '0';
+            return String(Math.round(num * 1e10) / 1e10);
+        }
+
+        function formatCalcNumber(value) {
+            if (typeof value === 'string' && (value === 'Error' || value.endsWith('.'))) return value;
+            const num = parseFloat(value);
+            if (!isFinite(num)) return String(value);
+            if (Math.abs(num) >= 1e15 || (Math.abs(num) < 1e-9 && num !== 0)) {
+                return num.toExponential(6);
+            }
+            const str = num.toString();
+            return str.length > MAX_DIGITS ? num.toPrecision(10) : str;
+        }
+
+        function updateDisplay() {
+            calcDisplayEl.textContent = formatCalcNumber(display);
+            calcExpressionEl.textContent = (previousValue !== null && pendingOperator)
+                ? `${formatCalcNumber(String(previousValue))} ${opSymbols[pendingOperator]}`
+                : '\u00A0';
+
+            calcGrid.querySelectorAll('.calc-btn-op').forEach(btn => {
+                btn.classList.toggle('active-op', !!pendingOperator && waitingForOperand && btn.dataset.op === pendingOperator);
+            });
+        }
+
+        function resetChain() {
+            previousValue = null;
+            pendingOperator = null;
+            lastOperand = null;
+            lastOperator = null;
+        }
+
+        function inputDigit(digit) {
+            if (justEvaluated) {
+                display = digit;
+                resetChain();
+                justEvaluated = false;
+            } else if (waitingForOperand) {
+                display = digit;
+                waitingForOperand = false;
+            } else {
+                display = (display === '0') ? digit : display + digit;
+            }
+            if (display.replace('-', '').replace('.', '').length > MAX_DIGITS) return;
+            updateDisplay();
+        }
+
+        function inputDecimal() {
+            if (justEvaluated) {
+                display = '0.';
+                resetChain();
+                justEvaluated = false;
+            } else if (waitingForOperand) {
+                display = '0.';
+                waitingForOperand = false;
+            } else if (display.indexOf('.') === -1) {
+                display += '.';
+            }
+            updateDisplay();
+        }
+
+        function toggleSign() {
+            if (display === '0' || display === 'Error') return;
+            display = display.startsWith('-') ? display.slice(1) : '-' + display;
+            updateDisplay();
+        }
+
+        function inputPercent() {
+            if (display === 'Error') return;
+            const current = parseFloat(display) || 0;
+            const result = (previousValue !== null && pendingOperator)
+                ? (previousValue * current) / 100
+                : current / 100;
+            display = trimNumber(result);
+            waitingForOperand = false;
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (justEvaluated || display === 'Error') { clearAll(); return; }
+            if (waitingForOperand) return;
+            display = display.length > 1 ? display.slice(0, -1) : '0';
+            if (display === '-') display = '0';
+            updateDisplay();
+        }
+
+        function clearAll() {
+            display = '0';
+            resetChain();
+            waitingForOperand = false;
+            justEvaluated = false;
+            updateDisplay();
+        }
+
+        function setOperator(operator) {
+            if (display === 'Error') return;
+            const current = parseFloat(display);
+
+            if (pendingOperator && waitingForOperand) {
+                // Pressing another operator right after one just chooses the new one.
+                pendingOperator = operator;
+                updateDisplay();
+                return;
+            }
+
+            if (previousValue === null) {
+                previousValue = current;
+            } else if (pendingOperator) {
+                const result = compute(previousValue, current, pendingOperator);
+                if (result === null) { showDivisionByZero(); return; }
+                display = trimNumber(result);
+                previousValue = parseFloat(display);
+            }
+
+            pendingOperator = operator;
+            waitingForOperand = true;
+            justEvaluated = false;
+            updateDisplay();
+        }
+
+        function equals() {
+            if (display === 'Error') return;
+            const current = parseFloat(display);
+
+            let a, b, operator;
+
+            if (pendingOperator !== null && !waitingForOperand) {
+                a = previousValue; b = current; operator = pendingOperator;
+                lastOperand = current; lastOperator = pendingOperator;
+            } else if (pendingOperator !== null && waitingForOperand) {
+                // Operator pressed but no second operand typed (e.g. "5 + =").
+                a = previousValue; b = previousValue; operator = pendingOperator;
+                lastOperand = previousValue; lastOperator = pendingOperator;
+            } else if (lastOperator !== null) {
+                // Repeated "=" — redo the last operation with the same operand.
+                a = current; b = lastOperand; operator = lastOperator;
+            } else {
+                justEvaluated = true;
+                updateDisplay();
+                return;
+            }
+
+            const result = compute(a, b, operator);
+            if (result === null) { showDivisionByZero(); return; }
+
+            display = trimNumber(result);
+            previousValue = parseFloat(display);
+            pendingOperator = null;
+            waitingForOperand = false;
+            justEvaluated = true;
+            updateDisplay();
+        }
+
+        function showDivisionByZero() {
+            display = 'Error';
+            resetChain();
+            waitingForOperand = false;
+            justEvaluated = true;
+            calcDisplayEl.textContent = 'Cannot divide by 0';
+            calcExpressionEl.textContent = '\u00A0';
+        }
+
+        calcGrid.addEventListener('click', function (e) {
+            const btn = e.target.closest('.calc-btn');
+            if (!btn) return;
+
+            switch (btn.dataset.calc) {
+                case 'digit': inputDigit(btn.dataset.digit); break;
+                case 'decimal': inputDecimal(); break;
+                case 'sign': toggleSign(); break;
+                case 'percent': inputPercent(); break;
+                case 'backspace': backspace(); break;
+                case 'clear': clearAll(); break;
+                case 'op': setOperator(btn.dataset.op); break;
+                case 'equals': equals(); break;
+            }
+        });
+
+        // Fresh state every time it's opened — never carries over between sessions.
+        calcModalEl.addEventListener('show.bs.modal', clearAll);
+
+        document.addEventListener('keydown', function (e) {
+            if (!calcModalEl.classList.contains('show')) return;
+
+            if (e.key >= '0' && e.key <= '9') { inputDigit(e.key); e.preventDefault(); return; }
+
+            switch (e.key) {
+                case '.': inputDecimal(); e.preventDefault(); break;
+                case '+': setOperator('+'); e.preventDefault(); break;
+                case '-': setOperator('-'); e.preventDefault(); break;
+                case '*': setOperator('*'); e.preventDefault(); break;
+                case '/': setOperator('/'); e.preventDefault(); break;
+                case '%': inputPercent(); e.preventDefault(); break;
+                case 'Enter':
+                case '=': equals(); e.preventDefault(); break;
+                case 'Backspace': backspace(); e.preventDefault(); break;
+                case 'Escape': {
+                    const instance = bootstrap.Modal.getInstance(calcModalEl);
+                    if (instance) instance.hide();
+                    e.preventDefault();
+                    break;
+                }
+            }
+        });
+
+        updateDisplay();
+    })();
 
     /* ── Init ── */
     loadProducts();

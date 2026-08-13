@@ -63,13 +63,15 @@ class Purchase extends Model
     }
 
     /**
-     * A purchase's items are locked ONLY once it's cancelled — that's a
-     * deliberate, closed action. A "received" purchase can still be
-     * edited; PurchaseService checks stock availability before allowing
-     * it, rather than blocking editing outright.
+     * A purchase's items are locked once it's "received" or "cancelled".
+     * Once received, its items have already moved real stock and blended
+     * into the product's weighted-average cost — editing them after the
+     * fact can't be done reliably (see PurchaseService), so a received
+     * purchase is view-only from here on. The only remaining action is
+     * cancelling it, which PurchaseService reverses in a controlled way.
      */
     public function getItemsLockedAttribute(): bool
     {
-        return $this->status === 'cancelled';
+        return in_array($this->status, ['received', 'cancelled'], true);
     }
 }

@@ -312,41 +312,7 @@
                     <a href="{{ route('sticky-notices.sticky_notices') }}" class="{{ request()->routeIs('sticky-notices.sticky_notices') ? 'active' : '' }}"><img src="{{ asset('backend/assets/img/icons/edit.svg') }}"
                             alt="img"><span>
                             Sticky Notices</span> <span class="menu-arrow"></span></a>
-                </li>
-                <li class="submenu">
-                    <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/settings.svg') }}"
-                            alt="img"><span>
-                            Settings</span> <span class="menu-arrow"></span></a>
-                    <ul>
-                        <li>
-                            <a href="{{ route('admin.user.show') }}" class="{{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
-                                <span> Users</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
-                                <span> Roles</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('admin.permissions.index') }}" class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
-                                <span> Permissions</span>
-                            </a>
-
-                        <li>
-                            <a href="{{ route('admin.roles_permissions.index') }}" class="{{ request()->routeIs('admin.roles_permissions.*') ? 'active' : '' }}">
-                                <span> Roles & Permissions</span>
-                            </a>
-
-                        </li>
-
-
-                    </ul>
-                </li>
-
-           
+                </li>           
 
             </ul>
 

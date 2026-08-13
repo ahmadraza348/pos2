@@ -16,13 +16,17 @@ class PurchaseItem extends Model
         'unit_cost',
         'discount',
         'total',
+        'previous_stock',
+        'previous_cost_price',
     ];
 
     protected $casts = [
-        'quantity'  => 'integer',
-        'unit_cost' => 'decimal:2',
-        'discount'  => 'decimal:2',
-        'total'     => 'decimal:2',
+        'quantity'             => 'integer',
+        'unit_cost'            => 'decimal:2',
+        'discount'             => 'decimal:2',
+        'total'                => 'decimal:2',
+        'previous_stock'       => 'integer',
+        'previous_cost_price'  => 'decimal:2',
     ];
 
     public function purchase()

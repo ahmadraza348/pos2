@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $itemsLocked = $purchase->items_locked; // true only once cancelled
+    $itemsLocked = $purchase->items_locked; // true once received or cancelled
 
     $statusLabels = [
         'pending'   => 'Pending',
@@ -81,7 +81,7 @@
                                 @if ($purchase->status === 'pending')
                                     <small class="text-muted">Marking "Received" adds this stock to your products.</small>
                                 @elseif ($purchase->status === 'received')
-                                    <small class="text-muted">Stock is already in — editing items here will adjust it accordingly. Setting to "Cancelled" reverses it.</small>
+                                    <small class="text-muted">Stock is already in and its items are locked. Setting to "Cancelled" safely reverses that stock and cost.</small>
                                 @else
                                     <small class="text-muted">This purchase is cancelled and can no longer be changed.</small>
                                 @endif
@@ -117,16 +117,17 @@
                                 @endif
                             </div>
 
-                            @if ($itemsLocked)
+                            @if ($purchase->status === 'cancelled')
                                 <div class="alert alert-light border small mb-3">
                                     This purchase is cancelled, so its items can no longer be changed.
                                 </div>
                             @elseif ($purchase->status === 'received')
                                 <div class="alert alert-light border small mb-3">
-                                    This stock has already been added to your products. You can still correct
-                                    quantities or prices — if a product's stock has since dropped below what this
-                                    purchase originally added (because some was sold), saving will be blocked with
-                                    an explanation instead of silently getting the numbers wrong.
+                                    This stock — and the cost it blended into — has already been applied to your
+                                    products, so these items are locked and view-only. To undo it, set the status
+                                    above to "Cancelled", which safely reverses the stock and cost (unless some of
+                                    it has already been sold or another purchase has since changed the product,
+                                    in which case it'll explain why it can't).
                                 </div>
                             @endif
 
@@ -253,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ===== Editable mode (pending or received) =====
+    // ===== Editable mode (pending only — received/cancelled are locked above) =====
     const products = @json($products);
     const existingItems = @json($existingItemsData);
 
