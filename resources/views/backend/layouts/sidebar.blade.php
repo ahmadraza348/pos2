@@ -17,30 +17,38 @@
                     </a>
                 </li>
 
+                @canany(['view_categories', 'view_units', 'view_brands', 'view_products'])
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/product.svg') }}"
                             alt="img"><span>
                             Inventory </span> <span class="menu-arrow"></span></a>
                     <ul>
 
-
+                        @can('view_categories')
                         <li>
                             <a href="{{ route('category.index') }}" class="{{ request()->routeIs('category.*') ? 'active' : '' }}">
                                 <span>Category</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('view_units')
                         <li>
                             <a href="{{ route('unit.index') }}" class="{{ request()->routeIs('unit.*') ? 'active' : '' }}">
                                 <span>Units</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('view_brands')
                         <li>
                             <a href="{{ route('brand.index') }}" class="{{ request()->routeIs('brand.*') ? 'active' : '' }}">
                                 <span>Brands</span>
                             </a>
                         </li>
+                        @endcan
+
+                        @can('view_products')
                         <li>
                            <a href="{{ route('barcode-print') }}" class="{{ request()->routeIs('barcode-print') ? 'active' : '' }}">Barcode Print</a>
                         </li>
@@ -50,41 +58,51 @@
                                 <span>Products</span>
                             </a>
                         </li>
+                        @endcan
 
                     </ul>
                 </li>
+                @endcanany
 
 
 
+                @canany(['view_purchases', 'create_purchases'])
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/purchase1.svg') }}"
                             alt="img"><span>
                             Purchases </span> <span class="menu-arrow"></span></a>
                     <ul>
 
-
+                        @can('view_purchases')
                         <li>
                             <a href="{{ route('purchase.index') }}" class="{{ request()->routeIs('purchase.index') ? 'active' : '' }}">
                                 <span>All Purchase</span>
                             </a>
                         </li>
+                        @endcan
+                        @can('create_purchases')
                         <li>
                             <a href="{{ route('purchase.create') }}" class="{{ request()->routeIs('purchase.create') ? 'active' : '' }}">
                                 <span>Create Purchase</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('view_purchases')
                         <li>
                             <a href="{{ route('purchase.restorePurchase') }}" class="{{ request()->routeIs('purchase.restorePurchase') ? 'active' : '' }}">
                                 <span>Trashed Purchases</span>
                             </a>
                         </li>
+                        @endcan
 
 
 
                     </ul>
                 </li>
+                @endcanany
 
+                @can('view_sales')
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/sales1.svg') }}"
                             alt="img"><span>
@@ -108,34 +126,41 @@
 
 
                 </li>
+                @endcan
 
 
 
+                @canany(['view_returns', 'create_returns'])
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/return1.svg') }}"
                             alt="img"><span>
                             Return </span> <span class="menu-arrow"></span></a>
                     <ul>
 
-
+                        @can('view_returns')
                         <li>
                             <a href="{{ route('returns.index') }}" class="{{ request()->routeIs('returns.index') ? 'active' : '' }}">
                                 <span>Sale Return List</span>
                             </a>
                         </li>
+                        @endcan
+                        @can('create_returns')
                         <li>
                             <a href="{{ route('returns.create') }}" class="{{ request()->routeIs('returns.create') ? 'active' : '' }}">
                                 <span>Add Sale Return</span>
                             </a>
                         </li>
+                        @endcan
 
                     </ul>
 
 
 
                 </li>
+                @endcanany
 
 
+                @can('view_expenses')
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/expense1.svg') }}"
                             alt="img"><span>
@@ -161,8 +186,10 @@
 
                     </ul>
                 </li>
+                @endcan
 
 
+      @can('view_reports')
       <li class="submenu">
     <a href="javascript:void(0);"
         class="{{ request()->routeIs('reports.*') ? 'subdrop active' : '' }}">
@@ -245,10 +272,11 @@
 
     </ul>
 </li>
+      @endcan
 
 
 
-
+                @can('view_customers')
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/quotation1.svg') }}"
                             alt="img"><span>
@@ -262,6 +290,8 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
+                @can('view_suppliers')
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/places.svg') }}"
                             alt="img"><span>
@@ -274,39 +304,51 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
 
 
+                @canany(['view_admins', 'view_roles', 'view_permissions', 'view_roles_permissions'])
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('backend/assets/img/icons/users1.svg') }}"
                             alt="img"><span>
                             For Admin Only </span> <span class="menu-arrow"></span></a>
                     <ul>
+                        @can('view_admins')
                         <li>
                             <a href="{{ route('admin.user.show') }}" class="{{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
                                 <span> Users</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('view_roles')
                         <li>
                             <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
                                 <span> Roles</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('view_permissions')
                         <li>
                             <a href="{{ route('admin.permissions.index') }}" class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
                                 <span> Permissions</span>
                             </a>
+                        </li>
+                        @endcan
 
+                        @can('view_roles_permissions')
                         <li>
                             <a href="{{ route('admin.roles_permissions.index') }}" class="{{ request()->routeIs('admin.roles_permissions.*') ? 'active' : '' }}">
                                 <span> Roles & Permissions</span>
                             </a>
                         </li>
+                        @endcan
 
 
                     </ul>
                 </li>
+                @endcanany
                      <li>
 
                     <a href="{{ route('sticky-notices.sticky_notices') }}" class="{{ request()->routeIs('sticky-notices.sticky_notices') ? 'active' : '' }}"><img src="{{ asset('backend/assets/img/icons/edit.svg') }}"
