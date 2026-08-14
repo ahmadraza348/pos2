@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Muhammad Ahmad Raza | Laravel & Full-Stack Developer</title>
-  <meta name="description" content="Muhammad Ahmad Raza — Laravel & Full-Stack Developer with 2+ years of experience building web applications, e-commerce platforms, and business software.">
+  <title>Muhammad Ahmad Raza | Laravel Developer</title>
+  <meta name="description" content="Laravel developer with 2+ years of experience building web applications, eCommerce platforms, POS & inventory systems, REST APIs, and business software.">
 
   <!-- Canonical -->
   <link rel="canonical" href="https://ahmadrazadev.com">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Muhammad Ahmad Raza | Laravel & Full-Stack Developer">
-  <meta property="og:description" content="Laravel & Full-Stack Developer building practical web applications and business software.">
+  <meta property="og:title" content="Muhammad Ahmad Raza | Laravel Developer">
+  <meta property="og:description" content="Laravel developer building practical web applications, eCommerce, POS, APIs, and business systems.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ahmadrazadev.com">
+  <meta property="og:image" content="{{asset('portfolio/images/og-image.jpg')}}">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="{{asset('portfolio/images/favicon.png')}}">
@@ -34,6 +35,21 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="{{asset('portfolio/css/style.css')}}">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Muhammad Ahmad Raza",
+      "jobTitle": "Laravel Developer",
+      "url": "https://ahmadrazadev.com",
+      "sameAs": [
+        "https://github.com/ahmadraza348",
+        "https://linkedin.com/in/ahmadraza348"
+      ]
+    }
+  </script>
 </head>
 <body>
 
@@ -50,8 +66,7 @@
     <div class="navbar-inner container-narrow">
 
       <a href="#hero" class="navbar-brand-custom" aria-label="Ahmad Raza — home">
-        <!-- <span class="text-accent">&lt;</span>AhmadRaza<span class="text-accent">/&gt;</span> -->
-         <img src="{{asset('portfolio/images/logo-light.png')}}" style="width: 60px; height: auto;" alt="Ahmad Raza Logo">
+        <img src="{{asset('portfolio/images/logo-light.png')}}" style="width: 60px; height: auto;" alt="Ahmad Raza Logo">
       </a>
 
       <button
@@ -82,7 +97,7 @@
         </ul>
 
         <a
-          href="{{asset('portfolio/cv/muhammad-ahmad-raza-cv.pdf')}}"
+          href="{{asset('portfolio/Ahmad-Raza-Laravel-Resume.pdf')}}"
           class="btn-cta-nav mono"
           download
         >
@@ -114,7 +129,7 @@
     ============================================ -->
     <section id="hero" class="section hero-section">
       <div class="hero-bg-grid" aria-hidden="true"></div>
-      
+
       <!-- Animated particles background -->
       <div class="particles-container" id="particlesContainer"></div>
 
@@ -125,13 +140,13 @@
           <h1 class="hero-name">Muhammad Ahmad Raza</h1>
           <h2 class="hero-role">Laravel &amp; Full-Stack Developer</h2>
           <p class="hero-desc">
-            2+ years of full-stack experience building Laravel web apps, 
-            e-commerce platforms, REST APIs, and business software.
+            Laravel-focused developer building practical web applications, eCommerce platforms,
+            POS &amp; inventory systems, REST APIs, and business software.
           </p>
 
           <div class="hero-actions">
             <a href="#projects" class="btn-hero btn-hero-primary" data-nav-link-scroll>View My Work</a>
-            <a href="{{asset('portfolio/cv/muhammad-ahmad-raza-cv.pdf')}}" target="_blank" rel="noopener" class="btn-hero btn-hero-outline">View CV</a>
+            <a href="{{asset('portfolio/Ahmad-Raza-Laravel-Resume.pdf')}}" target="_blank" rel="noopener" class="btn-hero btn-hero-outline">View CV</a>
           </div>
 
           <div class="hero-socials">
@@ -164,8 +179,8 @@
               <div class="code-line"><span class="line-no">2</span><span class="code-content">&nbsp;&nbsp;name: <span class="tok-string">"Muhammad Ahmad Raza"</span>,</span></div>
               <div class="code-line"><span class="line-no">3</span><span class="code-content">&nbsp;&nbsp;role: <span class="tok-string">"Laravel Developer"</span>,</span></div>
               <div class="code-line"><span class="line-no">4</span><span class="code-content">&nbsp;&nbsp;experience: <span class="tok-string">"2+ Years"</span>,</span></div>
-              <div class="code-line"><span class="line-no">5</span><span class="code-content">&nbsp;&nbsp;stack: [<span class="tok-string">"PHP"</span>, <span class="tok-string">"Laravel"</span>, <span class="tok-string">"MySQL"</span>, <span class="tok-string">"JavaScript"</span>],</span></div>
-              <div class="code-line"><span class="line-no">6</span><span class="code-content">&nbsp;&nbsp;focus: <span class="tok-string">"Full-Stack Development"</span></span></div>
+              <div class="code-line"><span class="line-no">5</span><span class="code-content">&nbsp;&nbsp;stack: [<span class="tok-string">"PHP"</span>, <span class="tok-string">"Laravel"</span>, <span class="tok-string">"MySQL"</span>],</span></div>
+              <div class="code-line"><span class="line-no">6</span><span class="code-content">&nbsp;&nbsp;focus: <span class="tok-string">"Business Applications"</span></span></div>
               <div class="code-line"><span class="line-no">7</span><span class="code-content">};</span></div>
             </div>
 
@@ -180,30 +195,24 @@
     </section>
 
     <!-- ============================================
-         02 // ABOUT (Condensed)
+         02 // ABOUT
     ============================================ -->
     <section id="about" class="section about-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">02 // About</p>
 
         <div class="about-grid">
           <div class="about-text" data-aos="fade-right" data-aos-duration="800">
             <h2>Building practical software that lasts.</h2>
             <p>
-              Laravel-focused full-stack developer with 2+ years of hands-on experience.
-              I build web applications, e-commerce platforms, and business tools 
-              — from database design to deployment.
+              I’m a Laravel-focused developer who builds practical web applications from database design
+              and backend logic to APIs, frontend integration, and production deployment.
+              My projects include eCommerce platforms, POS and inventory systems, learning platforms,
+              admin dashboards, and business applications.
             </p>
-
-            <div class="about-tags-block">
-              <span class="meta-label mono">Soft Skills</span>
-              <div class="skills-tags">
-                <span class="skill-tag">Team Player</span>
-                <span class="skill-tag">Communication</span>
-                <span class="skill-tag">Problem-Solving</span>
-                <span class="skill-tag">Continuous Learning</span>
-              </div>
-            </div>
+            <p>
+              With experience in both professional and independent development, I focus on
+              delivering clean, maintainable, and functional systems.
+            </p>
           </div>
 
           <div class="about-meta-grid" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
@@ -221,11 +230,11 @@
             </div>
             <div class="meta-card">
               <span class="meta-label mono">Frontend</span>
-              <span class="meta-value">React / Bootstrap</span>
+              <span class="meta-value">Blade / React</span>
             </div>
             <div class="meta-card">
-              <span class="meta-label mono">API</span>
-              <span class="meta-value">REST / Sanctum</span>
+              <span class="meta-label mono">APIs</span>
+              <span class="meta-value">REST / Sanctum / Passport</span>
             </div>
             <div class="meta-card">
               <span class="meta-label mono">Deployment</span>
@@ -241,10 +250,9 @@
     ============================================ -->
     <section id="skills" class="section skills-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">03 // Skills</p>
-        <h2 data-aos="fade-up" data-aos-delay="50">Tech Stack</h2>
+        <h2 data-aos="fade-up" data-aos-delay="50">Technical Skills</h2>
         <p class="skills-intro" data-aos="fade-up" data-aos-delay="100">
-          Laravel and PHP anchor everything I build, extending to frontend, APIs, and deployment.
+          Laravel and PHP anchor everything I build, extended with modern frontend and deployment tools.
         </p>
 
         <div class="skills-tabs-wrap" data-aos="fade-up" data-aos-delay="150">
@@ -252,42 +260,42 @@
             <ul class="skills-tab-list" id="skillsTab" role="tablist">
               <li role="presentation">
                 <button class="skills-tab-btn mono is-emphasis active" id="tab-laravel" data-bs-toggle="tab" data-bs-target="#panel-laravel" type="button" role="tab" aria-controls="panel-laravel" aria-selected="true">
-                  <i class="bi bi-lightning-charge" aria-hidden="true"></i> laravel <span class="tab-count">11</span>
+                  <i class="bi bi-lightning-charge" aria-hidden="true"></i> Laravel
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-backend" data-bs-toggle="tab" data-bs-target="#panel-backend" type="button" role="tab" aria-controls="panel-backend" aria-selected="false">
-                  <i class="bi bi-hdd-stack" aria-hidden="true"></i> backend <span class="tab-count">11</span>
+                  <i class="bi bi-hdd-stack" aria-hidden="true"></i> Backend
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-frontend" data-bs-toggle="tab" data-bs-target="#panel-frontend" type="button" role="tab" aria-controls="panel-frontend" aria-selected="false">
-                  <i class="bi bi-window" aria-hidden="true"></i> frontend <span class="tab-count">11</span>
+                  <i class="bi bi-window" aria-hidden="true"></i> Frontend
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-api" data-bs-toggle="tab" data-bs-target="#panel-api" type="button" role="tab" aria-controls="panel-api" aria-selected="false">
-                  <i class="bi bi-diagram-2" aria-hidden="true"></i> apis <span class="tab-count">6</span>
+                  <i class="bi bi-diagram-2" aria-hidden="true"></i> APIs &amp; Integrations
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-packages" data-bs-toggle="tab" data-bs-target="#panel-packages" type="button" role="tab" aria-controls="panel-packages" aria-selected="false">
-                  <i class="bi bi-box-seam" aria-hidden="true"></i> packages <span class="tab-count">8</span>
+                  <i class="bi bi-box-seam" aria-hidden="true"></i> Packages
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-devops" data-bs-toggle="tab" data-bs-target="#panel-devops" type="button" role="tab" aria-controls="panel-devops" aria-selected="false">
-                  <i class="bi bi-gear" aria-hidden="true"></i> devops <span class="tab-count">9</span>
+                  <i class="bi bi-gear" aria-hidden="true"></i> Deployment &amp; Tools
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-seo" data-bs-toggle="tab" data-bs-target="#panel-seo" type="button" role="tab" aria-controls="panel-seo" aria-selected="false">
-                  <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> seo <span class="tab-count">9</span>
+                  <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> SEO &amp; Analytics
                 </button>
               </li>
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-additional" data-bs-toggle="tab" data-bs-target="#panel-additional" type="button" role="tab" aria-controls="panel-additional" aria-selected="false">
-                  <i class="bi bi-palette2" aria-hidden="true"></i> additional <span class="tab-count">6</span>
+                  <i class="bi bi-palette2" aria-hidden="true"></i> Additional
                 </button>
               </li>
             </ul>
@@ -299,31 +307,31 @@
               <div class="skills-tags">
                 <span class="skill-tag tag-emphasis">Authentication</span>
                 <span class="skill-tag tag-emphasis">Authorization</span>
+                <span class="skill-tag tag-emphasis">RBAC</span>
                 <span class="skill-tag tag-emphasis">Routing</span>
                 <span class="skill-tag tag-emphasis">Middleware</span>
+                <span class="skill-tag tag-emphasis">Validation</span>
                 <span class="skill-tag tag-emphasis">Caching</span>
-                <span class="skill-tag tag-emphasis">Queues</span>
-                <span class="skill-tag tag-emphasis">Jobs</span>
-                <span class="skill-tag tag-emphasis">Events</span>
-                <span class="skill-tag tag-emphasis">Notifications</span>
-                <span class="skill-tag tag-emphasis">Mail</span>
-                <span class="skill-tag tag-emphasis">File Uploads</span>
+                <span class="skill-tag tag-emphasis">Queues / Jobs</span>
+                <span class="skill-tag tag-emphasis">Events / Listeners</span>
+                <span class="skill-tag tag-emphasis">Notifications / Mail</span>
+                <span class="skill-tag tag-emphasis">File Storage</span>
               </div>
             </div>
 
             <div class="tab-pane fade" id="panel-backend" role="tabpanel" aria-labelledby="tab-backend">
               <div class="skills-tags">
-                <span class="skill-tag tag-emphasis">PHP</span>
-                <span class="skill-tag">OOP</span>
-                <span class="skill-tag">MVC</span>
-                <span class="skill-tag tag-emphasis">Laravel v8&ndash;12</span>
+                <span class="skill-tag tag-emphasis">PHP (OOP)</span>
+                <span class="skill-tag tag-emphasis">Laravel (v8–12)</span>
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">Eloquent ORM</span>
                 <span class="skill-tag">Query Builder</span>
                 <span class="skill-tag">Relationships</span>
-                <span class="skill-tag">Migrations</span>
-                <span class="skill-tag">Seeders</span>
+                <span class="skill-tag">Migrations / Seeders</span>
+                <span class="skill-tag">Transactions</span>
                 <span class="skill-tag">Database Optimization</span>
+                <span class="skill-tag">MVC Architecture</span>
+                <span class="skill-tag">Dependency Injection</span>
               </div>
             </div>
 
@@ -331,15 +339,12 @@
               <div class="skills-tags">
                 <span class="skill-tag">HTML5</span>
                 <span class="skill-tag">CSS3</span>
-                <span class="skill-tag">SCSS</span>
-                <span class="skill-tag">JavaScript ES6+</span>
                 <span class="skill-tag">jQuery</span>
                 <span class="skill-tag">Bootstrap</span>
-                <span class="skill-tag">Tailwind CSS</span>
                 <span class="skill-tag">Responsive Design</span>
                 <span class="skill-tag">Blade</span>
                 <span class="skill-tag">AJAX</span>
-                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">React.js (basic)</span>
               </div>
             </div>
 
@@ -347,10 +352,14 @@
               <div class="skills-tags">
                 <span class="skill-tag">RESTful APIs</span>
                 <span class="skill-tag">Postman</span>
-                <span class="skill-tag">Resource Controllers</span>
-                <span class="skill-tag">Sanctum</span>
+                <span class="skill-tag">API Resource Controllers</span>
+                <span class="skill-tag">Laravel Sanctum</span>
+                <span class="skill-tag">Laravel Passport</span>
                 <span class="skill-tag">Validation</span>
                 <span class="skill-tag">Exception Handling</span>
+                <span class="skill-tag">Stripe Integration</span>
+                <span class="skill-tag">Email / Notification APIs</span>
+                <span class="skill-tag">API Authentication</span>
               </div>
             </div>
 
@@ -358,26 +367,25 @@
               <div class="skills-tags">
                 <span class="skill-tag">Laravel Breeze</span>
                 <span class="skill-tag">Sanctum</span>
-                <span class="skill-tag">Spatie Roles &amp; Permissions</span>
+                <span class="skill-tag">Spatie Permission</span>
                 <span class="skill-tag">Socialite</span>
                 <span class="skill-tag">Laravel Excel</span>
                 <span class="skill-tag">Intervention Image</span>
-                <span class="skill-tag">Stripe</span>
-                <span class="skill-tag">PayPal Sandbox</span>
+                <span class="skill-tag">Stripe PHP</span>
               </div>
             </div>
 
             <div class="tab-pane fade" id="panel-devops" role="tabpanel" aria-labelledby="tab-devops">
               <div class="skills-tags">
-                <span class="skill-tag">Hostinger</span>
-                <span class="skill-tag">cPanel</span>
-                <span class="skill-tag">Domain &amp; DNS</span>
-                <span class="skill-tag">SSH</span>
-                <span class="skill-tag">GitHub Actions</span>
-                <span class="skill-tag">CI/CD</span>
-                <span class="skill-tag">Cron Jobs</span>
                 <span class="skill-tag">Git</span>
                 <span class="skill-tag">GitHub</span>
+                <span class="skill-tag">SSH</span>
+                <span class="skill-tag">Hostinger</span>
+                <span class="skill-tag">cPanel</span>
+                <span class="skill-tag">Domain / DNS</span>
+                <span class="skill-tag">Production Deployment</span>
+                <span class="skill-tag">Cron Jobs</span>
+                <span class="skill-tag">Environment Configuration</span>
               </div>
             </div>
 
@@ -385,13 +393,12 @@
               <div class="skills-tags">
                 <span class="skill-tag">Technical SEO</span>
                 <span class="skill-tag">On-page SEO</span>
-                <span class="skill-tag">Speed Optimization</span>
                 <span class="skill-tag">Core Web Vitals</span>
                 <span class="skill-tag">Google Analytics</span>
                 <span class="skill-tag">Google Search Console</span>
                 <span class="skill-tag">Google Tag Manager</span>
                 <span class="skill-tag">Facebook Pixel</span>
-                <span class="skill-tag">Meta Ads</span>
+                <span class="skill-tag">Performance Optimization</span>
               </div>
             </div>
 
@@ -399,10 +406,7 @@
               <div class="skills-tags">
                 <span class="skill-tag">WordPress</span>
                 <span class="skill-tag">Shopify</span>
-                <span class="skill-tag">Product Photography</span>
-                <span class="skill-tag">Content Writing</span>
-                <span class="skill-tag">Canva</span>
-                <span class="skill-tag">Photoshop</span>
+                <span class="skill-tag">Basic Design (Canva)</span>
               </div>
             </div>
 
@@ -416,10 +420,9 @@
     ============================================ -->
     <section id="projects" class="section projects-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">04 // Projects</p>
-        <h2 data-aos="fade-up" data-aos-delay="50">Selected Work</h2>
+        <h2 data-aos="fade-up" data-aos-delay="50">Projects</h2>
         <p class="skills-intro" data-aos="fade-up" data-aos-delay="100">
-          Personal projects, client work, and an ongoing business system.
+          Personal projects, client work, and ongoing business systems.
         </p>
 
         <div class="project-filters mono" role="group" aria-label="Filter projects by category" data-aos="fade-up" data-aos-delay="150">
@@ -429,149 +432,168 @@
           <button class="filter-btn" data-filter="business" aria-pressed="false">Business</button>
           <button class="filter-btn" data-filter="react" aria-pressed="false">React</button>
           <button class="filter-btn" data-filter="client" aria-pressed="false">Client</button>
+          <button class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
         </div>
 
         <div class="projects-grid" id="projectsGrid">
 
-          <!-- Project 1 -->
-          <article class="project-card" data-category="laravel" data-aos="fade-up" data-aos-delay="100">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-1" aria-label="View details for Web Tech Tutorials">
+          <!-- ===== Project 1: POS & Inventory (Flagship) ===== -->
+          <article class="project-card" data-category="laravel business personal" data-aos="fade-up" data-aos-delay="100">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-1" aria-label="View details for POS & Inventory System">
               <span class="project-thumb-index mono">01</span>
-              <i class="bi bi-journal-code project-thumb-icon" aria-hidden="true"></i>
+              <img src="{{asset('portfolio/images/pos.png')}}" alt="POS & Inventory System screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Personal Project &middot; Laravel</span>
-              <h3 class="project-card-title">Web Tech Tutorials</h3>
-              <p class="project-card-desc">Learning platform with CMS, role-based permissions, blog & course modules.</p>
-              <div class="project-card-tech">
-                <span class="skill-tag">Laravel</span>
-                <span class="skill-tag">PHP</span>
-                <span class="skill-tag">MySQL</span>
-              </div>
-              <div class="project-card-links">
-                <a href="https://webtechtutorials.com" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project 2 -->
-          <article class="project-card" data-category="laravel ecommerce" data-aos="fade-up" data-aos-delay="150">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-2" aria-label="View details for E-Commerce Website">
-              <span class="project-thumb-index mono">02</span>
-              <i class="bi bi-cart3 project-thumb-icon" aria-hidden="true"></i>
-              <span class="project-thumb-overlay">
-                <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
-              </span>
-            </button>
-            <div class="project-card-body">
-              <span class="project-card-category mono">Laravel &middot; E-commerce</span>
-              <h3 class="project-card-title">E-Commerce Platform</h3>
-              <p class="project-card-desc">Full-featured online store with cart, orders, inventory & admin dashboard.</p>
-              <div class="project-card-tech">
-                <span class="skill-tag">Laravel</span>
-                <span class="skill-tag">PHP</span>
-                <span class="skill-tag">MySQL</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project 3 -->
-          <article class="project-card" data-category="laravel business" data-aos="fade-up" data-aos-delay="200">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-3" aria-label="View details for POS and Inventory Management System">
-              <span class="project-thumb-index mono">03</span>
-              <i class="bi bi-shop project-thumb-icon" aria-hidden="true"></i>
-              <span class="project-thumb-overlay">
-                <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
-              </span>
-            </button>
-            <div class="project-card-body">
-              <span class="project-card-category mono">Laravel &middot; Business</span>
+              <span class="project-card-category mono">Independent Project</span>
               <h3 class="project-card-title">POS &amp; Inventory System</h3>
-              <p class="project-card-desc">Point-of-sale, inventory, purchases, sales, and reporting — in progress.</p>
+              <p class="project-card-desc">Point-of-sale, inventory management, purchasing, sales, and real-time reporting — built with Laravel.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">PHP</span>
                 <span class="skill-tag">MySQL</span>
               </div>
+              <div class="project-card-links">
+                <a href="https://ahmadrazadev.com/admin/dashboard" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              </div>
             </div>
           </article>
 
-          <!-- Project 4 -->
-          <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="100">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-4" aria-label="View details for ImperialRide.ae">
-              <span class="project-thumb-index mono">04</span>
-              <i class="bi bi-car-front project-thumb-icon" aria-hidden="true"></i>
+          <!-- ===== Project 2: E-Commerce Platform ===== -->
+          <article class="project-card" data-category="laravel ecommerce personal" data-aos="fade-up" data-aos-delay="150">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-2" aria-label="View details for E-Commerce Platform">
+              <span class="project-thumb-index mono">02</span>
+              <img src="{{asset('portfolio/images/ecommerce.png')}}" alt="E-Commerce Platform screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Client Project</span>
-              <h3 class="project-card-title">ImperialRide.ae</h3>
-              <p class="project-card-desc">Ride-booking platform for UAE client — frontend & booking flow.</p>
+              <span class="project-card-category mono">Independent Project &middot; Live</span>
+              <h3 class="project-card-title">E-Commerce Platform</h3>
+              <p class="project-card-desc">Full-featured online store with product variants, cart, checkout, order processing, and admin dashboard.</p>
+              <div class="project-card-tech">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+              </div>
               <div class="project-card-links">
-                <a href="https://imperialride.ae" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+                <a href="https://ecommerce.ahmadrazadev.com" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
 
-          <!-- Project 5 -->
-          <article class="project-card" data-category="laravel" data-aos="fade-up" data-aos-delay="150">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-5" aria-label="View details for Laravel Job Portal">
-              <span class="project-thumb-index mono">05</span>
+          <!-- ===== Project 3: Web Tech Tutorials ===== -->
+          <article class="project-card" data-category="laravel personal" data-aos="fade-up" data-aos-delay="200">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-3" aria-label="View details for Web Tech Tutorials">
+              <span class="project-thumb-index mono">03</span>
+              <img src="{{asset('portfolio/images/tutorials.png')}}" alt="Web Tech Tutorials screenshot" class="project-thumb-img">
+              <span class="project-thumb-overlay">
+                <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+              </span>
+            </button>
+            <div class="project-card-body">
+              <span class="project-card-category mono">Independent Project &middot; Live</span>
+              <h3 class="project-card-title">Web Tech Tutorials</h3>
+              <p class="project-card-desc">Learning platform with course management, blog, role-based permissions, and SEO-focused features.</p>
+              <div class="project-card-tech">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+              </div>
+              <div class="project-card-links">
+                <a href="https://tutorials.ahmadrazadev.com" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Project 4: Job Portal ===== -->
+          <article class="project-card" data-category="laravel personal" data-aos="fade-up" data-aos-delay="100">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-4" aria-label="View details for Job Portal">
+              <span class="project-thumb-index mono">04</span>
               <i class="bi bi-briefcase project-thumb-icon" aria-hidden="true"></i>
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Personal Project &middot; Laravel</span>
+              <span class="project-card-category mono">Independent Project &middot; Completed</span>
               <h3 class="project-card-title">Job Portal</h3>
-              <p class="project-card-desc">Job portal with authentication, job posting, and filtered search.</p>
+              <p class="project-card-desc">Job listing platform with authentication, job posting, search/filter, and admin management.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
-                <span class="skill-tag">PHP</span>
-                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Sanctum</span>
+              </div>
+              <div class="project-card-links">
+                <a href="https://github.com/ahmadraza348/job-portal" target="_blank" rel="noopener" class="project-link mono">View Code <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
 
-          <!-- Project 6 -->
-          <article class="project-card" data-category="laravel react" data-aos="fade-up" data-aos-delay="200">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-6" aria-label="View details for Construction Website">
-              <span class="project-thumb-index mono">06</span>
+          <!-- ===== Project 5: Construction Website (Laravel + React) ===== -->
+          <article class="project-card" data-category="laravel react personal" data-aos="fade-up" data-aos-delay="150">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-5" aria-label="View details for Construction Website">
+              <span class="project-thumb-index mono">05</span>
               <i class="bi bi-building project-thumb-icon" aria-hidden="true"></i>
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Laravel &middot; React</span>
+              <span class="project-card-category mono">Independent Project &middot; Completed</span>
               <h3 class="project-card-title">Construction Website</h3>
-              <p class="project-card-desc">Sanctum-secured admin panel with dynamic project and blog modules.</p>
+              <p class="project-card-desc">Dynamic company site with Laravel backend, React frontend, and Sanctum-powered admin panel.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Sanctum</span>
+              </div>
+              <div class="project-card-links">
+                <a href="https://github.com/ahmadraza348/construction" target="_blank" rel="noopener" class="project-link mono">View Code <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
 
-          <!-- Project 7 -->
-          <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="100">
-            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-7" aria-label="View details for Art Portfolio Website">
-              <span class="project-thumb-index mono">07</span>
-              <i class="bi bi-palette project-thumb-icon" aria-hidden="true"></i>
+          <!-- ===== Project 6: ImperialRide.ae (Client) ===== -->
+          <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="200">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-6" aria-label="View details for ImperialRide.ae">
+              <span class="project-thumb-index mono">06</span>
+              <img src="{{asset('portfolio/images/ride.png')}}" alt="ImperialRide.ae screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Client Project &middot; WordPress</span>
+              <span class="project-card-category mono">Client Project &middot; Live</span>
+              <h3 class="project-card-title">ImperialRide.ae</h3>
+              <p class="project-card-desc">Ride-booking platform for UAE client — frontend development, booking flow, and performance improvements.</p>
+              <div class="project-card-tech">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+              </div>
+              <div class="project-card-links">
+                <a href="https://imperialride.ae" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Project 7: Art Portfolio (Client - WordPress) ===== -->
+          <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="100">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-7" aria-label="View details for Art Portfolio Website">
+              <span class="project-thumb-index mono">07</span>
+              <img src="{{asset('portfolio/images/baig.png')}}" alt="Art Portfolio screenshot" class="project-thumb-img">
+              <span class="project-thumb-overlay">
+                <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+              </span>
+            </button>
+            <div class="project-card-body">
+              <span class="project-card-category mono">Client Project &middot; Live</span>
               <h3 class="project-card-title">Art Portfolio Website</h3>
-              <p class="project-card-desc">Fully functional WordPress art portfolio for a client.</p>
+              <p class="project-card-desc">WordPress-based portfolio site for an artist — fully functional and customised.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">WordPress</span>
                 <span class="skill-tag">CMS</span>
@@ -589,16 +611,429 @@
     </section>
 
     <!-- ============================================
-         PROJECT MODALS (Same as before, kept for brevity)
+         PROJECT MODALS
     ============================================ -->
-    <!-- ... modals remain the same ... -->
+
+    <!-- Modal 1: POS & Inventory -->
+    <div class="modal fade project-modal" id="modal-project-1" tabindex="-1" aria-labelledby="modal-project-1-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-1-label">POS &amp; Inventory System</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <img src="{{asset('portfolio/images/pos.png')}}" alt="POS & Inventory System screenshot" class="modal-thumb-img">
+            </div>
+            <p class="modal-desc">
+              A Laravel-based point-of-sale and inventory management system designed for small to medium businesses.
+              This independent project demonstrates my ability to build complex business logic.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Overview</h6>
+              <p>
+                The system manages products, categories, brands, units, suppliers, purchases, and sales.
+                It automatically updates stock levels, calculates profit margins, and provides comprehensive
+                reports for sales, purchases, inventory, and profitability.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Product &amp; variant management</li>
+                <li>Supplier &amp; purchase order management</li>
+                <li>Sales &amp; POS interface</li>
+                <li>Automatic stock updates</li>
+                <li>Profit margin based pricing</li>
+                <li>Role-based access control</li>
+                <li>Sales, purchase &amp; inventory reports</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Built with Laravel (MVC, Eloquent, relationships, migrations, seeders, authentication, authorization),
+                MySQL, Blade, Bootstrap, and custom JavaScript. Implements complex database queries and business
+                logic for inventory tracking and reporting.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Blade</span>
+                <span class="skill-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-success text-dark">Completed</span>
+              <span class="ms-2 text-muted">— Fully functional and deployed</span>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Live Demo</h6>
+              <a href="https://ahmadrazadev.com/admin/dashboard" target="_blank" rel="noopener" class="btn btn-outline-light">Visit Site</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: E-Commerce Platform -->
+    <div class="modal fade project-modal" id="modal-project-2" tabindex="-1" aria-labelledby="modal-project-2-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-2-label">E-Commerce Platform</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <img src="{{asset('portfolio/images/ecommerce.png')}}" alt="E-Commerce Platform screenshot" class="modal-thumb-img">
+            </div>
+            <p class="modal-desc">
+              A full-featured eCommerce platform built with Laravel, enabling product management, shopping cart,
+              checkout, order processing, inventory, and an admin dashboard.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Product management with variants</li>
+                <li>Shopping cart &amp; checkout</li>
+                <li>Order processing &amp; status tracking</li>
+                <li>Inventory management</li>
+                <li>Admin dashboard with analytics</li>
+                <li>Role-based access (admin, staff, customer)</li>
+                <li>Email notifications</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Laravel backend with Eloquent relationships, authentication, middleware, and validation.
+                Frontend uses Blade with Bootstrap for a responsive, user-friendly interface.
+                The platform is fully functional and ready for deployment.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Blade</span>
+                <span class="skill-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-success text-dark">Completed</span>
+              <span class="ms-2 text-muted">— Fully functional and deployed</span>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Live Demo</h6>
+              <a href="https://ecommerce.ahmadrazadev.com" target="_blank" rel="noopener" class="btn btn-outline-light">Visit Site</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 3: Web Tech Tutorials -->
+    <div class="modal fade project-modal" id="modal-project-3" tabindex="-1" aria-labelledby="modal-project-3-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-3-label">Web Tech Tutorials</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <img src="{{asset('portfolio/images/tutorials.png')}}" alt="Web Tech Tutorials screenshot" class="modal-thumb-img">
+            </div>
+            <p class="modal-desc">
+              A learning platform that combines a course/tutorial system with a blog and CMS functionality.
+              Built with Laravel and deployed on Hostinger.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Course &amp; tutorial management</li>
+                <li>Blog / CMS</li>
+                <li>Role-based permissions (admin, editor, user)</li>
+                <li>SEO-optimised structure</li>
+                <li>User authentication</li>
+                <li>Admin dashboard for content management</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Laravel with Eloquent, relationships, authentication, authorization (Spatie Permission),
+                and Blade templates. Deployed on Hostinger with custom domain and SSL.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Blade</span>
+                <span class="skill-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-success text-dark">Completed</span>
+              <span class="ms-2 text-muted">— Fully functional and deployed</span>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Live Demo</h6>
+              <a href="https://tutorials.ahmadrazadev.com" target="_blank" rel="noopener" class="btn btn-outline-light">Visit Site</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 4: Job Portal (FIXED) -->
+    <div class="modal fade project-modal" id="modal-project-4" tabindex="-1" aria-labelledby="modal-project-4-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-4-label">Job Portal</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <i class="bi bi-briefcase" aria-hidden="true"></i>
+            </div>
+            <p class="modal-desc">
+              A Laravel-powered job portal where users can browse, post, and apply for jobs.
+              Features authentication, job search/filtering, and an admin panel.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Job posting &amp; management</li>
+                <li>Search &amp; filter jobs</li>
+                <li>User authentication (job seekers &amp; employers)</li>
+                <li>Admin dashboard</li>
+                <li>Database relationships (jobs, users, categories)</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Laravel with Eloquent, authentication, validation, and Blade. Implements search functionality
+                and filtering using query builder.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Blade</span>
+                <span class="skill-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-success text-dark">Completed</span>
+              <span class="ms-2 text-muted">— Fully functional</span>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Visit Repository</h6>
+              <a href="https://github.com/ahmadraza348/job-portal" target="_blank" rel="noopener" class="btn btn-outline-light">View Code</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 5: Construction Website -->
+    <div class="modal fade project-modal" id="modal-project-5" tabindex="-1" aria-labelledby="modal-project-5-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-5-label">Construction Website</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <i class="bi bi-building" aria-hidden="true"></i>
+            </div>
+            <p class="modal-desc">
+              A dynamic company website with a Laravel backend, React frontend, and Sanctum-based authentication
+              for the admin panel. Demonstrates full-stack capability.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Laravel REST API backend</li>
+                <li>React frontend (components, hooks)</li>
+                <li>Sanctum authentication for admin</li>
+                <li>Dynamic project &amp; blog content</li>
+                <li>Admin panel for content management</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                API-first architecture with Laravel Sanctum for token-based authentication.
+                React consumes the API to display content. Admin panel uses React with form handling.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Sanctum</span>
+                <span class="skill-tag">MySQL</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Visit Repository</h6>
+              <a href="https://github.com/ahmadraza348/construction" target="_blank" rel="noopener" class="btn btn-outline-light">View Code</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 6: ImperialRide.ae -->
+    <div class="modal fade project-modal" id="modal-project-6" tabindex="-1" aria-labelledby="modal-project-6-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-6-label">ImperialRide.ae</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <img src="{{asset('portfolio/images/ride.png')}}" alt="ImperialRide.ae screenshot" class="modal-thumb-img">
+            </div>
+            <p class="modal-desc">
+              A ride-booking platform for a UAE client. I designed and developed the frontend, improved the
+              booking flow, and enhanced overall usability and performance.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">My Role</h6>
+              <ul class="modal-feature-list">
+                <li>Frontend development from scratch</li>
+                <li>Booking flow &amp; user experience improvements</li>
+                <li>Responsive design &amp; cross-browser compatibility</li>
+                <li>Performance optimisation</li>
+                <li>Backend contribution (where applicable)</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Built with PHP, JavaScript, and Bootstrap. The frontend was custom-coded for a smooth booking
+                experience. Worked closely with the backend team to integrate APIs.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Bootstrap</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Live Demo</h6>
+              <a href="https://imperialride.ae" target="_blank" rel="noopener" class="btn btn-outline-light">Visit Site</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 7: Art Portfolio -->
+    <div class="modal fade project-modal" id="modal-project-7" tabindex="-1" aria-labelledby="modal-project-7-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-7-label">Art Portfolio Website</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <img src="{{asset('portfolio/images/baig.png')}}" alt="Art Portfolio Website screenshot" class="modal-thumb-img">
+            </div>
+            <p class="modal-desc">
+              A WordPress-based portfolio site built for an artist client. Fully functional, customised, and
+              deployed with a clean design.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Custom WordPress theme</li>
+                <li>Portfolio gallery</li>
+                <li>Contact form</li>
+                <li>Responsive design</li>
+                <li>SEO-friendly structure</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Built with WordPress, custom CSS/JS, and plugin integrations. Deployed on hosting with
+                domain configuration.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">WordPress</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">CSS</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Live Demo</h6>
+              <a href="https://adnanbaig.pk" target="_blank" rel="noopener" class="btn btn-outline-light">Visit Site</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- ============================================
          05 // EXPERIENCE
     ============================================ -->
     <section id="experience" class="section experience-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">05 // Experience</p>
         <h2 data-aos="fade-up" data-aos-delay="50">Work Experience</h2>
 
         <div class="timeline">
@@ -606,14 +1041,16 @@
           <div class="timeline-item" data-aos="fade-right" data-aos-duration="800">
             <span class="timeline-dot is-current" aria-hidden="true"></span>
             <div class="timeline-content">
-              <span class="timeline-date mono">Oct 2023 &mdash; Dec 2025</span>
+              <span class="timeline-date mono">Oct 2023 &mdash; Present</span>
               <h3 class="timeline-role">Web Manager</h3>
               <p class="timeline-company mono">OPEA, Rafiq Center, Gojra</p>
               <ul class="timeline-list">
-                <li>Laravel eCommerce website management</li>
-                <li>SEO optimization & traffic growth</li>
-                <li>Performance optimization</li>
-                <li>Full-stack Laravel & React projects</li>
+                <li>Managed and maintained the company's Laravel-based eCommerce website</li>
+                <li>Performed troubleshooting and bug reporting/reproduction</li>
+                <li>Implemented SEO strategies and analytics (Google Analytics, Search Console, Tag Manager)</li>
+                <li>Optimised performance and user experience</li>
+                <li>Implemented Ecommerce Events, Facebook Pixel, Meta Events, Analytics Events and Tracking Events with Google Tag Manager</li>
+                <li>Coordinated with developers on technical issues</li>
               </ul>
             </div>
           </div>
@@ -625,14 +1062,24 @@
               <h3 class="timeline-role">Junior Full Stack Developer</h3>
               <p class="timeline-company mono">BriskBase Software House, Gojra</p>
               <ul class="timeline-list">
-                <li>Laravel & full-stack development</li>
-                <li>Backend logic & frontend integration</li>
-                <li>Deployment & maintenance</li>
-                <li>Real-world project collaboration</li>
+                <li>Developed Laravel-based web applications using PHP, MySQL, Blade, and JavaScript</li>
+                <li>Implemented backend logic, CRUD modules, authentication, and database relationships</li>
+                <li>Integrated frontend components with backend APIs</li>
+                <li>Collaborated with senior developers to debug and deliver production features</li>
+                <li>Assisted with deployment, configuration, and maintenance</li>
               </ul>
             </div>
           </div>
 
+        </div>
+
+        <!-- Independent Development Note -->
+        <div class="independent-note" data-aos="fade-up" data-aos-delay="150">
+          <p class="mono text-muted" style="font-size:0.85rem; ">
+            <i class="bi bi-arrow-right-circle-fill text-accent" aria-hidden="true"></i>
+            Alongside professional work, I have continued building and deploying Laravel applications independently,
+            including eCommerce, POS &amp; inventory, learning platforms, job portals, and business systems.
+          </p>
         </div>
       </div>
     </section>
@@ -642,14 +1089,12 @@
     ============================================ -->
     <section id="education" class="section education-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">06 // Education</p>
         <h2 data-aos="fade-up" data-aos-delay="50">Education</h2>
 
         <div class="education-grid">
 
-          
           <div class="education-card education-card-current" data-aos="fade-up" data-aos-duration="600">
-            <span class="education-years mono">2025 &ndash; Present</span>
+            <span class="education-years mono">2026 &ndash; Present</span>
             <h3 class="education-degree">BS Software Engineering</h3>
             <p class="education-institute">Virtual University of Pakistan</p>
             <span class="education-score mono education-status-badge">In Progress &middot; 2nd Semester</span>
@@ -674,58 +1119,48 @@
     </section>
 
     <!-- ============================================
-         07 // WHAT I BUILD
+         07 // CORE CAPABILITIES
     ============================================ -->
-    <section id="what-i-build" class="section build-section">
+    <section id="core-capabilities" class="section build-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">07 // What I Build</p>
         <h2 data-aos="fade-up" data-aos-delay="50">What I Build</h2>
         <p class="skills-intro" data-aos="fade-up" data-aos-delay="100">
-          Applications I build across personal projects, work, and clients.
+          Applications I build across personal projects, work, and client engagements.
         </p>
 
         <div class="build-grid">
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500">
             <i class="bi bi-diagram-3 build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">Laravel Web Apps</h3>
+            <h3 class="build-title">Laravel Business Applications</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="50">
             <i class="bi bi-cart3 build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">E-commerce Platforms</h3>
+            <h3 class="build-title">E-commerce Systems</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="100">
             <i class="bi bi-shop build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">POS &amp; Inventory</h3>
+            <h3 class="build-title">POS &amp; Inventory Management</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="150">
             <i class="bi bi-building-gear build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">Business Systems</h3>
+            <h3 class="build-title">Admin Dashboards</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="200">
             <i class="bi bi-diagram-2 build-icon" aria-hidden="true"></i>
             <h3 class="build-title">REST APIs</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="250">
-            <i class="bi bi-speedometer2 build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">Admin Dashboards</h3>
+            <i class="bi bi-lock build-icon" aria-hidden="true"></i>
+            <h3 class="build-title">Authentication &amp; RBAC</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="300">
-            <i class="bi bi-phone build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">Responsive Websites</h3>
+            <i class="bi bi-database build-icon" aria-hidden="true"></i>
+            <h3 class="build-title">Database-driven Applications</h3>
           </div>
-
           <div class="build-card" data-aos="fade-up" data-aos-duration="500" data-aos-delay="350">
-            <i class="bi bi-graph-up-arrow build-icon" aria-hidden="true"></i>
-            <h3 class="build-title">SEO &amp; Optimization</h3>
+            <i class="bi bi-cloud-upload build-icon" aria-hidden="true"></i>
+            <h3 class="build-title">Production Deployment</h3>
           </div>
-
         </div>
       </div>
     </section>
@@ -735,7 +1170,6 @@
     ============================================ -->
     <section id="cv" class="section cv-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">08 // CV</p>
 
         <div class="cv-grid">
           <div class="cv-text" data-aos="fade-right" data-aos-duration="800">
@@ -746,21 +1180,21 @@
             </p>
 
             <div class="cv-actions">
-              <a href="{{asset('portfolio/cv/muhammad-ahmad-raza-cv.pdf')}}" target="_blank" rel="noopener" class="btn-hero btn-hero-primary">
+              <a href="{{asset('portfolio/Ahmad-Raza-Laravel-Resume.pdf')}}" target="_blank" rel="noopener" class="btn-hero btn-hero-primary">
                 <i class="bi bi-eye" aria-hidden="true"></i> View CV
               </a>
-              <a href="{{asset('portfolio/cv/muhammad-ahmad-raza-cv.pdf')}}" download class="btn-hero btn-hero-outline">
+              <a href="{{asset('portfolio/Ahmad-Raza-Laravel-Resume.pdf')}}" download class="btn-hero btn-hero-outline">
                 <i class="bi bi-download" aria-hidden="true"></i> Download CV
               </a>
             </div>
           </div>
 
-          <a href="{{asset('portfolio/cv/muhammad-ahmad-raza-cv.pdf')}}" target="_blank" rel="noopener" class="cv-preview-card" aria-label="Open CV" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
+          <a href="{{asset('portfolio/Ahmad-Raza-Laravel-Resume.pdf')}}" target="_blank" rel="noopener" class="cv-preview-card" aria-label="Open CV" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
             <div class="cv-preview-header">
               <div class="code-panel-dots" aria-hidden="true">
                 <span></span><span></span><span></span>
               </div>
-              <span class="cv-preview-filename mono">muhammad-ahmad-raza-cv.pdf</span>
+              <span class="cv-preview-filename mono">Ahmad-Raza-Laravel-Resume.pdf</span>
             </div>
             <div class="cv-preview-body">
               <i class="bi bi-file-earmark-pdf cv-preview-icon" aria-hidden="true"></i>
@@ -780,7 +1214,6 @@
     ============================================ -->
     <section id="contact" class="section contact-section">
       <div class="container-narrow">
-        <p class="section-label" data-aos="fade-up">09 // Contact</p>
         <h2 class="contact-heading" data-aos="fade-up" data-aos-delay="50">Let&rsquo;s Build Something</h2>
         <p class="skills-intro" data-aos="fade-up" data-aos-delay="100">
           Open to Laravel roles, freelance projects, and conversations.
@@ -831,13 +1264,13 @@
   </main>
 
   <!-- ============================================
-       FOOTER - Short & Clean
+       FOOTER
   ============================================ -->
   <footer id="footer" class="site-footer">
     <div class="container-narrow">
       <div class="footer-content">
         <a href="#hero" class="navbar-brand-custom" aria-label="Ahmad Raza — home">
-          <span class="text-accent">&lt;</span>AhmadRaza<span class="text-accent">/&gt;</span>
+          <img src="{{asset('portfolio/images/logo-light.png')}}" style="width: 50px; height: auto;" alt="Ahmad Raza Logo">
         </a>
 
         <div class="footer-social-links">
@@ -863,6 +1296,7 @@
       </div>
     </div>
   </footer>
+
   <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

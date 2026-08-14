@@ -108,20 +108,17 @@ document.addEventListener('DOMContentLoaded', function() {
       navClose.addEventListener('click', closeNav);
     }
 
-    // Close on link click
     const navLinks = navMenu.querySelectorAll('.nav-link-custom');
     navLinks.forEach(link => {
       link.addEventListener('click', closeNav);
     });
 
-    // Close on outside click (overlay)
     navMenu.addEventListener('click', function(e) {
       if (e.target === navMenu) {
         closeNav();
       }
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && navMenu.classList.contains('show')) {
         closeNav();
@@ -300,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (cursorDot) cursorDot.style.display = 'none';
         if (cursorRing) cursorRing.style.display = 'none';
         document.body.style.cursor = 'auto';
-        // Close mobile nav if open
         if (navMenu && navMenu.classList.contains('show')) {
           closeNav();
         }
