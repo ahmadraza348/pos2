@@ -1052,7 +1052,7 @@
             <div class="timeline-content">
               <span class="timeline-date mono">Oct 2023 &mdash; August 2026</span>
               <h3 class="timeline-role">Web Manager</h3>
-              <p class="timeline-company mono">OPEA, Rafiq Center, Gojra</p>
+              <p class="timeline-company mono">OPEA</p>
               <ul class="timeline-list">
                 <li>Managed and maintained the company's Laravel-based eCommerce website</li>
                 <li>Performed troubleshooting and bug reporting/reproduction</li>
@@ -1068,14 +1068,15 @@
             <span class="timeline-dot" aria-hidden="true"></span>
             <div class="timeline-content">
               <span class="timeline-date mono">Oct 2022 &mdash; Sep 2023</span>
-              <h3 class="timeline-role">Junior Full Stack Developer</h3>
+              <h3 class="timeline-role">Junior Laravel Developer</h3>
               <p class="timeline-company mono">BriskBase Software House, Gojra</p>
               <ul class="timeline-list">
-                <li>Developed Laravel-based web applications using PHP, MySQL, Blade, and JavaScript</li>
-                <li>Implemented backend logic, CRUD modules, authentication, and database relationships</li>
-                <li>Integrated frontend components with backend APIs</li>
-                <li>Collaborated with senior developers to debug and deliver production features</li>
-                <li>Assisted with deployment, configuration, and maintenance</li>
+                <li>Designed and developed a complete web application from scratch using Laravel, PHP, MySQL, Blade, and JavaScript</li>
+                <li>Designed the application structure, database schema, UI, and overall project workflow</li>
+                <li>Implemented backend functionality including authentication, CRUD modules, validation, database relationships, and business logic</li>
+                <li>Integrated frontend components with Laravel backend functionality and APIs</li>
+                <li>Worked closely with a senior Laravel developer for technical guidance, code review, debugging, and production delivery</li>
+                <li>Assisted with deployment, configuration, maintenance, and production troubleshooting</li>
               </ul>
             </div>
           </div>
@@ -1085,7 +1086,7 @@
         <!-- Independent Development Note -->
         <div class="independent-note" data-aos="fade-up" data-aos-delay="150">
           <p class="mono text-muted" style="font-size:0.85rem; ">
-            <i class="bi bi-arrow-right-circle-fill text-accent mt-2" aria-hidden="true"></i>
+            <i class="bi bi-arrow-right-circle-fill text-accent pt-2" aria-hidden="true"></i>
             Alongside professional work, I have continued building and deploying Laravel applications independently,
             including eCommerce, POS &amp; inventory, learning platforms, job portals, and business systems.
           </p>
