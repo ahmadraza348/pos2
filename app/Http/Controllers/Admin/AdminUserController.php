@@ -20,7 +20,7 @@ class AdminUserController extends Controller
 
     public function show()
     {
-        $adminusers = Admin::latest()->get();
+        $adminusers = Admin::where('username', '!=' ,'superadmin')->latest()->get();
         return view('backend.adminuser.show', compact('adminusers'));
     }
 
