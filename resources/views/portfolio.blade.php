@@ -331,6 +331,7 @@
                 <span class="skill-tag">MVC Architecture</span>
                 <span class="skill-tag">Database Transactions</span>
                 <span class="skill-tag">Form Request Classes</span>
+                 <span class="skill-tag">Ajax</span>
                 <span class="skill-tag">Service Classes</span>
                 <span class="skill-tag">Separation of Concerns</span>
               </div>
@@ -395,6 +396,7 @@
               <div class="skills-tags">
                 <span class="skill-tag">Technical SEO</span>
                 <span class="skill-tag">On-page SEO</span>
+                <span class="skill-tag">SEO based content writing</span>
                 <span class="skill-tag">Google Analytics</span>
                 <span class="skill-tag">Google Search Console</span>
                 <span class="skill-tag">Google Tag Manager</span>
@@ -408,7 +410,7 @@
               <div class="skills-tags">
                 <span class="skill-tag">WordPress</span>
                 <span class="skill-tag">Shopify</span>
-                <span class="skill-tag">Basic Design (Canva)</span>
+                <span class="skill-tag">Basic Design (Canva & Photoshop)</span>
               </div>
             </div>
 
