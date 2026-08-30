@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muhammad Ahmad Raza | Laravel Developer</title>
-  <meta name="description" content="Laravel developer with 2+ years of experience building web applications, eCommerce platforms, POS & inventory systems, REST APIs, and business software.">
+  <meta name="description" content="Laravel Developer with 3+ years of hands-on web development experience, including 2+ years of practical Laravel development. Building eCommerce, POS & inventory, project management, and CMS applications with Laravel, PHP, MySQL, and REST APIs.">
 
   <!-- Canonical -->
   <link rel="canonical" href="https://ahmadrazadev.com">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Muhammad Ahmad Raza | Laravel Developer">
-  <meta property="og:description" content="Laravel developer building practical web applications, eCommerce, POS, APIs, and business systems.">
+  <meta property="og:description" content="Laravel Developer with 3+ years of hands-on web development experience, including 2+ years of practical Laravel development. Available immediately for remote, hybrid, or on-site roles.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ahmadrazadev.com">
   <meta property="og:image" content="{{asset('portfolio/images/og-image.jpg')}}">
@@ -139,9 +139,11 @@
           <p class="hero-eyebrow mono">Hi, I&rsquo;m</p>
           <h1 class="hero-name">Muhammad Ahmad Raza</h1>
           <h2 class="hero-role">Laravel Developer</h2>
+          <p class="hero-tagline mono">PHP &middot; MySQL &middot; REST APIs</p>
           <p class="hero-desc">
             Building practical Laravel web applications, eCommerce platforms,
             POS &amp; inventory systems, REST APIs, and business software.
+            Available immediately for remote, hybrid, or on-site roles.
           </p>
 
           <div class="hero-actions">
@@ -178,7 +180,7 @@
               <div class="code-line"><span class="line-no">1</span><span class="code-content"><span class="tok-keyword">const</span> developer = {</span></div>
               <div class="code-line"><span class="line-no">2</span><span class="code-content">&nbsp;&nbsp;name: <span class="tok-string">"Muhammad Ahmad Raza"</span>,</span></div>
               <div class="code-line"><span class="line-no">3</span><span class="code-content">&nbsp;&nbsp;role: <span class="tok-string">"Laravel Developer"</span>,</span></div>
-              <div class="code-line"><span class="line-no">4</span><span class="code-content">&nbsp;&nbsp;experience: <span class="tok-string">"2+ Years"</span>,</span></div>
+              <div class="code-line"><span class="line-no">4</span><span class="code-content">&nbsp;&nbsp;experience: <span class="tok-string">"3+ Yrs Web Dev (2+ Laravel)"</span>,</span></div>
               <div class="code-line"><span class="line-no">5</span><span class="code-content">&nbsp;&nbsp;stack: [<span class="tok-string">"PHP"</span>, <span class="tok-string">"Laravel"</span>, <span class="tok-string">"MySQL"</span>],</span></div>
               <div class="code-line"><span class="line-no">6</span><span class="code-content">&nbsp;&nbsp;focus: <span class="tok-string">"Business Applications"</span></span></div>
               <div class="code-line"><span class="line-no">7</span><span class="code-content">};</span></div>
@@ -204,25 +206,27 @@
           <div class="about-text" data-aos="fade-right" data-aos-duration="800">
             <h2>Building practical software that lasts.</h2>
             <p>
-              I’m a Laravel-focused developer who builds practical web applications from database design
-              and backend logic to APIs, frontend integration, and production deployment.
-              My projects include eCommerce platforms, POS and inventory systems, learning platforms,
-              admin dashboards, and business applications.
+              Laravel Developer with 3+ years of hands-on web development experience, including
+              2+ years of practical Laravel development through professional work and independent
+              projects. I build eCommerce platforms, POS &amp; inventory systems, project management
+              tools, and CMS applications — from database design and backend logic to APIs,
+              frontend integration, and production deployment.
             </p>
             <p>
               With experience in both professional and independent development, I focus on
-              delivering clean, maintainable, and functional systems.
+              delivering clean, maintainable, and functional systems. Available immediately for
+              remote, hybrid, or on-site roles.
             </p>
           </div>
 
           <div class="about-meta-grid" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
             <div class="meta-card">
-              <span class="meta-label mono">Experience</span>
-              <span class="meta-value">2+ Years</span>
+              <span class="meta-label mono">Web Dev Experience</span>
+              <span class="meta-value">3+ Years</span>
             </div>
             <div class="meta-card">
-              <span class="meta-label mono">Framework</span>
-              <span class="meta-value">Laravel</span>
+              <span class="meta-label mono">Laravel Experience</span>
+              <span class="meta-value">2+ Years</span>
             </div>
             <div class="meta-card">
               <span class="meta-label mono">Backend</span>
@@ -279,6 +283,11 @@
                 </button>
               </li>
               <li role="presentation">
+                <button class="skills-tab-btn mono" id="tab-testing" data-bs-toggle="tab" data-bs-target="#panel-testing" type="button" role="tab" aria-controls="panel-testing" aria-selected="false">
+                  <i class="bi bi-bug" aria-hidden="true"></i> Testing &amp; Debugging
+                </button>
+              </li>
+              <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-packages" data-bs-toggle="tab" data-bs-target="#panel-packages" type="button" role="tab" aria-controls="panel-packages" aria-selected="false">
                   <i class="bi bi-box-seam" aria-hidden="true"></i> Packages
                 </button>
@@ -291,6 +300,11 @@
               <li role="presentation">
                 <button class="skills-tab-btn mono" id="tab-seo" data-bs-toggle="tab" data-bs-target="#panel-seo" type="button" role="tab" aria-controls="panel-seo" aria-selected="false">
                   <i class="bi bi-graph-up-arrow" aria-hidden="true"></i> SEO &amp; Analytics
+                </button>
+              </li>
+              <li role="presentation">
+                <button class="skills-tab-btn mono" id="tab-methodologies" data-bs-toggle="tab" data-bs-target="#panel-methodologies" type="button" role="tab" aria-controls="panel-methodologies" aria-selected="false">
+                  <i class="bi bi-diagram-3" aria-hidden="true"></i> Methodologies
                 </button>
               </li>
               <li role="presentation">
@@ -310,28 +324,38 @@
                 <span class="skill-tag tag-emphasis">Middleware</span>
                 <span class="skill-tag tag-emphasis">Authentication</span>
                 <span class="skill-tag tag-emphasis">Authorization (RBAC)</span>
+                <span class="skill-tag tag-emphasis">Policies &amp; Guards</span>
                 <span class="skill-tag tag-emphasis">Validation</span>
                 <span class="skill-tag tag-emphasis">Eloquent ORM</span>
                 <span class="skill-tag tag-emphasis">Relationships</span>
                 <span class="skill-tag tag-emphasis">Migrations &amp; Seeders</span>
                 <span class="skill-tag tag-emphasis">Service Container</span>
                 <span class="skill-tag tag-emphasis">Dependency Injection</span>
+                <span class="skill-tag tag-emphasis">Repository Pattern</span>
+                <span class="skill-tag tag-emphasis">SOLID Principles</span>
+                <span class="skill-tag tag-emphasis">Accessors &amp; Mutators</span>
                 <span class="skill-tag tag-emphasis">Blade Templates</span>
+                <span class="skill-tag tag-emphasis">Testing</span>
               </div>
             </div>
 
             <!-- Backend -->
             <div class="tab-pane fade" id="panel-backend" role="tabpanel" aria-labelledby="tab-backend">
               <div class="skills-tags">
-                <span class="skill-tag">PHP (OOP)</span>
+                <span class="skill-tag">PHP (OOP, Core PHP)</span>
                 <span class="skill-tag">Laravel (v8–12)</span>
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">Eloquent ORM</span>
                 <span class="skill-tag">Query Builder</span>
                 <span class="skill-tag">MVC Architecture</span>
                 <span class="skill-tag">Database Transactions</span>
+                <span class="skill-tag">Factories</span>
+                <span class="skill-tag">Eager Loading</span>
+                <span class="skill-tag">N+1 Query Resolution</span>
+                <span class="skill-tag">Soft Deletes</span>
+                <span class="skill-tag">Query Optimization</span>
                 <span class="skill-tag">Form Request Classes</span>
-                 <span class="skill-tag">Ajax</span>
+                <span class="skill-tag">Ajax</span>
                 <span class="skill-tag">Service Classes</span>
                 <span class="skill-tag">Separation of Concerns</span>
               </div>
@@ -354,13 +378,27 @@
             <!-- APIs & Integrations -->
             <div class="tab-pane fade" id="panel-api" role="tabpanel" aria-labelledby="tab-api">
               <div class="skills-tags">
-                <span class="skill-tag">RESTful APIs</span>
+                <span class="skill-tag">RESTful API Design</span>
                 <span class="skill-tag">Postman</span>
                 <span class="skill-tag">API Resource Controllers</span>
                 <span class="skill-tag">Laravel Sanctum</span>
+                <span class="skill-tag">Laravel Passport</span>
+                <span class="skill-tag">Rate Limiting</span>
                 <span class="skill-tag">Stripe Payment Integration</span>
                 <span class="skill-tag">Email &amp; Notifications</span>
                 <span class="skill-tag">File Storage</span>
+              </div>
+            </div>
+
+            <!-- Testing & Debugging -->
+            <div class="tab-pane fade" id="panel-testing" role="tabpanel" aria-labelledby="tab-testing">
+              <div class="skills-tags">
+                <span class="skill-tag">PHPUnit</span>
+                <span class="skill-tag">Tinker</span>
+                <span class="skill-tag">Log Analysis</span>
+                <span class="skill-tag">Browser DevTools</span>
+                <span class="skill-tag">Exception Handling</span>
+                <span class="skill-tag">Production Troubleshooting</span>
               </div>
             </div>
 
@@ -369,8 +407,12 @@
               <div class="skills-tags">
                 <span class="skill-tag">Laravel Breeze</span>
                 <span class="skill-tag">Sanctum</span>
+                <span class="skill-tag">Passport</span>
                 <span class="skill-tag">Spatie Permission</span>
                 <span class="skill-tag">Laravel Excel</span>
+                <span class="skill-tag">Laravel Livewire</span>
+                <span class="skill-tag">Laravel Scout</span>
+                <span class="skill-tag">Laravel Reverb</span>
                 <span class="skill-tag">Intervention Image</span>
                 <span class="skill-tag">Stripe PHP</span>
               </div>
@@ -381,7 +423,9 @@
               <div class="skills-tags">
                 <span class="skill-tag">Git</span>
                 <span class="skill-tag">GitHub</span>
+                <span class="skill-tag">CI/CD</span>
                 <span class="skill-tag">SSH</span>
+                <span class="skill-tag">Composer</span>
                 <span class="skill-tag">Hostinger</span>
                 <span class="skill-tag">cPanel</span>
                 <span class="skill-tag">Domain / DNS</span>
@@ -402,6 +446,15 @@
                 <span class="skill-tag">Google Tag Manager</span>
                 <span class="skill-tag">Facebook Pixel</span>
                 <span class="skill-tag">Performance Optimization</span>
+              </div>
+            </div>
+
+            <!-- Methodologies -->
+            <div class="tab-pane fade" id="panel-methodologies" role="tabpanel" aria-labelledby="tab-methodologies">
+              <div class="skills-tags">
+                <span class="skill-tag">Agile</span>
+                <span class="skill-tag">Scrum</span>
+                <span class="skill-tag">SDLC</span>
               </div>
             </div>
 
@@ -451,13 +504,15 @@
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Independent Project &middot; Live</span>
+              <span class="project-card-category mono">Independent Project &middot; Deployed</span>
               <h3 class="project-card-title">E-Commerce Platform</h3>
-              <p class="project-card-desc">Built and deployed a Laravel-based eCommerce platform covering product/variant management, cart, checkout, Stripe payment integration, order processing, inventory updates, customer and admin notifications, and role-based administration.</p>
+              <p class="project-card-desc">Built a complete Laravel online store with dynamic product variants and attributes, cart and coupon workflows, order processing, and automated stock updates using database locking, queues, and real-time features.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">PHP</span>
                 <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Stripe</span>
+                <span class="skill-tag">Reverb</span>
               </div>
               <div class="project-card-links">
                 <a href="https://ecommerce.ahmadrazadev.com" target="_blank" rel="noopener" class="project-link mono">Live Demo <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
@@ -475,9 +530,9 @@
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Independent Project</span>
+              <span class="project-card-category mono">Independent Project &middot; Deployed</span>
               <h3 class="project-card-title">POS &amp; Inventory System</h3>
-              <p class="project-card-desc">Developed a Laravel-based POS and inventory management system featuring product, supplier, purchase, and sales management, automatic stock updates, profit-margin-based pricing, role-based access control, and sales, purchase, inventory, and profit reporting.</p>
+              <p class="project-card-desc">Developed a Laravel-based POS and inventory management system covering suppliers, purchases, sales management, automatic stock tracking, profit-margin-based pricing, role-based access control, and sales, purchase, inventory, and profit reporting.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">PHP</span>
@@ -489,22 +544,46 @@
             </div>
           </article>
 
-          <!-- ===== PRIMARY 3: Web Tech Tutorials ===== -->
+          <!-- ===== PRIMARY 3: Project Management System ===== -->
+          <article class="project-card" data-category="laravel business personal" data-aos="fade-up" data-aos-delay="175">
+            <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-8" aria-label="View details for Project Management System">
+              <span class="project-thumb-index mono">03</span>
+              <i class="bi bi-kanban project-thumb-icon" aria-hidden="true"></i>
+              <span class="project-thumb-overlay">
+                <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+              </span>
+            </button>
+            <div class="project-card-body">
+              <span class="project-card-category mono">Independent Project &middot; Repository</span>
+              <h3 class="project-card-title">Project Management System</h3>
+              <p class="project-card-desc">Built a multi-user Laravel project management platform with role-based dashboards (Admin, Manager, Member) for task assignment, commenting, and reporting; currently converting the CRUD modules into RESTful APIs with Laravel Passport.</p>
+              <div class="project-card-tech">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">Passport</span>
+                <span class="skill-tag">PHPUnit</span>
+              </div>
+              <div class="project-card-links">
+                <a href="https://github.com/ahmadraza348" target="_blank" rel="noopener" class="project-link mono">View Code <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== PRIMARY 4: Web Tech Tutorials ===== -->
           <article class="project-card" data-category="laravel personal" data-aos="fade-up" data-aos-delay="200">
             <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-3" aria-label="View details for Web Tech Tutorials">
-              <span class="project-thumb-index mono">03</span>
+              <span class="project-thumb-index mono">04</span>
               <img src="{{asset('portfolio/images/tutorials.png')}}" alt="Web Tech Tutorials screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Independent Project &middot; Live</span>
-              <h3 class="project-card-title">Web Tech Tutorials</h3>
-              <p class="project-card-desc">Learning platform with course management, blog/CMS, role-based permissions, SEO-friendly URLs, metadata, sitemap, and authentication — deployed on Hostinger.</p>
+              <span class="project-card-category mono">Independent Project &middot; Deployed</span>
+              <h3 class="project-card-title">Tutorials &amp; Learning Platform</h3>
+              <p class="project-card-desc">Developed and deployed an SEO-focused educational platform with course management, content-adding tools, and a custom blog/CMS, built with Laravel Livewire — deployed on Hostinger.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">Laravel</span>
-                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">Livewire</span>
                 <span class="skill-tag">MySQL</span>
               </div>
               <div class="project-card-links">
@@ -513,19 +592,19 @@
             </div>
           </article>
 
-          <!-- ===== PRIMARY 4: ImperialRide.ae (Client) ===== -->
+          <!-- ===== PRIMARY 5: ImperialRide.ae (Client) ===== -->
           <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="250">
             <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-6" aria-label="View details for ImperialRide.ae">
-              <span class="project-thumb-index mono">04</span>
+              <span class="project-thumb-index mono">05</span>
               <img src="{{asset('portfolio/images/ride.png')}}" alt="ImperialRide.ae screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Client Project &middot; Live</span>
+              <span class="project-card-category mono">Client Project &middot; Deployed</span>
               <h3 class="project-card-title">ImperialRide.ae</h3>
-              <p class="project-card-desc">Ride-booking platform for UAE client — designed and developed the frontend from scratch, improved booking flow, responsive design, usability, and performance, with backend contributions.</p>
+              <p class="project-card-desc">Designed the responsive frontend and contributed to backend modules for a UAE vehicle-booking platform, with a focus on booking flow, usability, and performance.</p>
               <div class="project-card-tech">
                 <span class="skill-tag">PHP</span>
                 <span class="skill-tag">JavaScript</span>
@@ -540,7 +619,7 @@
           <!-- ===== SECONDARY: Job Portal ===== -->
           <article class="project-card" data-category="laravel personal" data-aos="fade-up" data-aos-delay="100">
             <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-4" aria-label="View details for Job Portal">
-              <span class="project-thumb-index mono">05</span>
+              <span class="project-thumb-index mono">06</span>
               <i class="bi bi-briefcase project-thumb-icon" aria-hidden="true"></i>
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
@@ -564,7 +643,7 @@
           <!-- ===== SECONDARY: Construction Website ===== -->
           <article class="project-card" data-category="laravel react personal" data-aos="fade-up" data-aos-delay="150">
             <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-5" aria-label="View details for Construction Website">
-              <span class="project-thumb-index mono">06</span>
+              <span class="project-thumb-index mono">07</span>
               <i class="bi bi-building project-thumb-icon" aria-hidden="true"></i>
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
@@ -588,14 +667,14 @@
           <!-- ===== SECONDARY: Art Portfolio (Client) ===== -->
           <article class="project-card" data-category="client" data-aos="fade-up" data-aos-delay="200">
             <button type="button" class="project-thumb" data-bs-toggle="modal" data-bs-target="#modal-project-7" aria-label="View details for Art Portfolio Website">
-              <span class="project-thumb-index mono">07</span>
+              <span class="project-thumb-index mono">08</span>
               <img src="{{asset('portfolio/images/baig.png')}}" alt="Art Portfolio screenshot" class="project-thumb-img">
               <span class="project-thumb-overlay">
                 <span class="project-thumb-cta mono">View Details <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
               </span>
             </button>
             <div class="project-card-body">
-              <span class="project-card-category mono">Client Project &middot; Live</span>
+              <span class="project-card-category mono">Client Project &middot; Deployed</span>
               <h3 class="project-card-title">Art Portfolio Website</h3>
               <p class="project-card-desc">WordPress-based portfolio site for an artist — fully functional and customised.</p>
               <div class="project-card-tech">
@@ -647,11 +726,11 @@
               <ul class="modal-feature-list">
                 <li>Product &amp; variant management</li>
                 <li>Supplier &amp; purchase order management</li>
-                <li>Sales &amp; POS interface</li>
-                <li>Automatic stock updates</li>
+                <li>AJAX-driven sales &amp; POS interface</li>
+                <li>Automatic, transaction-safe stock updates</li>
                 <li>Profit-margin-based pricing</li>
-                <li>Role-based access control</li>
-                <li>Sales, purchase &amp; inventory reports</li>
+                <li>Spatie Roles &amp; Permissions (role-based access control)</li>
+                <li>Dynamic sales, purchase &amp; inventory reports</li>
               </ul>
             </div>
             <div class="modal-section">
@@ -668,13 +747,14 @@
                 <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">PHP</span>
                 <span class="skill-tag">MySQL</span>
-                <span class="skill-tag">Blade</span>
-                <span class="skill-tag">Bootstrap</span>
+                <span class="skill-tag">AJAX</span>
+                <span class="skill-tag">Database Transactions</span>
+                <span class="skill-tag">Spatie Roles &amp; Permissions</span>
               </div>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Status</h6>
-              <span class="badge bg-success text-dark">Completed &amp; Deployed</span>
+              <span class="badge bg-success text-dark">Deployed</span>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Live Demo</h6>
@@ -701,7 +781,7 @@
               <img src="{{asset('portfolio/images/ecommerce.png')}}" alt="E-Commerce Platform screenshot" class="modal-thumb-img">
             </div>
             <p class="modal-desc">
-              A full-featured eCommerce platform built with Laravel, covering product management, cart, checkout, Stripe payment, order processing, inventory, and notifications.
+              A full-featured eCommerce platform built with Laravel, covering dynamic product variants and attributes, cart and coupon workflows, Stripe payment, order processing, automated stock updates, and notifications.
             </p>
             <div class="modal-section">
               <h6 class="modal-subheading">My Role</h6>
@@ -714,21 +794,24 @@
             <div class="modal-section">
               <h6 class="modal-subheading">Key Features</h6>
               <ul class="modal-feature-list">
-                <li>Product management with variants</li>
-                <li>Shopping cart &amp; checkout</li>
+                <li>Product management with dynamic variants &amp; attributes</li>
+                <li>Shopping cart, coupon &amp; checkout workflows</li>
                 <li>Stripe payment integration</li>
                 <li>Order processing &amp; status tracking</li>
-                <li>Inventory management</li>
+                <li>Automated stock updates with database locking (lockForUpdate)</li>
+                <li>Queues &amp; background jobs, real-time updates via Laravel Reverb</li>
+                <li>Live search with Laravel Scout, AJAX filtering, rate limiting</li>
                 <li>Admin dashboard with analytics</li>
-                <li>Role-based access (admin, staff, customer)</li>
+                <li>Spatie Permissions-based role access (admin, staff, customer)</li>
                 <li>Customer and admin email notifications</li>
               </ul>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Technical Implementation</h6>
               <p>
-                Laravel backend with Eloquent relationships, authentication, middleware, validation, and Stripe PHP SDK.
-                Frontend uses Blade with Bootstrap for a responsive interface.
+                Laravel backend with Eloquent relationships, authentication, middleware, validation, Stripe PHP SDK, database
+                locking for stock-safe concurrent orders, queued jobs, and Laravel Reverb for real-time features.
+                Frontend uses Blade with Bootstrap and AJAX for a responsive interface.
               </p>
             </div>
             <div class="modal-section">
@@ -739,11 +822,15 @@
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">Blade</span>
                 <span class="skill-tag">Bootstrap</span>
+                <span class="skill-tag">Stripe API</span>
+                <span class="skill-tag">Laravel Reverb</span>
+                <span class="skill-tag">Laravel Scout</span>
+                <span class="skill-tag">Spatie Permissions</span>
               </div>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Status</h6>
-              <span class="badge bg-success text-dark">Completed &amp; Deployed</span>
+              <span class="badge bg-success text-dark">Deployed</span>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Live Demo</h6>
@@ -762,7 +849,7 @@
       <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-project-3-label">Web Tech Tutorials</h5>
+            <h5 class="modal-title" id="modal-project-3-label">Tutorials &amp; Learning Platform</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -770,7 +857,7 @@
               <img src="{{asset('portfolio/images/tutorials.png')}}" alt="Web Tech Tutorials screenshot" class="modal-thumb-img">
             </div>
             <p class="modal-desc">
-              A learning platform combining course/tutorial management with a blog/CMS. Built with Laravel and deployed on Hostinger.
+              A learning platform combining course/tutorial management with a blog/CMS. Built with Laravel and Livewire, deployed on Hostinger.
             </p>
             <div class="modal-section">
               <h6 class="modal-subheading">My Role</h6>
@@ -779,9 +866,9 @@
             <div class="modal-section">
               <h6 class="modal-subheading">Key Features</h6>
               <ul class="modal-feature-list">
-                <li>Course &amp; tutorial management</li>
-                <li>Blog / CMS</li>
-                <li>Role-based permissions (admin, editor, user)</li>
+                <li>Course &amp; tutorial management with content-adding tools</li>
+                <li>Blog / CMS with content management workflows</li>
+                <li>Spatie Roles &amp; Permissions (admin, editor, user)</li>
                 <li>SEO-friendly URLs and metadata</li>
                 <li>Sitemap generation</li>
                 <li>User authentication</li>
@@ -791,7 +878,7 @@
             <div class="modal-section">
               <h6 class="modal-subheading">Technical Implementation</h6>
               <p>
-                Laravel with Eloquent, relationships, authentication, Spatie Permission, Blade templates.
+                Laravel with Eloquent, relationships, authentication, Laravel Livewire for dynamic UI, Spatie Permission, Blade templates.
                 Deployed on Hostinger with custom domain and SSL.
               </p>
             </div>
@@ -799,15 +886,16 @@
               <h6 class="modal-subheading">Stack</h6>
               <div class="skills-tags">
                 <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">Livewire</span>
                 <span class="skill-tag">PHP</span>
                 <span class="skill-tag">MySQL</span>
-                <span class="skill-tag">Blade</span>
-                <span class="skill-tag">Bootstrap</span>
+                <span class="skill-tag">Spatie Roles &amp; Permissions</span>
+                <span class="skill-tag">SEO</span>
               </div>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Status</h6>
-              <span class="badge bg-success text-dark">Completed &amp; Deployed</span>
+              <span class="badge bg-success text-dark">Deployed</span>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Live Demo</h6>
@@ -963,17 +1051,23 @@
             <div class="modal-section">
               <h6 class="modal-subheading">Technical Implementation</h6>
               <p>
-                Built with PHP, JavaScript, and Bootstrap. Custom frontend for a smooth booking experience.
+                Built with Laravel, PHP, JavaScript, and Bootstrap. Custom frontend for a smooth booking experience.
                 Collaborated with backend team on API integration.
               </p>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Stack</h6>
               <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
                 <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">JavaScript</span>
                 <span class="skill-tag">Bootstrap</span>
               </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-success text-dark">Deployed</span>
             </div>
             <div class="modal-section">
               <h6 class="modal-subheading">Live Demo</h6>
@@ -1040,6 +1134,72 @@
       </div>
     </div>
 
+    <!-- Modal 8: Project Management System -->
+    <div class="modal fade project-modal" id="modal-project-8" tabindex="-1" aria-labelledby="modal-project-8-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-project-8-label">Project Management System</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb">
+              <i class="bi bi-kanban" aria-hidden="true"></i>
+            </div>
+            <p class="modal-desc">
+              A multi-user Laravel project management platform with role-based dashboards for task assignment,
+              commenting, and reporting. Actively being extended into a set of RESTful APIs.
+            </p>
+            <div class="modal-section">
+              <h6 class="modal-subheading">My Role</h6>
+              <p>Independent full-stack development — design, backend, database, and ongoing API layer.</p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Key Features</h6>
+              <ul class="modal-feature-list">
+                <li>Role-based dashboards (Admin, Manager, Member)</li>
+                <li>Projects, tasks &amp; categories management with task assignment</li>
+                <li>Task comments, time logs, and attachments</li>
+                <li>Commenting &amp; reporting</li>
+                <li>Custom Guards &amp; Policies for authorization (RBAC)</li>
+                <li>In-progress: RESTful APIs via Laravel Passport, converting each CRUD module one at a time</li>
+              </ul>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Technical Implementation</h6>
+              <p>
+                Built with Laravel, Eloquent relationships, custom Guards and Policies, and SOLID principles for
+                maintainable code. RESTful APIs are being added with Laravel Passport and tested end-to-end
+                with PHPUnit and Postman, without breaking the existing website or its authentication.
+              </p>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Stack</h6>
+              <div class="skills-tags">
+                <span class="skill-tag">Laravel</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Laravel Passport</span>
+                <span class="skill-tag">PHPUnit</span>
+                <span class="skill-tag">RESTful APIs</span>
+              </div>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Status</h6>
+              <span class="badge bg-warning text-dark">In Progress &middot; API Conversion</span>
+            </div>
+            <div class="modal-section">
+              <h6 class="modal-subheading">Repository</h6>
+              <a href="https://github.com/ahmadraza348" target="_blank" rel="noopener" class="btn btn-outline-light">View Code</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ============================================
          05 // EXPERIENCE
     ============================================ -->
@@ -1052,46 +1212,43 @@
           <div class="timeline-item" data-aos="fade-right" data-aos-duration="800">
             <span class="timeline-dot is-current" aria-hidden="true"></span>
             <div class="timeline-content">
-              <span class="timeline-date mono">Oct 2023 &mdash; August 2026</span>
-              <h3 class="timeline-role">Web Manager</h3>
-              <p class="timeline-company mono">OPEA</p>
+              <span class="timeline-date mono">Oct 2023 &mdash; July 2026</span>
+              <h3 class="timeline-role">Web Developer &amp; Manager</h3>
+              <p class="timeline-company mono">OPEA, Gojra</p>
               <ul class="timeline-list">
-                <li>Managed and maintained the company's Laravel-based eCommerce website</li>
-                <li>Performed troubleshooting and bug reporting/reproduction</li>
-                <li>Implemented SEO strategies and analytics (Google Analytics, Search Console, Tag Manager)</li>
-                <li>Optimised performance and user experience</li>
-                <li>Implemented eCommerce events, Facebook Pixel, Meta Events, and tracking via Google Tag Manager</li>
-                <li>Coordinated with developers on technical issues</li>
+                <li>eCommerce Development: Developed core online store features and optimized backend queries and assets to improve site speed and performance</li>
+                <li>ERP &amp; Integration: Collaborated with senior Laravel/ERP developers to implement product, variant, and stock synchronization, reducing manual data-entry errors and improving inventory accuracy across the platform</li>
+                <li>QA &amp; System Support: Identified technical bugs, coordinated issue resolution with the core team, and optimized workflows to ensure a smooth shopping experience for customers</li>
               </ul>
             </div>
           </div>
 
-          <div class="timeline-item" data-aos="fade-right" data-aos-duration="800" data-aos-delay="100">
+          <div class="timeline-item" data-aos="fade-right" data-aos-duration="800" data-aos-delay="75">
+            <span class="timeline-dot is-current" aria-hidden="true"></span>
+            <div class="timeline-content">
+              <span class="timeline-date mono">2023 &mdash; Present</span>
+              <h3 class="timeline-role">Independent Laravel Projects</h3>
+              <p class="timeline-company mono">Freelance / Side projects</p>
+              <ul class="timeline-list">
+                <li>Development: Built complete Laravel applications including eCommerce, POS/inventory, project management, learning platforms, and Laravel-with-React projects</li>
+                <li>Deployment: Managed Git-based version control workflows, server environment configuration (.env), shared-host deployments (cPanel/Hostinger), database migrations, and production troubleshooting</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-aos="fade-right" data-aos-duration="800" data-aos-delay="150">
             <span class="timeline-dot" aria-hidden="true"></span>
             <div class="timeline-content">
               <span class="timeline-date mono">Oct 2022 &mdash; Sep 2023</span>
               <h3 class="timeline-role">Junior Laravel Developer</h3>
               <p class="timeline-company mono">BriskBase Software House, Gojra</p>
               <ul class="timeline-list">
-                <li>Designed and developed a complete web application from scratch using Laravel, PHP, MySQL, Blade, and JavaScript</li>
-                <li>Designed the application structure, database schema, UI, and overall project workflow</li>
-                <li>Implemented backend functionality including authentication, CRUD modules, validation, database relationships, and business logic</li>
-                <li>Integrated frontend components with Laravel backend functionality and APIs</li>
-                <li>Worked closely with a senior Laravel developer for technical guidance, code review, debugging, and production delivery</li>
-                <li>Assisted with deployment, configuration, maintenance, and production troubleshooting</li>
+                <li>Full-Stack Development: Developed and maintained client-facing Laravel web applications using PHP, MySQL, Blade, and Bootstrap to deliver responsive, dynamic user interfaces</li>
+                <li>Collaboration &amp; Delivery: Collaborated with senior developers to debug issues, execute code changes, and reliably deliver production updates for client web applications</li>
               </ul>
             </div>
           </div>
 
-        </div>
-
-        <!-- Independent Development Note -->
-        <div class="independent-note" data-aos="fade-up" data-aos-delay="150">
-          <p class="mono text-muted" style="font-size:0.85rem; ">
-            <i class="bi bi-arrow-right-circle-fill text-accent pt-2" aria-hidden="true"></i>
-            Alongside professional work, I have continued building and deploying Laravel applications independently,
-            including eCommerce, POS &amp; inventory, learning platforms, job portals, and business systems.
-          </p>
         </div>
       </div>
     </section>
@@ -1228,7 +1385,7 @@
       <div class="container-narrow">
         <h2 class="contact-heading" data-aos="fade-up" data-aos-delay="50">Let&rsquo;s Build Something</h2>
         <p class="skills-intro" data-aos="fade-up" data-aos-delay="100">
-          Open to Laravel roles, freelance projects, and conversations.
+          Open to Laravel roles, freelance projects, and conversations. Available immediately for remote, hybrid, or on-site roles.
         </p>
 
         <div class="contact-grid">
