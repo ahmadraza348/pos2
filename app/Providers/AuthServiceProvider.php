@@ -16,16 +16,18 @@ class AuthServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // $this->registerCategoryGates();
-
-        // The seeded "superadmin" account (already treated as a special,
-        // non-deletable account in resources/views/backend/adminuser/show.blade.php)
-        // always passes every permission check, even before any permissions
-        // are assigned to it via the Roles & Permissions screen. This keeps
-        // the existing Spatie permission system as the only authorization
-        // mechanism, it just short-circuits it for that one account.
+        // Only an admin with the "Super Admin" role bypasses every
+        // permission check. This used to be hardcoded to a specific
+        // username, which meant that ONE account's credentials leaking
+        // (e.g. being shown anywhere, including in a view) was enough to
+        // grant total control of the system. Tying the bypass to a role
+        // instead means:
+        //   - it survives renaming/recreating the account,
+        //   - you can see at a glance who has full access via the Roles
+        //     screen instead of grepping code for a magic string,
+        //   - revoking it is a normal "remove role" action, not a deploy.
         Gate::before(function ($user, string $ability) {
-            if ($user instanceof Admin && $user->username === 'superadmin') {
+            if ($user instanceof Admin && $user->hasRole('Super Admin')) {
                 return true;
             }
 

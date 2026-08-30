@@ -60,22 +60,38 @@
                     <!-- End of Updated Form -->
 
                     <!-- Start of Quick Login (demo accounts) -->
+                    {{--
+                        SECURITY NOTE: this box used to contain the REAL
+                        super admin's email/password in plain text in the
+                        page source. That is how the account was
+                        compromised and the data was deleted. It has been
+                        replaced with two low-privilege demo accounts
+                        ("Admin" and "Cashier" roles - see RoleSeeder) that
+                        cannot edit or delete anything, so it is safe to
+                        expose their credentials here for recruiters/demo
+                        purposes. The real admin account is never shown on
+                        this page or anywhere in the frontend.
+                    --}}
                     <div class="form-login quick-login-box">
                         <label class="d-block mb-2">Quick Login (Demo Accounts)</label>
                         <div class="d-flex" style="gap:10px;">
                             <button type="button" class="btn btn-outline-primary w-100"
-                                onclick="quickLogin('engr.ahmadraza348@gmail.com', 'engr.ahmadraza348@gmail.com')">
-                                Superadmin
+                                onclick="quickLogin('demo_admin', 'Demo@Admin123')">
+                                Admin (view &amp; create only)
                             </button>
                             <button type="button" class="btn btn-outline-secondary w-100"
-                                onclick="quickLogin('cashier@gmail.com', 'cashier@gmail.com')">
-                                Cashier
+                                onclick="quickLogin('demo_cashier', 'Demo@Cashier123')">
+                                Cashier (POS only)
                             </button>
                         </div>
+                        <small class="text-muted d-block mt-2">
+                            Both demo accounts are restricted: they can view the panel and create new
+                            records, but cannot edit or delete anything.
+                        </small>
                     </div>
                     <script>
-                        function quickLogin(email, password) {
-                            document.getElementById('email_username').value = email;
+                        function quickLogin(usernameOrEmail, password) {
+                            document.getElementById('email_username').value = usernameOrEmail;
                             document.getElementById('password').value = password;
                         }
                     </script>
